@@ -196,20 +196,21 @@
 /* ============ Icon definitions — ลากวาง 8 แบบ, สรุปรวมเป็น 4 หมวดเกม (group) ============ */
 const ICONS = {
   box:     {name:"กล่อง",            group:"expl",    color:"#3ec46a", svg:woodBox(),    desc:"กล่องกระดาษ/ไม้/มอนผู้พิทักษ์ — กล่องกระดาษเดินชนเปิดเอง, กล่องไม้กดเปิด, แบบมอนผู้พิทักษ์ตีมอนให้หมดก่อน"},
-  treasure:{name:"กล่องใช้คนช่วย",   group:"guard",   color:"#e2553f", svg:redBox(),     desc:"หีบที่ต้องยืนบนสวิตช์ (มากสุด 2 จุด) หรือใช้คนช่วยปลดล็อก — ตอนล็อกจะมีรูปมือจับสีทอง"},
+  treasure:{name:"กล่องใช้คนช่วย",   group:"expl",    color:"#e2553f", svg:redBox(),     desc:"หีบที่ต้องยืนบนสวิตช์ (มากสุด 2 จุด) หรือใช้คนช่วยปลดล็อก — ตอนล็อกจะมีรูปมือจับสีทอง (นับรวมในหมวด Expl. Chest)"},
+  guard:   {name:"Guard Chest",       group:"guard",   color:"#e6b800", svg:goldBox(),    desc:"Guard Chest — กล่องการ์ด/ผู้พิทักษ์ ต้องจัดการเงื่อนไข (เช่น เคลียร์มอนผู้พิทักษ์) ก่อนถึงจะเปิดได้"},
   high:    {name:"กล่องที่สูง",       group:"strange", color:"#9a7bff", svg:highChest(), desc:"หีบที่อยู่ที่สูง ไม่อยู่บนเส้นทางปกติ ต้องกระโดด/ว่ายน้ำ/ลื่นน้ำแข็ง/บิน ถึงจะไปถึง"},
   butterfly:{name:"ผีเสื้อ",          group:"strange", color:"#ff7ab0", svg:butterfly(),desc:"ผีเสื้อเรืองแสงฟ้า 2 ตัว เข้าไปสัมผัสแล้วมันจะนำทาง พอจบจะปรากฏกล่องไม้"},
   sun:     {name:"กล่องกลางวัน",      group:"strange", color:"#f6953a", svg:sun(),      desc:"อุปกรณ์แสงอาทิตย์ตอนแดดออก เปิดแล้วเก็บดวงอาทิตย์เล็ก 5 ดวงใน 60 วิ จะได้กล่องไม้"},
   rain:    {name:"กล่องฝนตก",         group:"strange", color:"#3aa3ff", svg:waterball(),desc:"ลูกบอลน้ำตอนฝนตก เดินเข้าไปสัมผัสเหมือนกล่องกระดาษ โผล่มากสุด 3 ลูกใกล้ๆ กัน"},
   snowman: {name:"กล่องหิมะตก",       group:"strange", color:"#5ec8e0", svg:snowman(),  desc:"ตุ๊กตาหิมะตอนหิมะตก กวาดหิมะที่กองอยู่ให้เสร็จ จะปรากฏกล่องไม้"},
-  winter:  {name:"กล่องพิเศษ",        group:"strange", color:"#e0c020", svg:winterChest(),desc:"หีบพิเศษฤดูหนาว/หีบไอเทมเฉพาะ — มีตามอีเวนต์/ฤดูกาล เช่น Prontera ทะเลสาบเป็นน้ำแข็ง"},
+  winter:  {name:"กล่องพิเศษ",        group:"strange", color:"#cf5ad0", svg:winterChest(),desc:"หีบพิเศษฤดูหนาว/หีบไอเทมเฉพาะ — มีตามอีเวนต์/ฤดูกาล เช่น Prontera ทะเลสาบเป็นน้ำแข็ง"},
   landmark:{name:"กล่องถ่ายรูป (Landmark)", group:"landmark", color:"#5bb6ff", svg:camera(), desc:"จุดถ่ายรูป Landmark — ไปถึงจุดที่กำหนดแล้วถ่ายรูปเพื่อเก็บความคืบหน้า"},
 };
 
 /* หมวดสรุปตามเกม (รวมหลายไอคอนเข้าด้วยกัน) */
 const GROUPS = {
   expl:    {name:"Expl. Chest (กล่อง)",       color:"#e0a13a", svg:explIcon()},
-  guard:   {name:"Guard Chest (กล่องพิเศษ)",  color:"#e2667a", svg:guardIcon()},
+  guard:   {name:"Guard Chest (กล่องเหลือง)", color:"#e6b800", svg:guardIcon()},
   landmark:{name:"Landmark (ถ่ายรูป)",        color:"#5bb6ff", svg:camera()},
   strange: {name:"Strange Chest (พิเศษ)",     color:"#9a7bff", svg:strangeIcon()},
 };
@@ -278,10 +279,18 @@ function explIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
   <rect x="18" y="19" width="4" height="8" rx="1.5" fill="#ffe9a8" stroke="#7c4f10" stroke-width="1"/>
 </g></svg>`;}
 function guardIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
-  <rect x="7" y="17" width="26" height="15" rx="2" fill="#e2667a" stroke="#7c2840" stroke-width="2"/>
-  <path d="M7 17 q13 -10 26 0" fill="#ee8a9c" stroke="#7c2840" stroke-width="2"/>
-  <rect x="6" y="21" width="28" height="4" fill="#7c2840"/>
-  <path d="M14 7 l6 7 M26 7 l-6 7" stroke="#ffe9a8" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="7" y="17" width="26" height="15" rx="2" fill="#e6b800" stroke="#8a6a00" stroke-width="2"/>
+  <path d="M7 17 q13 -10 26 0" fill="#f2cf45" stroke="#8a6a00" stroke-width="2"/>
+  <rect x="6" y="21" width="28" height="4" fill="#8a6a00"/>
+  <path d="M14 7 l6 7 M26 7 l-6 7" stroke="#fff1b0" stroke-width="2.2" stroke-linecap="round"/>
+</g></svg>`;}
+/* กล่องเหลือง (Guard Chest) — ลากวาง */
+function goldBox(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="15" width="26" height="17" rx="2" fill="#e8c020" stroke="#8a6a00" stroke-width="2"/>
+  <path d="M7 15 l13 -5 l13 5" fill="#f2d24a" stroke="#8a6a00" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="20" y1="10" x2="20" y2="32" stroke="#8a6a00" stroke-width="1.6"/>
+  <line x1="7" y1="23" x2="33" y2="23" stroke="#8a6a00" stroke-width="1.6"/>
+  <circle cx="20" cy="23" r="3" fill="#fff1b0" stroke="#8a6a00" stroke-width="1.2"/>
 </g></svg>`;}
 function camera(){return `<svg viewBox="0 0 40 40"><g class="body">
   <rect x="6" y="13" width="28" height="20" rx="4" fill="#5bb6ff" stroke="#1f5a8c" stroke-width="2"/>
@@ -655,7 +664,7 @@ function fitView(){
 /* ============ Init ============ */
 async function init(){
   refreshLockUI();
-  // ดึงตำบลกล่อง "ฉบับเผยแพร่" จาก markers.json — ถ้าไม่มีฉบับร่างในเครื่อง ให้ใช้ฉบับนี้
+  // ดึงตำแหน่งกล่อง "ฉบับเผยแพร่" จาก markers.json — ถ้าไม่มีฉบับร่างในเครื่อง ให้ใช้ฉบับนี้
   published = await loadPublished();
   if(published && !__hadDraft){
     CITY_LIST.forEach(c=>state.markers[c.key]=(published[c.key]||[]).map(m=>({...m})));
