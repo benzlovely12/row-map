@@ -106,13 +106,16 @@
 
   .legend-title{font-size:12px;color:var(--muted);font-weight:700;padding:2px 4px 8px;}
   .legend-body{padding:0 2px;}
-  .lg-row{display:flex;gap:8px;align-items:flex-start;padding:6px 2px;}
-  .lg-ic{width:30px;height:30px;flex:none;border-radius:50%;display:flex;align-items:center;
+  .lg-row{display:flex;gap:8px;align-items:center;padding:5px 2px;}
+  .lg-ic{width:26px;height:26px;flex:none;border-radius:50%;display:flex;align-items:center;
     justify-content:center;background:rgba(255,255,255,.05);border:2px solid;}
-  .lg-ic svg{width:22px;height:22px;}
-  .lg-txt{line-height:1.35;flex:1;min-width:0;}
-  .lg-name{font-weight:700;color:var(--text);font-size:12.5px;}
-  .lg-desc{color:var(--muted);font-size:11px;}
+  .lg-ic svg{width:19px;height:19px;}
+  .lg-txt{line-height:1.3;flex:1;min-width:0;cursor:pointer;}
+  .lg-name{font-weight:700;color:var(--text);font-size:12.5px;display:flex;align-items:center;gap:5px;}
+  .lg-name .caret{font-size:9px;color:var(--muted);transition:transform .15s;}
+  .lg-row.open .lg-name .caret{transform:rotate(90deg);}
+  .lg-desc{color:var(--muted);font-size:11px;margin-top:3px;display:none;}
+  .lg-row.open .lg-desc{display:block;}
   .lg-toggle{flex:none;width:34px;height:19px;border-radius:19px;border:none;cursor:pointer;
     background:#3a3f4d;position:relative;margin-top:5px;transition:background .15s;padding:0;}
   .lg-toggle .knob{position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;
@@ -166,8 +169,9 @@
       <select class="city-select" id="citySelect"></select>
       <div class="spacer"></div>
       <div class="lockpill">โหมด: <b id="modeLabel">แก้ไข</b></div>
-      <button class="btn" id="exportBtn" title="สำรองข้อมูล">⬇ Export</button>
-      <button class="btn" id="importBtn" title="โหลดข้อมูล">⬆ Import</button>
+      <button class="btn" id="pubBtn" title="โหลดตำแหน่งล่าสุดจากเว็บ (ทิ้งฉบับร่างในเครื่อง)">☁ โหลดจากเว็บ</button>
+      <button class="btn" id="exportBtn" title="บันทึกเป็น markers.json เพื่อนำไป commit ขึ้น GitHub">⬇ Export</button>
+      <button class="btn" id="importBtn" title="โหลดไฟล์ markers.json">⬆ Import</button>
       <button class="btn primary" id="lockBtn">🔓 ล็อกแผนที่</button>
     </div>
     <div class="stage-wrap" id="stageWrap">
@@ -297,7 +301,7 @@ const XMARK = `<svg viewBox="0 0 40 40"><path d="M9 9 L31 31 M31 9 L9 31" stroke
 
 /* ============ Cities (เรียงตามลำดับ; map=null คือยังไม่มีแผนที่) ============ */
 const CITY_LIST = [
-  {key:"prontera",   name:"Prontera",      map:null},
+  {key:"prontera",   name:"Prontera",      map:"Prontera/Prontera_full_map.png"},
   {key:"morroc",     name:"Morroc",        map:"Morroc/Morroc_full_map.png"},
   {key:"novice",     name:"Novice Village",map:"Novice%20village/Novice_village_full_map.png"},
   {key:"alberta",    name:"Alberta",       map:null},
@@ -314,22 +318,71 @@ const CITY_LIST = [
 const CITIES = {}; CITY_LIST.forEach(c=>CITIES[c.key]=c);
 let CITY = "novice";
 
-/* ============ State ============ */
-const STORAGE_KEY = "row_tracker_v1";
-let state = loadState();   // {locked:bool, hidden:{type:bool}, markers:{<city>:[...]}}
-function defaultState(){const mk={}; CITY_LIST.forEach(c=>mk[c.key]=[]); return {locked:false, hidden:{}, markers:mk};}
+/* ============ State & persistence (ไฮบริด) ============
+   - ตำแหน่งกล่อง (id,type,x,y): "ฉบับเผยแพร่" มาจากไฟล์ markers.json ใน repo → ทุกคนเห็นเหมือนกัน
+   - ฉบับร่าง (ที่ยังไม่ publish) เก็บใน DRAFT_KEY ของเครื่องเจ้าของเอง
+   - collected/hidden/locked = ข้อมูลส่วนตัวของผู้เปิดเว็บแต่ละคน เก็บใน PERSONAL_KEY
+*/
+const PERSONAL_KEY = "row_tracker_personal_v1";
+const DRAFT_KEY    = "row_tracker_draft_v1";
+const LEGACY_KEY   = "row_tracker_v1";   // ของเวอร์ชันเก่า ใช้ย้ายข้อมูลครั้งเดียว
 /* แปลง type เก่าจากเวอร์ชัน 4-ไอคอน กลับเป็น type ใน 8 แบบ (กันของที่วางไว้หาย) */
 const TYPE_MIGRATE={expl:"box", guard:"treasure", landmark:"box", strange:"high"};
-function migrate(arr){return (arr||[]).map(m=>{
-  if(m&&!ICONS[m.type]&&TYPE_MIGRATE[m.type]) m.type=TYPE_MIGRATE[m.type]; return m;});}
-function loadState(){
-  try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if(s&&s.markers){const d=defaultState(); d.locked=!!s.locked; d.hidden=s.hidden||{};
-      Object.keys(CITIES).forEach(c=>d.markers[c]=migrate(s.markers[c])); return d;}}catch(e){}
-  return defaultState();
+
+let state = {locked:true, hidden:{}, markers:{}};  // markers[city] = [{id,type,x,y}]
+let personal = {collected:{}};                     // collected[city][id] = true
+let published = null;                              // ตำแหน่งจาก markers.json
+CITY_LIST.forEach(c=>{state.markers[c.key]=[]; personal.collected[c.key]={};});
+
+function cleanMarkers(arr){
+  return (arr||[]).filter(Boolean).map(m=>{
+    let t=m.type; if(!ICONS[t]&&TYPE_MIGRATE[t]) t=TYPE_MIGRATE[t];
+    return {id:m.id, type:t, x:Math.round(m.x), y:Math.round(m.y)};
+  }).filter(m=>ICONS[m.type]);
 }
-function save(){ try{localStorage.setItem(STORAGE_KEY, JSON.stringify(state));}catch(e){} }
+function loadPersonal(){
+  try{const p=JSON.parse(localStorage.getItem(PERSONAL_KEY));
+    if(p){ state.locked = p.locked!==false; state.hidden=p.hidden||{};
+      CITY_LIST.forEach(c=>personal.collected[c.key]=(p.collected&&p.collected[c.key])||{});
+      return; }
+  }catch(e){}
+  // ย้ายข้อมูลส่วนตัวจากเวอร์ชันเก่า (collected ฝังในตัว marker)
+  try{const s=JSON.parse(localStorage.getItem(LEGACY_KEY));
+    if(s){ state.hidden=s.hidden||{}; state.locked=!!s.locked;
+      if(s.markers) CITY_LIST.forEach(c=>(s.markers[c.key]||[]).forEach(m=>{
+        if(m&&m.collected) personal.collected[c.key][m.id]=true; }));
+    }
+  }catch(e){}
+}
+/* คืนค่า true ถ้ามีฉบับร่างในเครื่อง (จะได้ไม่ทับด้วยฉบับเผยแพร่) */
+function loadDraftOrLegacy(){
+  try{const d=JSON.parse(localStorage.getItem(DRAFT_KEY));
+    if(d&&d.markers){ CITY_LIST.forEach(c=>state.markers[c.key]=cleanMarkers(d.markers[c.key])); return true; }
+  }catch(e){}
+  try{const s=JSON.parse(localStorage.getItem(LEGACY_KEY));
+    if(s&&s.markers){ CITY_LIST.forEach(c=>state.markers[c.key]=cleanMarkers(s.markers[c.key])); return true; }
+  }catch(e){}
+  return false;
+}
+async function loadPublished(){
+  try{const r=await fetch('markers.json',{cache:'no-store'});
+    if(r.ok){const j=await r.json(); const src=j.markers||j; const out={};
+      CITY_LIST.forEach(c=>out[c.key]=cleanMarkers(src[c.key])); return out;}
+  }catch(e){}
+  return null;
+}
+function savePersonal(){ try{localStorage.setItem(PERSONAL_KEY,
+  JSON.stringify({locked:state.locked,hidden:state.hidden,collected:personal.collected}));}catch(e){} }
+function saveDraft(){ try{localStorage.setItem(DRAFT_KEY, JSON.stringify({markers:state.markers}));}catch(e){} }
+function save(){ savePersonal(); }   // โค้ดเดิมเรียก save() ตอนแก้ hidden/locked
+
+function isCollected(m){ const c=personal.collected[CITY]; return !!(c&&c[m.id]); }
+function setCollected(m,v){ if(!personal.collected[CITY])personal.collected[CITY]={};
+  if(v)personal.collected[CITY][m.id]=true; else delete personal.collected[CITY][m.id]; savePersonal(); }
+
 function allMarkers(){return Object.values(state.markers).flat();}
+loadPersonal();
+let __hadDraft = loadDraftOrLegacy();
 let nextId = Math.max(0,...allMarkers().map(m=>m.id||0))+1;
 
 /* ============ DOM refs ============ */
@@ -359,16 +412,21 @@ Object.entries(ICONS).forEach(([key,def])=>{
   const row=document.createElement('div'); row.className='lg-row';
   const on = !state.hidden[key];
   row.innerHTML=`<span class="lg-ic" style="border-color:${def.color}">${def.svg}</span>
-    <span class="lg-txt"><span class="lg-name">${def.name}</span><br><span class="lg-desc">${def.desc||''}</span></span>
+    <span class="lg-txt"><span class="lg-name"><span class="caret">▶</span>${def.name}</span><span class="lg-desc">${def.desc||''}</span></span>
     <button class="lg-toggle${on?' on':''}" data-type="${key}" title="ซ่อน/แสดงบนแผนที่" aria-label="ซ่อน/แสดง"><span class="knob"></span></button>`;
   legendBody.appendChild(row);
 });
 legendBody.addEventListener('click',e=>{
-  const btn=e.target.closest('.lg-toggle'); if(!btn)return;
-  const t=btn.dataset.type;
-  state.hidden[t]=!state.hidden[t];
-  btn.classList.toggle('on',!state.hidden[t]);
-  save(); renderMarkers();
+  const btn=e.target.closest('.lg-toggle');
+  if(btn){
+    const t=btn.dataset.type;
+    state.hidden[t]=!state.hidden[t];
+    btn.classList.toggle('on',!state.hidden[t]);
+    save(); renderMarkers();
+    return;
+  }
+  const txt=e.target.closest('.lg-txt');
+  if(txt){ txt.closest('.lg-row').classList.toggle('open'); }
 });
 
 /* ============ Tabs ============ */
@@ -455,8 +513,8 @@ stageWrap.addEventListener('drop',e=>{
   const type=e.dataTransfer.getData('text/icon'); if(!type)return;
   e.preventDefault();
   const p=clientToMap(e.clientX,e.clientY);
-  state.markers[CITY].push({id:nextId++,type,x:Math.round(p.x),y:Math.round(p.y),collected:false});
-  save(); renderMarkers(); updateProgress();
+  state.markers[CITY].push({id:nextId++,type,x:Math.round(p.x),y:Math.round(p.y)});
+  saveDraft(); renderMarkers(); updateProgress();
   toast(`วาง ${ICONS[type].name} แล้ว`);
 });
 
@@ -467,7 +525,7 @@ function renderMarkers(){
     const def=ICONS[m.type]; if(!def)return;
     if(state.hidden[m.type])return;          // ซ่อนชนิดที่ปิด toggle ไว้
     const el=document.createElement('div');
-    el.className='marker'+(m.collected?' collected':'');
+    el.className='marker'+(isCollected(m)?' collected':'');
     el.style.left=m.x+'px'; el.style.top=m.y+'px'; el.dataset.id=m.id;
     el.style.setProperty('--ring',def.color);
     el.innerHTML=def.svg+`<div class="xmark">${XMARK}</div><div class="del">×</div>`;
@@ -476,7 +534,7 @@ function renderMarkers(){
       ev.stopPropagation();
       if(state.locked)return;
       state.markers[CITY]=state.markers[CITY].filter(x=>x.id!==m.id);
-      save(); renderMarkers(); updateProgress();
+      saveDraft(); renderMarkers(); updateProgress();
     });
     stage.appendChild(el);
   });
@@ -503,7 +561,7 @@ function endMarkerDrag(){
   if(!dragMarker)return;
   dragMarker.el.classList.remove('dragging');
   justDragged = dragMarker.moved;
-  if(dragMarker.moved){ save(); }
+  if(dragMarker.moved){ saveDraft(); }
   dragMarker=null;
 }
 /* click to toggle collected — works in locked mode (and in edit mode if not dragged) */
@@ -512,8 +570,8 @@ stage.addEventListener('click',e=>{
   if(e.target.closest('.del'))return;          // delete handled separately
   if(justDragged){ justDragged=false; return; } // ignore the click that ends a drag
   const id=+el.dataset.id; const m=state.markers[CITY].find(x=>x.id===id); if(!m)return;
-  m.collected=!m.collected; el.classList.toggle('collected',m.collected);
-  save(); updateProgress();
+  const v=!isCollected(m); setCollected(m,v); el.classList.toggle('collected',v);
+  updateProgress();
 });
 
 /* ============ Lock toggle ============ */
@@ -536,7 +594,7 @@ function updateProgress(){
   (state.markers[CITY]||[]).forEach(m=>{
     const def=ICONS[m.type]; if(!def)return;
     const g=def.group; if(!counts[g])return;
-    counts[g].placed++; if(m.collected)counts[g].collected++;
+    counts[g].placed++; if(isCollected(m))counts[g].collected++;
   });
   Object.entries(GROUPS).forEach(([g,def])=>{
     const c=counts[g];
@@ -548,21 +606,38 @@ function updateProgress(){
   });
 }
 
-/* ============ Export / Import ============ */
+/* ============ Export / Import / Load-from-web ============ */
+/* Export = บันทึกตำแหน่งทั้งหมดเป็น markers.json เพื่อนำไป commit ขึ้น GitHub (เผยแพร่ให้ทุกคน) */
 document.getElementById('exportBtn').onclick=()=>{
-  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const out={markers:{}};
+  CITY_LIST.forEach(c=>out.markers[c.key]=(state.markers[c.key]||[]).map(m=>({id:m.id,type:m.type,x:m.x,y:m.y})));
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download='row_tracker_novice.json'; a.click();
+  a.download='markers.json'; a.click();
+  toast('บันทึก markers.json แล้ว — นำไปวางทับใน repo แล้ว commit เพื่อเผยแพร่');
 };
+/* Import = โหลดไฟล์ markers.json มาแก้ต่อ (เก็บเป็นฉบับร่างในเครื่อง) */
 const fileInput=document.getElementById('fileInput');
 document.getElementById('importBtn').onclick=()=>fileInput.click();
 fileInput.onchange=e=>{
   const f=e.target.files[0]; if(!f)return;
   const r=new FileReader();
-  r.onload=()=>{try{const s=JSON.parse(r.result);
-    if(s&&s.markers){state=Object.assign(defaultState(),s);save();renderMarkers();updateProgress();refreshLockUI();toast('โหลดข้อมูลแล้ว');}
+  r.onload=()=>{try{const j=JSON.parse(r.result); const src=j.markers||j;
+    CITY_LIST.forEach(c=>state.markers[c.key]=cleanMarkers(src[c.key]));
+    nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
+    saveDraft();renderMarkers();updateProgress();toast('โหลดไฟล์แล้ว (เป็นฉบับร่างในเครื่อง)');
   }catch(err){toast('ไฟล์ไม่ถูกต้อง');}};
   r.readAsText(f); fileInput.value='';
+};
+/* โหลดจากเว็บ = ทิ้งฉบับร่างในเครื่อง แล้วดึงตำแหน่งล่าสุดจาก markers.json */
+document.getElementById('pubBtn').onclick=async()=>{
+  if(!confirm('ทิ้งฉบับร่างในเครื่องนี้ แล้วโหลดตำแหน่งล่าสุดจากเว็บ (markers.json)?'))return;
+  localStorage.removeItem(DRAFT_KEY);
+  const pub=await loadPublished();
+  if(pub){published=pub; CITY_LIST.forEach(c=>state.markers[c.key]=(pub[c.key]||[]).map(m=>({...m})));
+    nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
+    renderMarkers();updateProgress();toast('โหลดตำแหน่งล่าสุดจากเว็บแล้ว');
+  }else{toast('ยังไม่พบ markers.json บนเว็บ');}
 };
 
 /* ============ Toast ============ */
@@ -578,8 +653,15 @@ function fitView(){
 }
 
 /* ============ Init ============ */
-function init(){
-  renderMarkers(); updateProgress(); refreshLockUI();
+async function init(){
+  refreshLockUI();
+  // ดึงตำบลกล่อง "ฉบับเผยแพร่" จาก markers.json — ถ้าไม่มีฉบับร่างในเครื่อง ให้ใช้ฉบับนี้
+  published = await loadPublished();
+  if(published && !__hadDraft){
+    CITY_LIST.forEach(c=>state.markers[c.key]=(published[c.key]||[]).map(m=>({...m})));
+    nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
+  }
+  renderMarkers(); updateProgress();
   if(mapImg.complete) fitView(); else mapImg.onload=fitView;
 }
 init();
