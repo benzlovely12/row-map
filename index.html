@@ -157,6 +157,10 @@
   .welcome .donate img{width:300px;max-width:100%;aspect-ratio:1/1;height:auto;border-radius:12px;background:#fff;padding:12px;display:block;margin:0 auto 14px;}
   .welcome .donate .who{font-size:18px;color:var(--text);font-weight:700;}
   .welcome .donate .small{font-size:14px;color:var(--muted);margin-top:3px;}
+  .welcome .donate-inline{text-align:center;margin:12px 0 6px;}
+  .welcome .donate-inline img{width:220px;max-width:72%;aspect-ratio:1/1;height:auto;border-radius:12px;background:#fff;padding:10px;display:block;margin:0 auto 8px;}
+  .welcome .donate-inline .who{font-size:16px;color:var(--text);font-weight:700;}
+  .welcome .donate-inline .small{font-size:13px;color:var(--muted);margin-top:2px;}
   .welcome .enter{margin-top:auto;width:100%;padding:20px;font-size:19px;font-weight:700;
     background:var(--accent2);color:#fff;border:1px solid var(--accent);border-radius:12px;cursor:pointer;}
   .welcome .enter:hover{filter:brightness(1.12);}
@@ -245,7 +249,12 @@
           <h1><span class="dot"></span>ROW Map Tracker</h1>
           <div class="sub">ตัวช่วยเก็บกล่อง/หีบสมบัติใน Ragnarok: New World</div>
           <h2>จุดประสงค์</h2>
-          <p>เว็บนี้ทำขึ้นเพื่อช่วยผู้เล่นเก็บกล่องและหีบสมบัติในแต่ละแมพให้ครบ โดยรวมตำแหน่งกล่องทุกแบบไว้บนแผนที่เดียว พร้อมเช็กลิสต์ว่าเก็บอันไหนไปแล้วบ้าง ใช้ฟรี ไม่มีโฆษณา</p>
+          <p>เว็บนี้จัดทำขึ้นเพื่อให้ผู้เล่นเก็บกล่องและหีบสมบัติในแต่ละแมพให้ครบ โดยสามารถสร้างจุดเก็บกล่องของตัวเองได้อย่างสะดวก และแชร์ให้ผู้อื่นได้ใช้เช่นกัน พร้อมเช็กลิสต์ว่าเก็บกล่องไหนไปแล้วบ้าง ใช้ฟรี ไม่มีโฆษณา — แต่หากสะดวกและยินดี ก็สามารถสนับสนุนได้ผ่าน QR code ด้านล่าง</p>
+          <div class="donate-inline">
+            <img src="qr_donate.png" alt="Donate QR PromptPay">
+            <div class="who">วัชรพล วชิรชูเกียรติ</div>
+            <div class="small">PromptPay / TrueMoney — เลี้ยงกาแฟผู้พัฒนาได้ครับ 🙏</div>
+          </div>
           <div class="cols">
             <div>
               <h2>วิธีใช้งาน</h2>
@@ -257,15 +266,15 @@
               </ol>
             </div>
             <div>
-              <h2>สนับสนุนผู้พัฒนา</h2>
-              <div class="donate">
-                <img src="qr_donate.png" alt="Donate QR PromptPay">
-                <div class="who">วัชรพล วชิรชูเกียรติ</div>
-                <div class="small">PromptPay / TrueMoney — เลี้ยงกาแฟผู้พัฒนาได้ครับ 🙏</div>
-              </div>
+              <h2>วิธีสร้างจุดเก็บกล่อง</h2>
+              <ol>
+                <li>กดปุ่ม “เปิดแก้ไขกล่อง” ด้านบน เพื่อวางกล่องต่างๆ เองได้</li>
+                <li>เมื่อวางเสร็จ ให้กดปุ่ม “ปิดแก้ไขกล่อง”</li>
+                <li>กดปุ่ม “บันทึกข้อมูลใหม่” จะได้ไฟล์นามสกุล .json</li>
+                <li>นำไฟล์นี้ไปแชร์ให้ผู้อื่นได้ โดยให้ผู้ใช้กดปุ่ม “โหลดข้อมูลใหม่”</li>
+              </ol>
             </div>
           </div>
-          <button class="enter" id="enterBtn">เข้าสู่แผนที่ →</button>
         </div>
       </div>
     </div>
@@ -537,11 +546,6 @@ document.querySelectorAll('.maintab').forEach(t=>t.addEventListener('click',()=>
   document.getElementById('panel-cities').style.display = m==='cities'?'':'none';
   document.getElementById('panel-icons').style.display  = m==='icons'?'':'none';
 }));
-
-/* ============ Welcome / Main (เด้งทุกครั้งที่เปิดเว็บ) ============ */
-document.getElementById('enterBtn').addEventListener('click',()=>{
-  switchCity('prontera');
-});
 
 /* ============ Mobile drawer ============ */
 (function(){
