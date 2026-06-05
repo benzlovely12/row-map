@@ -140,10 +140,9 @@
   /* ---------- Welcome / Main ---------- */
   .welcome{position:absolute;inset:0;z-index:60;background:
     radial-gradient(circle at 30% 15%,#1b2330,#101218);
-    display:flex;align-items:stretch;justify-content:stretch;padding:16px;overflow:auto;}
+    display:flex;justify-content:center;padding:28px;overflow:auto;}
   .welcome-card{background:var(--panel);border:1px solid var(--border);border-radius:18px;
-    flex:1;width:100%;padding:44px 60px;box-shadow:var(--shadow);
-    display:flex;flex-direction:column;}
+    width:100%;max-width:1060px;margin:auto;padding:40px 52px;box-shadow:var(--shadow);}
   .welcome h1{margin:0;font-size:34px;display:flex;align-items:center;gap:12px;}
   .welcome h1 .dot{width:15px;height:15px;}
   .welcome .sub{color:var(--muted);font-size:17px;margin:8px 0 12px;}
@@ -255,26 +254,20 @@
             <div class="who">วัชรพล วชิรชูเกียรติ</div>
             <div class="small">PromptPay / TrueMoney — เลี้ยงกาแฟผู้พัฒนาได้ครับ 🙏</div>
           </div>
-          <div class="cols">
-            <div>
-              <h2>วิธีใช้งาน</h2>
-              <ol>
-                <li>เลือกเมืองจากเมนูด้านบน</li>
-                <li>ซูมด้วยลูกกลิ้งเมาส์ และลากเพื่อเลื่อนแผนที่</li>
-                <li>คลิกที่กล่องเพื่อกากบาทว่า “เก็บแล้ว” (บันทึกในเครื่องคุณเอง)</li>
-                <li>เปิด/ปิดชนิดกล่องที่อยากแสดงได้จากเมนูด้านซ้าย</li>
-              </ol>
-            </div>
-            <div>
-              <h2>วิธีสร้างจุดเก็บกล่อง</h2>
-              <ol>
-                <li>กดปุ่ม “เปิดแก้ไขกล่อง” ด้านบน เพื่อวางกล่องต่างๆ เองได้</li>
-                <li>เมื่อวางเสร็จ ให้กดปุ่ม “ปิดแก้ไขกล่อง”</li>
-                <li>กดปุ่ม “บันทึกข้อมูลใหม่” จะได้ไฟล์นามสกุล .json</li>
-                <li>นำไฟล์นี้ไปแชร์ให้ผู้อื่นได้ โดยให้ผู้ใช้กดปุ่ม “โหลดข้อมูลใหม่”</li>
-              </ol>
-            </div>
-          </div>
+          <h2>วิธีใช้งาน</h2>
+          <ol>
+            <li>เลือกเมืองจากเมนูด้านบน</li>
+            <li>ซูมด้วยลูกกลิ้งเมาส์ และลากเพื่อเลื่อนแผนที่</li>
+            <li>คลิกที่กล่องเพื่อกากบาทว่า “เก็บแล้ว” (บันทึกในเครื่องคุณเอง)</li>
+            <li>เปิด/ปิดชนิดกล่องที่อยากแสดงได้จากเมนูด้านซ้าย</li>
+          </ol>
+          <h2>วิธีสร้างจุดเก็บกล่อง</h2>
+          <ol>
+            <li>กดปุ่ม “เปิดแก้ไขกล่อง” ด้านบน เพื่อวางกล่องต่างๆ เองได้</li>
+            <li>เมื่อวางเสร็จ ให้กดปุ่ม “ปิดแก้ไขกล่อง”</li>
+            <li>กดปุ่ม “บันทึกข้อมูลใหม่” จะได้ไฟล์นามสกุล .json</li>
+            <li>นำไฟล์นี้ไปแชร์ให้ผู้อื่นได้ โดยให้ผู้ใช้กดปุ่ม “โหลดข้อมูลใหม่”</li>
+          </ol>
         </div>
       </div>
     </div>
@@ -409,7 +402,7 @@ const XMARK = `<svg viewBox="0 0 40 40"><path d="M9 9 L31 31 M31 9 L9 31" stroke
 
 /* ============ Cities (เรียงตามลำดับ; map=null คือยังไม่มีแผนที่) ============ */
 const CITY_LIST = [
-  {key:"main",       name:"Main",          map:null, welcome:true},
+  {key:"main",       name:"Home (Donate)", map:null, welcome:true},
   {key:"prontera",   name:"Prontera",      map:"Prontera/Prontera_full_map.png"},
   {key:"morroc",     name:"Morroc",        map:"Morroc/Morroc_full_map.png"},
   {key:"novice",     name:"Novice Village",map:"Novice%20village/Novice_village_full_map.png"},
@@ -601,6 +594,7 @@ function applyView(){ stage.style.transform=`translate(${view.x}px,${view.y}px) 
 function clampScale(s){return Math.min(3,Math.max(0.12,s));}
 
 stageWrap.addEventListener('wheel',e=>{
+  const wel=document.getElementById('welcome'); if(wel&&wel.style.display!=='none') return; // หน้า Main: ปล่อยให้เลื่อนปกติ
   e.preventDefault();
   const rect=stageWrap.getBoundingClientRect();
   const mx=e.clientX-rect.left, my=e.clientY-rect.top;
@@ -619,6 +613,7 @@ document.getElementById('zreset').onclick=()=>{fitView();};
 let panning=null;
 stageWrap.addEventListener('mousedown',e=>{
   if(e.target.closest('.marker')) return;
+  if(e.target.closest('.welcome')) return;
   panning={sx:e.clientX,sy:e.clientY,ox:view.x,oy:view.y};
 });
 window.addEventListener('mousemove',e=>{
