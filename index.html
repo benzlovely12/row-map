@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROW Map Tracker</title>
+<style>
+  :root{
+    --bg:#15171c; --panel:#1c1f27; --panel2:#232733; --border:#2e3440;
+    --text:#e6e9ef; --muted:#8b93a7; --accent:#5b8cff; --accent2:#3a5bbf;
+    --good:#46c46a; --warn:#e0a13a; --danger:#e25555;
+    --shadow:0 4px 18px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
+    font-family:"Segoe UI",system-ui,"Noto Sans Thai",sans-serif;overflow:hidden;}
+  .app{display:flex;height:100vh;}
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{width:280px;min-width:280px;background:var(--panel);border-right:1px solid var(--border);
+    display:flex;flex-direction:column;}
+  .brand{padding:16px 18px;font-size:18px;font-weight:700;letter-spacing:.5px;
+    border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
+  .maintabs{display:flex;border-bottom:1px solid var(--border);}
+  .maintab{flex:1;padding:12px;text-align:center;cursor:pointer;color:var(--muted);
+    font-weight:600;font-size:14px;border-bottom:2px solid transparent;user-select:none;}
+  .maintab.active{color:var(--text);border-bottom-color:var(--accent);background:var(--panel2);}
+  .maintab:hover{color:var(--text);}
+  .side-body{flex:1;overflow-y:auto;padding:10px;}
+
+  .subtab{padding:11px 14px;margin:5px 0;border-radius:9px;cursor:pointer;
+    background:var(--panel2);border:1px solid transparent;display:flex;align-items:center;
+    justify-content:space-between;font-size:14px;user-select:none;}
+  .subtab:hover{border-color:var(--border);}
+  .subtab.active{border-color:var(--accent);background:#222a3d;}
+  .subtab.disabled{opacity:.45;cursor:not-allowed;}
+  .subtab .soon{font-size:11px;color:var(--muted);background:#2b3142;padding:2px 7px;border-radius:20px;}
+
+  /* icon palette */
+  .palette-hint{font-size:12px;color:var(--muted);padding:4px 6px 10px;line-height:1.5;}
+  .ico-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  .ico-card{background:var(--panel2);border:1px solid var(--border);border-radius:10px;
+    padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;
+    cursor:grab;user-select:none;transition:transform .08s,border-color .12s;}
+  .ico-card{border-left-width:4px;}
+  .ico-card:hover{transform:translateY(-2px);filter:brightness(1.12);}
+  .ico-card:active{cursor:grabbing;}
+  .ico-card .lbl{font-size:11.5px;color:var(--text);text-align:center;line-height:1.25;}
+  .ico-card .ico-badge{display:flex;align-items:center;justify-content:center;
+    width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.06);
+    border:2px solid;}
+  .ico-card svg{width:34px;height:34px;display:block;}
+  .ico-card.locked{opacity:.4;pointer-events:none;}
+
+  /* ---------- Main ---------- */
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .topbar{height:54px;min-height:54px;background:var(--panel);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:14px;padding:0 16px;}
+  .topbar .title{font-weight:700;font-size:16px;}
+  .city-select{font-size:15px;font-weight:700;color:var(--text);background:var(--panel2);
+    border:1px solid var(--border);border-radius:8px;padding:8px 30px 8px 12px;cursor:pointer;
+    -webkit-appearance:none;appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4 L6 8 L10 4' stroke='%238b93a7' stroke-width='1.6' fill='none'/></svg>");
+    background-repeat:no-repeat;background-position:right 10px center;}
+  .city-select:hover{border-color:var(--accent);}
+  .city-select option{background:var(--panel);color:var(--text);}
+  .city-select option:disabled{color:var(--muted);}
+  .spacer{flex:1;}
+  .btn{background:var(--panel2);color:var(--text);border:1px solid var(--border);
+    padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;}
+  .btn:hover{border-color:var(--accent);}
+  .btn.primary{background:var(--accent2);border-color:var(--accent);}
+  .btn.danger:hover{border-color:var(--danger);color:#ffb4b4;}
+  .lockpill{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);}
+  .lockpill b{color:var(--text);}
+
+  .stage-wrap{flex:1;position:relative;overflow:hidden;background:
+    radial-gradient(circle at 30% 20%,#1b2330,#101218);}
+  .stage{position:absolute;left:0;top:0;transform-origin:0 0;}
+  .map-img{display:block;pointer-events:none;-webkit-user-drag:none;}
+  .marker{position:absolute;transform:translate(-50%,-50%);cursor:pointer;
+    width:50px;height:50px;display:flex;align-items:center;justify-content:center;
+    border-radius:50%;background:rgba(20,23,28,.78);
+    border:3px solid var(--ring,#888);box-sizing:border-box;
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,.7));}
+  .marker svg{width:38px;height:38px;display:block;pointer-events:none;}
+  .marker .xmark{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    pointer-events:none;}
+  .marker.collected{opacity:.55;border-style:dashed;}
+  .marker.collected svg .body{opacity:.4;}
+  .marker.collected .xmark{display:flex;}
+  .marker.dragging{opacity:.85;}
+  .marker .del{position:absolute;top:-8px;right:-8px;width:18px;height:18px;border-radius:50%;
+    background:var(--danger);color:#fff;font-size:12px;line-height:18px;text-align:center;
+    display:none;cursor:pointer;border:2px solid var(--bg);}
+  .editing .marker:hover .del{display:block;}
+
+  .empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:var(--muted);font-size:15px;text-align:center;padding:40px;}
+
+  .zoomctl{position:absolute;right:16px;bottom:16px;display:flex;flex-direction:column;gap:6px;}
+  .zoomctl button{width:38px;height:38px;border-radius:9px;background:var(--panel);
+    border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;}
+  .zoomctl button:hover{border-color:var(--accent);}
+
+  .legend-title{font-size:12px;color:var(--muted);font-weight:700;padding:2px 4px 8px;}
+  .legend-body{padding:0 2px;}
+  .lg-row{display:flex;gap:8px;align-items:flex-start;padding:6px 2px;}
+  .lg-ic{width:30px;height:30px;flex:none;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;background:rgba(255,255,255,.05);border:2px solid;}
+  .lg-ic svg{width:22px;height:22px;}
+  .lg-txt{line-height:1.35;flex:1;min-width:0;}
+  .lg-name{font-weight:700;color:var(--text);font-size:12.5px;}
+  .lg-desc{color:var(--muted);font-size:11px;}
+  .lg-toggle{flex:none;width:34px;height:19px;border-radius:19px;border:none;cursor:pointer;
+    background:#3a3f4d;position:relative;margin-top:5px;transition:background .15s;padding:0;}
+  .lg-toggle .knob{position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;
+    background:#cfd3dc;transition:left .15s;}
+  .lg-toggle.on{background:var(--accent);}
+  .lg-toggle.on .knob{left:17px;background:#fff;}
+
+  .toast{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+    background:var(--panel);border:1px solid var(--border);padding:9px 16px;border-radius:9px;
+    font-size:13px;box-shadow:var(--shadow);opacity:0;transition:opacity .25s;pointer-events:none;}
+  .toast.show{opacity:1;}
+
+  /* progress summary */
+  .progress{padding:10px 6px 4px;}
+  .prow{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:6px 2px;}
+  .prow .pi{width:20px;height:20px;flex:none;}
+  .prow .pname{flex:1;color:var(--muted);}
+  .prow .pcount{font-variant-numeric:tabular-nums;font-weight:700;}
+  .prow .pcount .c{color:var(--good);}
+  hr.sep{border:none;border-top:1px solid var(--border);margin:12px 0;}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span>ROW Map Tracker</div>
+    <div class="maintabs">
+      <div class="maintab active" data-main="cities">สรุป</div>
+      <div class="maintab" data-main="icons">ไอคอนต่างๆ</div>
+    </div>
+    <div class="side-body">
+      <!-- Cities panel -->
+      <div id="panel-cities">
+        <div class="progress" id="progress"></div>
+        <hr class="sep">
+        <div class="legend-title">คำอธิบายกล่องแต่ละแบบ</div>
+        <div class="legend-body" id="legendBody"></div>
+      </div>
+      <!-- Icons panel -->
+      <div id="panel-icons" style="display:none;">
+        <div class="palette-hint">ลากไอคอนไปวางบนแผนที่ (เฉพาะโหมดแก้ไข). คลิกไอคอนบนแผนที่เพื่อกากบาท = เก็บแล้ว.</div>
+        <div class="ico-grid" id="icoGrid"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <select class="city-select" id="citySelect"></select>
+      <div class="spacer"></div>
+      <div class="lockpill">โหมด: <b id="modeLabel">แก้ไข</b></div>
+      <button class="btn" id="exportBtn" title="สำรองข้อมูล">⬇ Export</button>
+      <button class="btn" id="importBtn" title="โหลดข้อมูล">⬆ Import</button>
+      <button class="btn primary" id="lockBtn">🔓 ล็อกแผนที่</button>
+    </div>
+    <div class="stage-wrap" id="stageWrap">
+      <div class="stage" id="stage">
+        <img class="map-img" id="mapImg" src="Novice%20village/Novice_village_full_map.png" alt="Novice Village map">
+        <!-- markers injected here -->
+      </div>
+      <div class="zoomctl">
+        <button id="zin">＋</button>
+        <button id="zout">－</button>
+        <button id="zreset" style="font-size:13px;">⟳</button>
+      </div>
+      <div class="empty" id="emptyMsg" style="display:none;">เมืองนี้ยังไม่มีแผนที่ — เร็วๆ นี้</div>
+      <div class="toast" id="toast"></div>
+    </div>
+  </main>
+</div>
+
+<input type="file" id="fileInput" accept="application/json" style="display:none;">
+
+<script>
+/* ============ Icon definitions — ลากวาง 8 แบบ, สรุปรวมเป็น 4 หมวดเกม (group) ============ */
+const ICONS = {
+  box:     {name:"กล่อง",            group:"expl",    color:"#3ec46a", svg:woodBox(),    desc:"กล่องกระดาษ/ไม้/มอนผู้พิทักษ์ — กล่องกระดาษเดินชนเปิดเอง, กล่องไม้กดเปิด, แบบมอนผู้พิทักษ์ตีมอนให้หมดก่อน"},
+  treasure:{name:"กล่องใช้คนช่วย",   group:"guard",   color:"#e2553f", svg:redBox(),     desc:"หีบที่ต้องยืนบนสวิตช์ (มากสุด 2 จุด) หรือใช้คนช่วยปลดล็อก — ตอนล็อกจะมีรูปมือจับสีทอง"},
+  high:    {name:"กล่องที่สูง",       group:"strange", color:"#9a7bff", svg:highChest(), desc:"หีบที่อยู่ที่สูง ไม่อยู่บนเส้นทางปกติ ต้องกระโดด/ว่ายน้ำ/ลื่นน้ำแข็ง/บิน ถึงจะไปถึง"},
+  butterfly:{name:"ผีเสื้อ",          group:"strange", color:"#ff7ab0", svg:butterfly(),desc:"ผีเสื้อเรืองแสงฟ้า 2 ตัว เข้าไปสัมผัสแล้วมันจะนำทาง พอจบจะปรากฏกล่องไม้"},
+  sun:     {name:"กล่องกลางวัน",      group:"strange", color:"#f6953a", svg:sun(),      desc:"อุปกรณ์แสงอาทิตย์ตอนแดดออก เปิดแล้วเก็บดวงอาทิตย์เล็ก 5 ดวงใน 60 วิ จะได้กล่องไม้"},
+  rain:    {name:"กล่องฝนตก",         group:"strange", color:"#3aa3ff", svg:waterball(),desc:"ลูกบอลน้ำตอนฝนตก เดินเข้าไปสัมผัสเหมือนกล่องกระดาษ โผล่มากสุด 3 ลูกใกล้ๆ กัน"},
+  snowman: {name:"กล่องหิมะตก",       group:"strange", color:"#5ec8e0", svg:snowman(),  desc:"ตุ๊กตาหิมะตอนหิมะตก กวาดหิมะที่กองอยู่ให้เสร็จ จะปรากฏกล่องไม้"},
+  winter:  {name:"กล่องพิเศษ",        group:"strange", color:"#e0c020", svg:winterChest(),desc:"หีบพิเศษฤดูหนาว/หีบไอเทมเฉพาะ — มีตามอีเวนต์/ฤดูกาล เช่น Prontera ทะเลสาบเป็นน้ำแข็ง"},
+  landmark:{name:"กล่องถ่ายรูป (Landmark)", group:"landmark", color:"#5bb6ff", svg:camera(), desc:"จุดถ่ายรูป Landmark — ไปถึงจุดที่กำหนดแล้วถ่ายรูปเพื่อเก็บความคืบหน้า"},
+};
+
+/* หมวดสรุปตามเกม (รวมหลายไอคอนเข้าด้วยกัน) */
+const GROUPS = {
+  expl:    {name:"Expl. Chest (กล่อง)",       color:"#e0a13a", svg:explIcon()},
+  guard:   {name:"Guard Chest (กล่องพิเศษ)",  color:"#e2667a", svg:guardIcon()},
+  landmark:{name:"Landmark (ถ่ายรูป)",        color:"#5bb6ff", svg:camera()},
+  strange: {name:"Strange Chest (พิเศษ)",     color:"#9a7bff", svg:strangeIcon()},
+};
+
+/* ---- ไอคอนลากวาง 8 แบบ ---- */
+function woodBox(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="15" width="26" height="17" rx="2" fill="#c79a5b" stroke="#7c5824" stroke-width="2"/>
+  <path d="M7 15 l13 -5 l13 5" fill="#d8ad6e" stroke="#7c5824" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="20" y1="10" x2="20" y2="32" stroke="#7c5824" stroke-width="1.6"/>
+  <line x1="7" y1="23" x2="33" y2="23" stroke="#7c5824" stroke-width="1.6"/>
+  <circle cx="20" cy="11" r="2.4" fill="#f6c0d0" stroke="#7c5824" stroke-width="1"/>
+</g></svg>`;}
+function redBox(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="15" width="26" height="17" rx="2" fill="#d83a3a" stroke="#7c1c1c" stroke-width="2"/>
+  <path d="M7 15 l13 -5 l13 5" fill="#e85b5b" stroke="#7c1c1c" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="20" y1="10" x2="20" y2="32" stroke="#7c1c1c" stroke-width="1.6"/>
+  <line x1="7" y1="23" x2="33" y2="23" stroke="#7c1c1c" stroke-width="1.6"/>
+  <circle cx="20" cy="23" r="3" fill="#ffd24a" stroke="#7c1c1c" stroke-width="1.2"/>
+</g></svg>`;}
+function highChest(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="9" y="22" width="22" height="11" rx="2" fill="#9a86e0" stroke="#473a86" stroke-width="2"/>
+  <path d="M9 22 q11 -8 22 0" fill="#b6a6ef" stroke="#473a86" stroke-width="2"/>
+  <rect x="8" y="25" width="24" height="3.5" fill="#473a86"/>
+  <path d="M20 5 l6 8 h-4 v6 h-4 v-6 h-4z" fill="#cfc4f7" stroke="#473a86" stroke-width="1.8" stroke-linejoin="round"/>
+</g></svg>`;}
+function butterfly(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <ellipse cx="13" cy="15" rx="8" ry="7" fill="#5bb6ff" stroke="#1f5a8c" stroke-width="1.6"/>
+  <ellipse cx="27" cy="15" rx="8" ry="7" fill="#5bb6ff" stroke="#1f5a8c" stroke-width="1.6"/>
+  <ellipse cx="14" cy="27" rx="6" ry="6" fill="#7ec8ff" stroke="#1f5a8c" stroke-width="1.6"/>
+  <ellipse cx="26" cy="27" rx="6" ry="6" fill="#7ec8ff" stroke="#1f5a8c" stroke-width="1.6"/>
+  <rect x="18.6" y="10" width="2.8" height="22" rx="1.4" fill="#27405a"/>
+  <path d="M20 10 q-3 -5 -6 -5 M20 10 q3 -5 6 -5" fill="none" stroke="#27405a" stroke-width="1.4"/>
+</g></svg>`;}
+function sun(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <circle cx="20" cy="20" r="8" fill="#f6b51e" stroke="#9c6a06" stroke-width="2"/>
+  <g stroke="#f6b51e" stroke-width="3" stroke-linecap="round">
+    <line x1="20" y1="4" x2="20" y2="9"/><line x1="20" y1="31" x2="20" y2="36"/>
+    <line x1="4" y1="20" x2="9" y2="20"/><line x1="31" y1="20" x2="36" y2="20"/>
+    <line x1="8.5" y1="8.5" x2="12" y2="12"/><line x1="28" y1="28" x2="31.5" y2="31.5"/>
+    <line x1="31.5" y1="8.5" x2="28" y2="12"/><line x1="12" y1="28" x2="8.5" y2="31.5"/>
+  </g></g></svg>`;}
+function waterball(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <circle cx="20" cy="22" r="11" fill="#7ec8ff" fill-opacity="0.55" stroke="#1f5a8c" stroke-width="2"/>
+  <path d="M20 8 q5 7 5 11 a5 5 0 0 1 -10 0 q0 -4 5 -11z" fill="#3a93e0" stroke="#1f5a8c" stroke-width="1.6"/>
+  <ellipse cx="16" cy="19" rx="2.5" ry="3.5" fill="#ffffff" fill-opacity="0.7"/>
+</g></svg>`;}
+function snowman(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <circle cx="20" cy="21" r="13" fill="#eaf4ff" stroke="#7fa8c9" stroke-width="2"/>
+  <circle cx="15" cy="19" r="2" fill="#2c3e50"/><circle cx="25" cy="19" r="2" fill="#2c3e50"/>
+  <path d="M20 22 l5 1.5 -5 1.5z" fill="#f0922e"/>
+  <path d="M14 28 q6 4 12 0" fill="none" stroke="#7fa8c9" stroke-width="1.6" stroke-linecap="round"/>
+</g></svg>`;}
+function winterChest(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="8" y="20" width="24" height="13" rx="2" fill="#d96a86" stroke="#7c2840" stroke-width="2"/>
+  <path d="M8 20 q12 -9 24 0" fill="#e88aa0" stroke="#7c2840" stroke-width="2"/>
+  <rect x="7" y="23.5" width="26" height="3.5" fill="#7c2840"/>
+  <g stroke="#eaf4ff" stroke-width="1.6" stroke-linecap="round">
+    <line x1="20" y1="3" x2="20" y2="14"/><line x1="14.5" y1="5" x2="25.5" y2="12"/><line x1="25.5" y1="5" x2="14.5" y2="12"/>
+  </g></g></svg>`;}
+
+/* ---- ไอคอนหมวดสรุป 4 หมวด ---- */
+function explIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="17" width="26" height="15" rx="2" fill="#e0a13a" stroke="#7c4f10" stroke-width="2"/>
+  <path d="M7 17 q13 -10 26 0" fill="#f0bf63" stroke="#7c4f10" stroke-width="2"/>
+  <rect x="6" y="21" width="28" height="4" fill="#7c4f10"/>
+  <rect x="18" y="19" width="4" height="8" rx="1.5" fill="#ffe9a8" stroke="#7c4f10" stroke-width="1"/>
+</g></svg>`;}
+function guardIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="17" width="26" height="15" rx="2" fill="#e2667a" stroke="#7c2840" stroke-width="2"/>
+  <path d="M7 17 q13 -10 26 0" fill="#ee8a9c" stroke="#7c2840" stroke-width="2"/>
+  <rect x="6" y="21" width="28" height="4" fill="#7c2840"/>
+  <path d="M14 7 l6 7 M26 7 l-6 7" stroke="#ffe9a8" stroke-width="2.2" stroke-linecap="round"/>
+</g></svg>`;}
+function camera(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="6" y="13" width="28" height="20" rx="4" fill="#5bb6ff" stroke="#1f5a8c" stroke-width="2"/>
+  <rect x="14" y="9" width="11" height="6" rx="2" fill="#5bb6ff" stroke="#1f5a8c" stroke-width="2"/>
+  <circle cx="20" cy="23" r="6" fill="#cdebff" stroke="#1f5a8c" stroke-width="2"/>
+  <circle cx="20" cy="23" r="2.5" fill="#1f5a8c"/>
+  <circle cx="29" cy="18" r="1.6" fill="#ffe9a8"/>
+</g></svg>`;}
+function strangeIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="17" width="26" height="15" rx="2" fill="#9a86e0" stroke="#473a86" stroke-width="2"/>
+  <path d="M7 17 q13 -10 26 0" fill="#b6a6ef" stroke="#473a86" stroke-width="2"/>
+  <rect x="6" y="21" width="28" height="4" fill="#473a86"/>
+  <text x="20" y="30" font-size="11" font-weight="800" fill="#ffe9a8" text-anchor="middle" font-family="sans-serif">?</text>
+</g></svg>`;}
+
+const XMARK = `<svg viewBox="0 0 40 40"><path d="M9 9 L31 31 M31 9 L9 31" stroke="#ff4b4b" stroke-width="5" stroke-linecap="round"/></svg>`;
+
+/* ============ Cities (เรียงตามลำดับ; map=null คือยังไม่มีแผนที่) ============ */
+const CITY_LIST = [
+  {key:"prontera",   name:"Prontera",      map:null},
+  {key:"morroc",     name:"Morroc",        map:"Morroc/Morroc_full_map.png"},
+  {key:"novice",     name:"Novice Village",map:"Novice%20village/Novice_village_full_map.png"},
+  {key:"alberta",    name:"Alberta",       map:null},
+  {key:"byalan",     name:"Byalan Island", map:null},
+  {key:"payon",      name:"Payon",         map:null},
+  {key:"goblin",     name:"Goblin Forest", map:null},
+  {key:"geffen",     name:"Geffen",        map:null},
+  {key:"geffenriver",name:"Geffen River",  map:null},
+  {key:"mjolnir",    name:"Mt. Mjolnir",   map:null},
+  {key:"poring",     name:"Poring Island", map:null},
+  {key:"izlude",     name:"Izlude",        map:null},
+  {key:"glastheim",  name:"Glast Heim",    map:null},
+];
+const CITIES = {}; CITY_LIST.forEach(c=>CITIES[c.key]=c);
+let CITY = "novice";
+
+/* ============ State ============ */
+const STORAGE_KEY = "row_tracker_v1";
+let state = loadState();   // {locked:bool, hidden:{type:bool}, markers:{<city>:[...]}}
+function defaultState(){const mk={}; CITY_LIST.forEach(c=>mk[c.key]=[]); return {locked:false, hidden:{}, markers:mk};}
+/* แปลง type เก่าจากเวอร์ชัน 4-ไอคอน กลับเป็น type ใน 8 แบบ (กันของที่วางไว้หาย) */
+const TYPE_MIGRATE={expl:"box", guard:"treasure", landmark:"box", strange:"high"};
+function migrate(arr){return (arr||[]).map(m=>{
+  if(m&&!ICONS[m.type]&&TYPE_MIGRATE[m.type]) m.type=TYPE_MIGRATE[m.type]; return m;});}
+function loadState(){
+  try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(s&&s.markers){const d=defaultState(); d.locked=!!s.locked; d.hidden=s.hidden||{};
+      Object.keys(CITIES).forEach(c=>d.markers[c]=migrate(s.markers[c])); return d;}}catch(e){}
+  return defaultState();
+}
+function save(){ try{localStorage.setItem(STORAGE_KEY, JSON.stringify(state));}catch(e){} }
+function allMarkers(){return Object.values(state.markers).flat();}
+let nextId = Math.max(0,...allMarkers().map(m=>m.id||0))+1;
+
+/* ============ DOM refs ============ */
+const stage=document.getElementById('stage'), stageWrap=document.getElementById('stageWrap');
+const mapImg=document.getElementById('mapImg');
+const lockBtn=document.getElementById('lockBtn'), modeLabel=document.getElementById('modeLabel');
+const toastEl=document.getElementById('toast');
+let view={scale:0.35, x:60, y:30};
+
+/* ============ Build icon palette ============ */
+const icoGrid=document.getElementById('icoGrid');
+Object.entries(ICONS).forEach(([key,def])=>{
+  const card=document.createElement('div');
+  card.className='ico-card'; card.draggable=true; card.dataset.type=key;
+  card.style.borderColor=def.color;
+  card.innerHTML=`<span class="ico-badge" style="border-color:${def.color}">${def.svg}</span><span class="lbl">${def.name}</span>`;
+  card.addEventListener('dragstart',e=>{
+    if(state.locked){e.preventDefault();return;}
+    e.dataTransfer.setData('text/icon',key);
+  });
+  icoGrid.appendChild(card);
+});
+
+/* ============ Build legend (คำอธิบายกล่อง + toggle ซ่อน/แสดงบนแผนที่) ============ */
+const legendBody=document.getElementById('legendBody');
+Object.entries(ICONS).forEach(([key,def])=>{
+  const row=document.createElement('div'); row.className='lg-row';
+  const on = !state.hidden[key];
+  row.innerHTML=`<span class="lg-ic" style="border-color:${def.color}">${def.svg}</span>
+    <span class="lg-txt"><span class="lg-name">${def.name}</span><br><span class="lg-desc">${def.desc||''}</span></span>
+    <button class="lg-toggle${on?' on':''}" data-type="${key}" title="ซ่อน/แสดงบนแผนที่" aria-label="ซ่อน/แสดง"><span class="knob"></span></button>`;
+  legendBody.appendChild(row);
+});
+legendBody.addEventListener('click',e=>{
+  const btn=e.target.closest('.lg-toggle'); if(!btn)return;
+  const t=btn.dataset.type;
+  state.hidden[t]=!state.hidden[t];
+  btn.classList.toggle('on',!state.hidden[t]);
+  save(); renderMarkers();
+});
+
+/* ============ Tabs ============ */
+document.querySelectorAll('.maintab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.maintab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  const m=t.dataset.main;
+  document.getElementById('panel-cities').style.display = m==='cities'?'':'none';
+  document.getElementById('panel-icons').style.display  = m==='icons'?'':'none';
+}));
+
+/* ============ City switching (dropdown) ============ */
+const citySelect=document.getElementById('citySelect');
+const emptyMsg=document.getElementById('emptyMsg');
+CITY_LIST.forEach(c=>{
+  const opt=document.createElement('option');
+  opt.value=c.key;
+  opt.textContent = c.map ? c.name : c.name+' (เร็วๆ นี้)';
+  citySelect.appendChild(opt);
+});
+citySelect.value=CITY;
+citySelect.addEventListener('change',()=>switchCity(citySelect.value));
+function switchCity(city){
+  if(!CITIES[city])return;
+  CITY=city;
+  citySelect.value=city;
+  const def=CITIES[city];
+  if(def.map){
+    emptyMsg.style.display='none';
+    mapImg.style.display='';
+    mapImg.src=def.map;
+    renderMarkers();
+    if(mapImg.complete) fitView(); else mapImg.onload=fitView;
+  }else{
+    // ยังไม่มีแผนที่
+    mapImg.removeAttribute('src'); mapImg.style.display='none';
+    stage.querySelectorAll('.marker').forEach(n=>n.remove());
+    emptyMsg.style.display='flex';
+  }
+  updateProgress();
+}
+
+/* ============ View transform ============ */
+function applyView(){ stage.style.transform=`translate(${view.x}px,${view.y}px) scale(${view.scale})`; }
+function clampScale(s){return Math.min(3,Math.max(0.12,s));}
+
+stageWrap.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const rect=stageWrap.getBoundingClientRect();
+  const mx=e.clientX-rect.left, my=e.clientY-rect.top;
+  const old=view.scale; const ns=clampScale(old*(e.deltaY<0?1.12:0.89));
+  // zoom toward cursor
+  view.x = mx-(mx-view.x)*(ns/old);
+  view.y = my-(my-view.y)*(ns/old);
+  view.scale=ns; applyView();
+},{passive:false});
+
+document.getElementById('zin').onclick =()=>{view.scale=clampScale(view.scale*1.2);applyView();};
+document.getElementById('zout').onclick=()=>{view.scale=clampScale(view.scale/1.2);applyView();};
+document.getElementById('zreset').onclick=()=>{fitView();};
+
+/* pan with drag on empty stage */
+let panning=null;
+stageWrap.addEventListener('mousedown',e=>{
+  if(e.target.closest('.marker')) return;
+  panning={sx:e.clientX,sy:e.clientY,ox:view.x,oy:view.y};
+});
+window.addEventListener('mousemove',e=>{
+  if(panning){view.x=panning.ox+(e.clientX-panning.sx);view.y=panning.oy+(e.clientY-panning.sy);applyView();}
+  if(dragMarker) onMarkerDrag(e);
+});
+window.addEventListener('mouseup',()=>{panning=null; endMarkerDrag();});
+
+/* ============ Coordinate helpers ============ */
+function clientToMap(cx,cy){
+  const rect=stageWrap.getBoundingClientRect();
+  return {x:(cx-rect.left-view.x)/view.scale, y:(cy-rect.top-view.y)/view.scale};
+}
+
+/* ============ Drop new icon ============ */
+stageWrap.addEventListener('dragover',e=>{if(!state.locked)e.preventDefault();});
+stageWrap.addEventListener('drop',e=>{
+  if(state.locked)return;
+  const type=e.dataTransfer.getData('text/icon'); if(!type)return;
+  e.preventDefault();
+  const p=clientToMap(e.clientX,e.clientY);
+  state.markers[CITY].push({id:nextId++,type,x:Math.round(p.x),y:Math.round(p.y),collected:false});
+  save(); renderMarkers(); updateProgress();
+  toast(`วาง ${ICONS[type].name} แล้ว`);
+});
+
+/* ============ Markers ============ */
+function renderMarkers(){
+  stage.querySelectorAll('.marker').forEach(n=>n.remove());
+  (state.markers[CITY]||[]).forEach(m=>{
+    const def=ICONS[m.type]; if(!def)return;
+    if(state.hidden[m.type])return;          // ซ่อนชนิดที่ปิด toggle ไว้
+    const el=document.createElement('div');
+    el.className='marker'+(m.collected?' collected':'');
+    el.style.left=m.x+'px'; el.style.top=m.y+'px'; el.dataset.id=m.id;
+    el.style.setProperty('--ring',def.color);
+    el.innerHTML=def.svg+`<div class="xmark">${XMARK}</div><div class="del">×</div>`;
+    el.addEventListener('mousedown',ev=>onMarkerDown(ev,m,el));
+    el.querySelector('.del').addEventListener('click',ev=>{
+      ev.stopPropagation();
+      if(state.locked)return;
+      state.markers[CITY]=state.markers[CITY].filter(x=>x.id!==m.id);
+      save(); renderMarkers(); updateProgress();
+    });
+    stage.appendChild(el);
+  });
+  stageWrap.classList.toggle('editing',!state.locked);
+}
+
+/* marker drag (edit) or toggle collected (locked) */
+let dragMarker=null;
+function onMarkerDown(ev,m,el){
+  ev.stopPropagation();
+  if(state.locked){ return; } // handled on click below
+  dragMarker={m,el,moved:false,sx:ev.clientX,sy:ev.clientY,ox:m.x,oy:m.y};
+  el.classList.add('dragging');
+}
+function onMarkerDrag(e){
+  const d=dragMarker;
+  const dx=(e.clientX-d.sx)/view.scale, dy=(e.clientY-d.sy)/view.scale;
+  if(Math.abs(e.clientX-d.sx)+Math.abs(e.clientY-d.sy)>3) d.moved=true;
+  d.m.x=Math.round(d.ox+dx); d.m.y=Math.round(d.oy+dy);
+  d.el.style.left=d.m.x+'px'; d.el.style.top=d.m.y+'px';
+}
+let justDragged=false;
+function endMarkerDrag(){
+  if(!dragMarker)return;
+  dragMarker.el.classList.remove('dragging');
+  justDragged = dragMarker.moved;
+  if(dragMarker.moved){ save(); }
+  dragMarker=null;
+}
+/* click to toggle collected — works in locked mode (and in edit mode if not dragged) */
+stage.addEventListener('click',e=>{
+  const el=e.target.closest('.marker'); if(!el)return;
+  if(e.target.closest('.del'))return;          // delete handled separately
+  if(justDragged){ justDragged=false; return; } // ignore the click that ends a drag
+  const id=+el.dataset.id; const m=state.markers[CITY].find(x=>x.id===id); if(!m)return;
+  m.collected=!m.collected; el.classList.toggle('collected',m.collected);
+  save(); updateProgress();
+});
+
+/* ============ Lock toggle ============ */
+function refreshLockUI(){
+  modeLabel.textContent = state.locked?'ใช้งาน (ล็อก)':'แก้ไข';
+  lockBtn.textContent = state.locked?'🔒 ปลดล็อก':'🔓 ล็อกแผนที่';
+  document.querySelectorAll('.ico-card').forEach(c=>c.classList.toggle('locked',state.locked));
+  stageWrap.classList.toggle('editing',!state.locked);
+}
+lockBtn.onclick=()=>{
+  state.locked=!state.locked; save(); refreshLockUI();
+  toast(state.locked?'ล็อกแล้ว — เพิ่ม/ลบไอคอนไม่ได้ คลิกเพื่อกากบาทว่าเก็บแล้ว':'ปลดล็อก — ลากเพิ่ม/ย้าย/ลบได้');
+};
+
+/* ============ Progress — รวม 8 ไอคอนเป็น 4 หมวดเกม ============ */
+function updateProgress(){
+  const el=document.getElementById('progress'); el.innerHTML='';
+  const counts={};
+  Object.keys(GROUPS).forEach(g=>counts[g]={placed:0,collected:0});
+  (state.markers[CITY]||[]).forEach(m=>{
+    const def=ICONS[m.type]; if(!def)return;
+    const g=def.group; if(!counts[g])return;
+    counts[g].placed++; if(m.collected)counts[g].collected++;
+  });
+  Object.entries(GROUPS).forEach(([g,def])=>{
+    const c=counts[g];
+    const row=document.createElement('div'); row.className='prow';
+    row.innerHTML=`<span class="pi">${def.svg.replace('<svg','<svg width="20" height="20"')}</span>
+      <span class="pname">${def.name}</span>
+      <span class="pcount"><span class="c">${c.collected}</span>/${c.placed}</span>`;
+    el.appendChild(row);
+  });
+}
+
+/* ============ Export / Import ============ */
+document.getElementById('exportBtn').onclick=()=>{
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='row_tracker_novice.json'; a.click();
+};
+const fileInput=document.getElementById('fileInput');
+document.getElementById('importBtn').onclick=()=>fileInput.click();
+fileInput.onchange=e=>{
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{const s=JSON.parse(r.result);
+    if(s&&s.markers){state=Object.assign(defaultState(),s);save();renderMarkers();updateProgress();refreshLockUI();toast('โหลดข้อมูลแล้ว');}
+  }catch(err){toast('ไฟล์ไม่ถูกต้อง');}};
+  r.readAsText(f); fileInput.value='';
+};
+
+/* ============ Toast ============ */
+let toastT;
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('show'),2200);}
+
+/* ============ Fit view ============ */
+function fitView(){
+  const w=mapImg.naturalWidth||2660, h=mapImg.naturalHeight||2144;
+  const rect=stageWrap.getBoundingClientRect();
+  const s=Math.min(rect.width/w, rect.height/h)*0.95;
+  view.scale=s; view.x=(rect.width-w*s)/2; view.y=(rect.height-h*s)/2; applyView();
+}
+
+/* ============ Init ============ */
+function init(){
+  renderMarkers(); updateProgress(); refreshLockUI();
+  if(mapImg.complete) fitView(); else mapImg.onload=fitView;
+}
+init();
+</script>
+</body>
+</html>
