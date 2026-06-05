@@ -138,25 +138,29 @@
   hr.sep{border:none;border-top:1px solid var(--border);margin:12px 0;}
 
   /* ---------- Welcome / Main ---------- */
-  .welcome{position:fixed;inset:0;z-index:1000;background:rgba(8,10,14,.93);
-    backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto;}
-  .welcome-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;
-    max-width:740px;width:100%;padding:30px;box-shadow:var(--shadow);}
-  .welcome h1{margin:0;font-size:24px;display:flex;align-items:center;gap:10px;}
-  .welcome .sub{color:var(--muted);font-size:13px;margin:4px 0 6px;}
-  .welcome h2{font-size:15px;margin:18px 0 8px;color:var(--accent);}
-  .welcome p,.welcome li{font-size:13.5px;line-height:1.65;color:var(--text);}
-  .welcome ol{margin:0;padding-left:20px;}
-  .welcome .cols{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start;}
-  .welcome .donate{background:var(--panel2);border:1px solid var(--border);border-radius:12px;
-    padding:14px;text-align:center;}
-  .welcome .donate img{width:170px;max-width:100%;height:auto;border-radius:10px;background:#fff;padding:6px;display:block;margin:0 auto 8px;}
-  .welcome .donate .who{font-size:12.5px;color:var(--text);font-weight:700;}
-  .welcome .donate .small{font-size:11px;color:var(--muted);}
-  .welcome .enter{margin-top:24px;width:100%;padding:14px;font-size:15px;font-weight:700;
-    background:var(--accent2);color:#fff;border:1px solid var(--accent);border-radius:10px;cursor:pointer;}
+  .welcome{position:absolute;inset:0;z-index:60;background:
+    radial-gradient(circle at 30% 15%,#1b2330,#101218);
+    display:flex;align-items:stretch;justify-content:stretch;padding:16px;overflow:auto;}
+  .welcome-card{background:var(--panel);border:1px solid var(--border);border-radius:18px;
+    flex:1;width:100%;padding:44px 60px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;}
+  .welcome h1{margin:0;font-size:34px;display:flex;align-items:center;gap:12px;}
+  .welcome h1 .dot{width:15px;height:15px;}
+  .welcome .sub{color:var(--muted);font-size:17px;margin:8px 0 12px;}
+  .welcome h2{font-size:21px;margin:30px 0 14px;color:var(--accent);}
+  .welcome p,.welcome li{font-size:17px;line-height:1.85;color:var(--text);}
+  .welcome ol{margin:0;padding-left:24px;}
+  .welcome ol li{margin:8px 0;}
+  .welcome .cols{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:start;margin-top:6px;}
+  .welcome .donate{background:var(--panel2);border:2px solid var(--accent);border-radius:16px;
+    padding:22px;text-align:center;box-shadow:0 0 0 4px rgba(91,140,255,.12);}
+  .welcome .donate img{width:300px;max-width:100%;aspect-ratio:1/1;height:auto;border-radius:12px;background:#fff;padding:12px;display:block;margin:0 auto 14px;}
+  .welcome .donate .who{font-size:18px;color:var(--text);font-weight:700;}
+  .welcome .donate .small{font-size:14px;color:var(--muted);margin-top:3px;}
+  .welcome .enter{margin-top:auto;width:100%;padding:20px;font-size:19px;font-weight:700;
+    background:var(--accent2);color:#fff;border:1px solid var(--accent);border-radius:12px;cursor:pointer;}
   .welcome .enter:hover{filter:brightness(1.12);}
-  @media(max-width:620px){.welcome .cols{grid-template-columns:1fr;}}
+  @media(max-width:820px){.welcome .cols{grid-template-columns:1fr;}.welcome-card{padding:28px;}}
 </style>
 </head>
 <body>
@@ -206,41 +210,36 @@
       </div>
       <div class="empty" id="emptyMsg" style="display:none;">เมืองนี้ยังไม่มีแผนที่ — เร็วๆ นี้</div>
       <div class="toast" id="toast"></div>
-    </div>
-  </main>
-</div>
-
-<!-- ===== Welcome / Main ===== -->
-<div class="welcome" id="welcome">
-  <div class="welcome-card">
-    <h1><span class="dot"></span>ROW Map Tracker</h1>
-    <div class="sub">ตัวช่วยเก็บกล่อง/หีบสมบัติใน Ragnarok: New World</div>
-
-    <h2>จุดประสงค์</h2>
-    <p>เว็บนี้ทำขึ้นเพื่อช่วยผู้เล่นเก็บกล่องและหีบสมบัติในแต่ละแมพให้ครบ โดยรวมตำแหน่งกล่องทุกแบบไว้บนแผนที่เดียว พร้อมเช็กลิสต์ว่าเก็บอันไหนไปแล้วบ้าง ใช้ฟรี ไม่มีโฆษณา</p>
-
-    <div class="cols">
-      <div>
-        <h2>วิธีใช้งาน</h2>
-        <ol>
-          <li>เลือกเมืองจากเมนูด้านบน</li>
-          <li>ซูมด้วยลูกกลิ้งเมาส์ และลากเพื่อเลื่อนแผนที่</li>
-          <li>คลิกที่กล่องเพื่อกากบาทว่า “เก็บแล้ว” (บันทึกในเครื่องคุณเอง)</li>
-          <li>เปิด/ปิดชนิดกล่องที่อยากแสดงได้จากเมนูด้านซ้าย</li>
-        </ol>
-      </div>
-      <div>
-        <h2>สนับสนุนผู้พัฒนา</h2>
-        <div class="donate">
-          <img src="QRCode.jpg" alt="Donate QR PromptPay">
-          <div class="who">วัชรพล วชิรชูเกียรติ</div>
-          <div class="small">PromptPay / TrueMoney — เลี้ยงกาแฟผู้พัฒนาได้ครับ 🙏</div>
+      <div class="welcome" id="welcome" style="display:none;">
+        <div class="welcome-card">
+          <h1><span class="dot"></span>ROW Map Tracker</h1>
+          <div class="sub">ตัวช่วยเก็บกล่อง/หีบสมบัติใน Ragnarok: New World</div>
+          <h2>จุดประสงค์</h2>
+          <p>เว็บนี้ทำขึ้นเพื่อช่วยผู้เล่นเก็บกล่องและหีบสมบัติในแต่ละแมพให้ครบ โดยรวมตำแหน่งกล่องทุกแบบไว้บนแผนที่เดียว พร้อมเช็กลิสต์ว่าเก็บอันไหนไปแล้วบ้าง ใช้ฟรี ไม่มีโฆษณา</p>
+          <div class="cols">
+            <div>
+              <h2>วิธีใช้งาน</h2>
+              <ol>
+                <li>เลือกเมืองจากเมนูด้านบน</li>
+                <li>ซูมด้วยลูกกลิ้งเมาส์ และลากเพื่อเลื่อนแผนที่</li>
+                <li>คลิกที่กล่องเพื่อกากบาทว่า “เก็บแล้ว” (บันทึกในเครื่องคุณเอง)</li>
+                <li>เปิด/ปิดชนิดกล่องที่อยากแสดงได้จากเมนูด้านซ้าย</li>
+              </ol>
+            </div>
+            <div>
+              <h2>สนับสนุนผู้พัฒนา</h2>
+              <div class="donate">
+                <img src="qr_donate.png" alt="Donate QR PromptPay">
+                <div class="who">วัชรพล วชิรชูเกียรติ</div>
+                <div class="small">PromptPay / TrueMoney — เลี้ยงกาแฟผู้พัฒนาได้ครับ 🙏</div>
+              </div>
+            </div>
+          </div>
+          <button class="enter" id="enterBtn">เข้าสู่แผนที่ →</button>
         </div>
       </div>
     </div>
-
-    <button class="enter" id="enterBtn">เข้าสู่แผนที่ →</button>
-  </div>
+  </main>
 </div>
 
 <input type="file" id="fileInput" accept="application/json" style="display:none;">
@@ -371,6 +370,7 @@ const XMARK = `<svg viewBox="0 0 40 40"><path d="M9 9 L31 31 M31 9 L9 31" stroke
 
 /* ============ Cities (เรียงตามลำดับ; map=null คือยังไม่มีแผนที่) ============ */
 const CITY_LIST = [
+  {key:"main",       name:"Main",          map:null, welcome:true},
   {key:"prontera",   name:"Prontera",      map:"Prontera/Prontera_full_map.png"},
   {key:"morroc",     name:"Morroc",        map:"Morroc/Morroc_full_map.png"},
   {key:"novice",     name:"Novice Village",map:"Novice%20village/Novice_village_full_map.png"},
@@ -386,7 +386,7 @@ const CITY_LIST = [
   {key:"glastheim",  name:"Glast Heim",    map:null},
 ];
 const CITIES = {}; CITY_LIST.forEach(c=>CITIES[c.key]=c);
-let CITY = "novice";
+let CITY = "main";
 
 /* ============ State & persistence (ไฮบริด) ============
    - ตำแหน่งกล่อง (id,type,x,y): "ฉบับเผยแพร่" มาจากไฟล์ markers.json ใน repo → ทุกคนเห็นเหมือนกัน
@@ -510,7 +510,7 @@ document.querySelectorAll('.maintab').forEach(t=>t.addEventListener('click',()=>
 
 /* ============ Welcome / Main (เด้งทุกครั้งที่เปิดเว็บ) ============ */
 document.getElementById('enterBtn').addEventListener('click',()=>{
-  document.getElementById('welcome').style.display='none';
+  switchCity('prontera');
 });
 
 /* ============ City switching (dropdown) ============ */
@@ -519,7 +519,7 @@ const emptyMsg=document.getElementById('emptyMsg');
 CITY_LIST.forEach(c=>{
   const opt=document.createElement('option');
   opt.value=c.key;
-  opt.textContent = c.map ? c.name : c.name+' (เร็วๆ นี้)';
+  opt.textContent = (c.map||c.welcome) ? c.name : c.name+' (เร็วๆ นี้)';
   citySelect.appendChild(opt);
 });
 citySelect.value=CITY;
@@ -529,14 +529,21 @@ function switchCity(city){
   CITY=city;
   citySelect.value=city;
   const def=CITIES[city];
-  if(def.map){
+  const welcomeEl=document.getElementById('welcome');
+  if(def.welcome){
+    welcomeEl.style.display='flex';
+    mapImg.removeAttribute('src'); mapImg.style.display='none';
+    stage.querySelectorAll('.marker').forEach(n=>n.remove());
+    emptyMsg.style.display='none';
+  }else if(def.map){
+    welcomeEl.style.display='none';
     emptyMsg.style.display='none';
     mapImg.style.display='';
     mapImg.src=def.map;
     renderMarkers();
     if(mapImg.complete) fitView(); else mapImg.onload=fitView;
   }else{
-    // ยังไม่มีแผนที่
+    welcomeEl.style.display='none';
     mapImg.removeAttribute('src'); mapImg.style.display='none';
     stage.querySelectorAll('.marker').forEach(n=>n.remove());
     emptyMsg.style.display='flex';
@@ -741,8 +748,7 @@ async function init(){
     CITY_LIST.forEach(c=>state.markers[c.key]=(published[c.key]||[]).map(m=>({...m})));
     nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
   }
-  renderMarkers(); updateProgress();
-  if(mapImg.complete) fitView(); else mapImg.onload=fitView;
+  switchCity(CITY);
 }
 init();
 </script>
