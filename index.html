@@ -66,6 +66,19 @@
   .city-select:hover{border-color:var(--accent);}
   .city-select option{background:var(--panel);color:var(--text);}
   .city-select option:disabled{color:var(--muted);}
+  .city-dd{position:relative;}
+  .city-btn{background-image:none;display:flex;align-items:center;gap:10px;min-width:210px;justify-content:space-between;}
+  .city-btn .dd-caret{color:var(--muted);font-size:11px;}
+  .city-menu{position:absolute;top:calc(100% + 4px);left:0;min-width:250px;max-width:86vw;max-height:72vh;overflow-y:auto;
+    background:var(--panel);border:1px solid var(--border);border-radius:9px;box-shadow:var(--shadow);z-index:120;padding:4px;display:none;}
+  .city-menu.open{display:block;}
+  .city-item{display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:8px 12px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;}
+  .city-item:hover{background:var(--panel2);}
+  .city-item.active{background:#222a3d;}
+  .city-item.soon{color:var(--muted);cursor:not-allowed;}
+  .city-item .city-pct{color:#9be29b;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .city-item .soon-tag{color:var(--muted);font-size:11px;font-weight:500;}
   .spacer{flex:1;}
   .btn{background:var(--panel2);color:var(--text);border:1px solid var(--border);
     padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;}
@@ -224,7 +237,10 @@
   <main class="main">
     <div class="topbar">
       <button class="menu-btn" id="menuBtn" aria-label="เมนู" title="เมนู">☰</button>
-      <select class="city-select" id="citySelect"></select>
+      <div class="city-dd" id="cityDD">
+        <button type="button" class="city-select city-btn" id="cityBtn"><span id="cityBtnLabel">Home (Donate)</span><span class="dd-caret">▾</span></button>
+        <div class="city-menu" id="cityMenu"></div>
+      </div>
       <div class="spacer"></div>
       <button class="btn" id="pubBtn" title="โหลดข้อมูลหลักมาใช้ (ของที่แก้ไขในเครื่องจะหายไป)">☁ ใช้ไฟล์หลัก</button>
       <button class="btn" id="exportBtn" title="บันทึกเป็น markers.json เพื่อนำไป commit ขึ้น GitHub">⬇ บันทึกข้อมูลใหม่</button>
@@ -406,7 +422,7 @@ const CITY_LIST = [
   {key:"prontera",   name:"Prontera",      map:"Prontera/Prontera_full_map.png"},
   {key:"morroc",     name:"Morroc",        map:"Morroc/Morroc_full_map.png"},
   {key:"novice",     name:"Novice Village",map:"Novice%20village/Novice_village_full_map.png"},
-  {key:"alberta",    name:"Alberta",       map:null},
+  {key:"alberta",    name:"Alberta",       map:"Alberta/Alberta_full_map.png"},
   {key:"byalan",     name:"Byalan Island", map:null},
   {key:"payon",      name:"Payon",         map:null},
   {key:"goblin",     name:"Goblin Forest", map:null},
@@ -548,24 +564,47 @@ document.querySelectorAll('.maintab').forEach(t=>t.addEventListener('click',()=>
   function setDrawer(open){ sidebar.classList.toggle('open',open); scrim.classList.toggle('show',open); }
   menuBtn.addEventListener('click',()=>setDrawer(!sidebar.classList.contains('open')));
   scrim.addEventListener('click',()=>setDrawer(false));
-  document.getElementById('citySelect').addEventListener('change',()=>setDrawer(false));
 })();
 
-/* ============ City switching (dropdown) ============ */
-const citySelect=document.getElementById('citySelect');
+/* ============ City switching (custom dropdown + % hint) ============ */
+const cityBtn=document.getElementById('cityBtn');
+const cityBtnLabel=document.getElementById('cityBtnLabel');
+const cityMenu=document.getElementById('cityMenu');
+const cityDD=document.getElementById('cityDD');
 const emptyMsg=document.getElementById('emptyMsg');
-CITY_LIST.forEach(c=>{
-  const opt=document.createElement('option');
-  opt.value=c.key;
-  opt.textContent = (c.map||c.welcome) ? c.name : c.name+' (เร็วๆ นี้)';
-  citySelect.appendChild(opt);
-});
-citySelect.value=CITY;
-citySelect.addEventListener('change',()=>switchCity(citySelect.value));
+
+function cityPercent(key){
+  let total=0,got=0;
+  (state.markers[key]||[]).forEach(m=>{
+    const def=ICONS[m.type]; if(!def||!GROUPS[def.group])return;
+    total++; if(personal.collected[key]&&personal.collected[key][m.id])got++;
+  });
+  return {total,got,pct: total? Math.round(got/total*100):0};
+}
+function buildCityMenu(){
+  cityMenu.innerHTML='';
+  CITY_LIST.forEach(c=>{
+    const item=document.createElement('div');
+    item.className='city-item'+(c.key===CITY?' active':'')+((!c.map&&!c.welcome)?' soon':'');
+    item.dataset.key=c.key;
+    let right='';
+    if(c.map){ const p=cityPercent(c.key); right=`<span class="city-pct">${p.pct}% (${p.got}/${p.total})</span>`; }
+    else if(!c.welcome){ right='<span class="soon-tag">เร็วๆ นี้</span>'; }
+    item.innerHTML=`<span>${c.name}</span>${right}`;
+    if(c.map||c.welcome) item.addEventListener('click',()=>{ closeCityMenu(); switchCity(c.key); });
+    cityMenu.appendChild(item);
+  });
+}
+function openCityMenu(){ buildCityMenu(); cityMenu.classList.add('open'); }
+function closeCityMenu(){ cityMenu.classList.remove('open'); }
+cityBtn.addEventListener('click',e=>{ e.stopPropagation(); cityMenu.classList.contains('open')?closeCityMenu():openCityMenu(); });
+document.addEventListener('click',e=>{ if(!cityDD.contains(e.target)) closeCityMenu(); });
+cityBtnLabel.textContent = CITIES[CITY] ? CITIES[CITY].name : '';
+
 function switchCity(city){
   if(!CITIES[city])return;
   CITY=city;
-  citySelect.value=city;
+  cityBtnLabel.textContent=CITIES[city].name;
   const def=CITIES[city];
   const welcomeEl=document.getElementById('welcome');
   if(def.welcome){
@@ -587,6 +626,8 @@ function switchCity(city){
     emptyMsg.style.display='flex';
   }
   updateProgress();
+  document.querySelector('.sidebar') && document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('scrim') && document.getElementById('scrim').classList.remove('show');
 }
 
 /* ============ View transform ============ */
