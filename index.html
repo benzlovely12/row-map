@@ -819,10 +819,16 @@ function updateProgress(){
   const el=document.getElementById('progress'); el.innerHTML='';
   const counts={};
   Object.keys(GROUPS).forEach(g=>counts[g]={placed:0,collected:0});
-  (state.markers[CITY]||[]).forEach(m=>{
-    const def=ICONS[m.type]; if(!def)return;
-    const g=def.group; if(!counts[g])return;
-    counts[g].placed++; if(isCollected(m))counts[g].collected++;
+  // ถ้าเมืองมีหลายชั้น (Glast Heim) ให้รวมสรุปทุกชั้น ไม่แยกชั้น
+  const par=parentCity(CITY);
+  const keys = (par&&par.floors) ? par.floors.map(f=>f.key) : [CITY];
+  keys.forEach(k=>{
+    (state.markers[k]||[]).forEach(m=>{
+      const def=ICONS[m.type]; if(!def)return;
+      const g=def.group; if(!counts[g])return;
+      counts[g].placed++;
+      const col=personal.collected[k]; if(col&&col[m.id])counts[g].collected++;
+    });
   });
   Object.entries(GROUPS).forEach(([g,def])=>{
     const c=counts[g];
