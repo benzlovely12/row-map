@@ -431,7 +431,12 @@ const CITY_LIST = [
   {key:"morroc",     name:"Morroc",        map:"Morroc/Morroc_full_map.png"},
   {key:"novice",     name:"Novice Village",map:"Novice%20village/Novice_village_full_map.png"},
   {key:"alberta",    name:"Alberta",       map:"Alberta/Alberta_full_map.png"},
-  {key:"byalan",     name:"Byalan Island", map:"Byalan%20Island/Byalan_full_map.png"},
+  {key:"byalan",     name:"Byalan Island", map:"Byalan%20Island/Byalan_full_map.png",
+     floors:[
+       {key:"byalan",  label:"ด้านนอก",            map:"Byalan%20Island/Byalan_full_map.png"},
+       {key:"byalan2", label:"Undersea Tunnel 1F", map:"Byalan%20Island/Byalan_full_map_2.png"},
+       {key:"byalan3", label:"Undersea Tunnel 2F", map:"Byalan%20Island/Byalan_full_map_3.png"},
+     ]},
   {key:"payon",      name:"Payon",         map:null},
   {key:"goblin",     name:"Goblin Forest", map:"Goblin%20Forest/Goblin_full_map.png"},
   {key:"geffen",     name:"Geffen",        map:"Geffen/Geffen_full_map.png"},
@@ -446,10 +451,12 @@ const CITY_LIST = [
        {key:"glastheim3", label:"คุกใต้ดิน",   map:"Glast%20Heim/Glast_full_map_3.png"},
      ]},
 ];
-/* ชั้นย่อยของ Glast Heim (key แยก เพื่อให้ marker/ความคืบหน้าแยกกัน) แต่ไม่โชว์ใน dropdown */
+/* ชั้นย่อยของเมืองที่มีหลายแมพ (key แยก เพื่อให้ marker/ความคืบหน้าแยกกัน) แต่ไม่โชว์ใน dropdown */
 const SUBFLOORS = [
   {key:"glastheim2", name:"Glast Heim (ในปราสาท)",  map:"Glast%20Heim/Glast_full_map_2.png", parent:"glastheim"},
   {key:"glastheim3", name:"Glast Heim (คุกใต้ดิน)", map:"Glast%20Heim/Glast_full_map_3.png", parent:"glastheim"},
+  {key:"byalan2",    name:"Byalan (Undersea Tunnel 1F)", map:"Byalan%20Island/Byalan_full_map_2.png", parent:"byalan"},
+  {key:"byalan3",    name:"Byalan (Undersea Tunnel 2F)", map:"Byalan%20Island/Byalan_full_map_3.png", parent:"byalan"},
 ];
 const CITIES = {}; CITY_LIST.forEach(c=>CITIES[c.key]=c);
 SUBFLOORS.forEach(c=>CITIES[c.key]=c);   // ให้ switchCity/markers รู้จัก key ชั้นย่อยด้วย
