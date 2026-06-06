@@ -112,6 +112,13 @@
   .empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     color:var(--muted);font-size:15px;text-align:center;padding:40px;}
 
+  .floorbar{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:40;
+    display:flex;gap:4px;background:rgba(24,27,34,.92);border:1px solid var(--border);
+    border-radius:10px;padding:4px;box-shadow:var(--shadow);}
+  .floorbar button{background:transparent;border:none;color:var(--muted);cursor:pointer;
+    font-size:13px;font-weight:600;padding:7px 14px;border-radius:7px;white-space:nowrap;}
+  .floorbar button:hover{color:var(--text);background:var(--panel2);}
+  .floorbar button.active{background:var(--accent2);color:#fff;}
   .zoomctl{position:absolute;right:16px;bottom:16px;display:flex;flex-direction:column;gap:6px;}
   .zoomctl button{width:38px;height:38px;border-radius:9px;background:var(--panel);
     border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;}
@@ -248,6 +255,7 @@
       <button class="btn primary" id="lockBtn">🔓 เปิดแก้ไขกล่อง</button>
     </div>
     <div class="stage-wrap" id="stageWrap">
+      <div class="floorbar" id="floorbar" style="display:none;"></div>
       <div class="stage" id="stage">
         <img class="map-img" id="mapImg" src="Novice%20village/Novice_village_full_map.png" alt="Novice Village map">
         <!-- markers injected here -->
@@ -431,9 +439,22 @@ const CITY_LIST = [
   {key:"mjolnir",    name:"Mt. Mjolnir",   map:"Mt.%20Mjolnir/Mjolnir_full_map.png"},
   {key:"poring",     name:"Poring Island", map:"Poring%20Island/Poring_full_map.png"},
   {key:"izlude",     name:"Izlude",        map:"Izlude/Izlude_full_map.png"},
-  {key:"glastheim",  name:"Glast Heim",    map:"Glast%20Heim/Glast_full_map.png"},
+  {key:"glastheim",  name:"Glast Heim",    map:"Glast%20Heim/Glast_full_map.png",
+     floors:[
+       {key:"glastheim",  label:"ด้านนอก",     map:"Glast%20Heim/Glast_full_map.png"},
+       {key:"glastheim2", label:"ในปราสาท",    map:"Glast%20Heim/Glast_full_map_2.png"},
+       {key:"glastheim3", label:"คุกใต้ดิน",   map:"Glast%20Heim/Glast_full_map_3.png"},
+     ]},
+];
+/* ชั้นย่อยของ Glast Heim (key แยก เพื่อให้ marker/ความคืบหน้าแยกกัน) แต่ไม่โชว์ใน dropdown */
+const SUBFLOORS = [
+  {key:"glastheim2", name:"Glast Heim (ในปราสาท)",  map:"Glast%20Heim/Glast_full_map_2.png", parent:"glastheim"},
+  {key:"glastheim3", name:"Glast Heim (คุกใต้ดิน)", map:"Glast%20Heim/Glast_full_map_3.png", parent:"glastheim"},
 ];
 const CITIES = {}; CITY_LIST.forEach(c=>CITIES[c.key]=c);
+SUBFLOORS.forEach(c=>CITIES[c.key]=c);   // ให้ switchCity/markers รู้จัก key ชั้นย่อยด้วย
+/* รายการ key ทั้งหมดที่ต้องมี marker/collected slot */
+const ALL_KEYS = CITY_LIST.map(c=>c.key).concat(SUBFLOORS.map(c=>c.key));
 let CITY = "main";
 
 /* ============ State & persistence (ไฮบริด) ============
@@ -450,7 +471,7 @@ const TYPE_MIGRATE={expl:"box", guard:"treasure", landmark:"box", strange:"high"
 let state = {locked:true, hidden:{}, markers:{}};  // markers[city] = [{id,type,x,y}]
 let personal = {collected:{}};                     // collected[city][id] = true
 let published = null;                              // ตำแหน่งจาก markers.json
-CITY_LIST.forEach(c=>{state.markers[c.key]=[]; personal.collected[c.key]={};});
+ALL_KEYS.forEach(k=>{state.markers[k]=[]; personal.collected[k]={};});
 
 function cleanMarkers(arr){
   return (arr||[]).filter(Boolean).map(m=>{
@@ -461,31 +482,31 @@ function cleanMarkers(arr){
 function loadPersonal(){
   try{const p=JSON.parse(localStorage.getItem(PERSONAL_KEY));
     if(p){ state.locked = p.locked!==false; state.hidden=p.hidden||{};
-      CITY_LIST.forEach(c=>personal.collected[c.key]=(p.collected&&p.collected[c.key])||{});
+      ALL_KEYS.forEach(k=>personal.collected[k]=(p.collected&&p.collected[k])||{});
       return; }
   }catch(e){}
   // ย้ายข้อมูลส่วนตัวจากเวอร์ชันเก่า (collected ฝังในตัว marker)
   try{const s=JSON.parse(localStorage.getItem(LEGACY_KEY));
     if(s){ state.hidden=s.hidden||{}; state.locked=!!s.locked;
-      if(s.markers) CITY_LIST.forEach(c=>(s.markers[c.key]||[]).forEach(m=>{
-        if(m&&m.collected) personal.collected[c.key][m.id]=true; }));
+      if(s.markers) ALL_KEYS.forEach(k=>(s.markers[k]||[]).forEach(m=>{
+        if(m&&m.collected) personal.collected[k][m.id]=true; }));
     }
   }catch(e){}
 }
 /* คืนค่า true ถ้ามีฉบับร่างในเครื่อง (จะได้ไม่ทับด้วยฉบับเผยแพร่) */
 function loadDraftOrLegacy(){
   try{const d=JSON.parse(localStorage.getItem(DRAFT_KEY));
-    if(d&&d.markers){ CITY_LIST.forEach(c=>state.markers[c.key]=cleanMarkers(d.markers[c.key])); return true; }
+    if(d&&d.markers){ ALL_KEYS.forEach(k=>state.markers[k]=cleanMarkers(d.markers[k])); return true; }
   }catch(e){}
   try{const s=JSON.parse(localStorage.getItem(LEGACY_KEY));
-    if(s&&s.markers){ CITY_LIST.forEach(c=>state.markers[c.key]=cleanMarkers(s.markers[c.key])); return true; }
+    if(s&&s.markers){ ALL_KEYS.forEach(k=>state.markers[k]=cleanMarkers(s.markers[k])); return true; }
   }catch(e){}
   return false;
 }
 async function loadPublished(){
   try{const r=await fetch('markers.json',{cache:'no-store'});
     if(r.ok){const j=await r.json(); const src=j.markers||j; const out={};
-      CITY_LIST.forEach(c=>out[c.key]=cleanMarkers(src[c.key])); return out;}
+      ALL_KEYS.forEach(k=>out[k]=cleanMarkers(src[k])); return out;}
   }catch(e){}
   return null;
 }
@@ -573,12 +594,21 @@ const cityMenu=document.getElementById('cityMenu');
 const cityDD=document.getElementById('cityDD');
 const emptyMsg=document.getElementById('emptyMsg');
 
-function cityPercent(key){
+function cityPercentOne(key){
   let total=0,got=0;
   (state.markers[key]||[]).forEach(m=>{
     const def=ICONS[m.type]; if(!def||!GROUPS[def.group])return;
     total++; if(personal.collected[key]&&personal.collected[key][m.id])got++;
   });
+  return {total,got};
+}
+function cityPercent(key){
+  // ถ้าเมืองมีหลายชั้น (floors) ให้รวมทุกชั้น
+  const c=CITIES[key];
+  let keys=[key];
+  if(c&&c.floors) keys=c.floors.map(f=>f.key);
+  let total=0,got=0;
+  keys.forEach(k=>{const r=cityPercentOne(k); total+=r.total; got+=r.got;});
   return {total,got,pct: total? Math.round(got/total*100):0};
 }
 function buildCityMenu(){
@@ -601,11 +631,37 @@ cityBtn.addEventListener('click',e=>{ e.stopPropagation(); cityMenu.classList.co
 document.addEventListener('click',e=>{ if(!cityDD.contains(e.target)) closeCityMenu(); });
 cityBtnLabel.textContent = CITIES[CITY] ? CITIES[CITY].name : '';
 
+/* หา "เมืองแม่" (ที่มี floors) ของ key หนึ่ง: ถ้า key เป็นชั้นย่อยให้คืน parent */
+function parentCity(key){
+  const c=CITIES[key];
+  if(c&&c.parent) return CITIES[c.parent];
+  return c;
+}
+function renderFloorbar(city){
+  const floorbar=document.getElementById('floorbar');
+  const par=parentCity(city);
+  if(par&&par.floors){
+    floorbar.innerHTML='';
+    par.floors.forEach(f=>{
+      const b=document.createElement('button');
+      b.textContent=f.label;
+      b.className=(f.key===city?'active':'');
+      b.addEventListener('click',()=>switchCity(f.key));
+      floorbar.appendChild(b);
+    });
+    floorbar.style.display='flex';
+  }else{
+    floorbar.style.display='none';
+  }
+}
 function switchCity(city){
   if(!CITIES[city])return;
   CITY=city;
-  cityBtnLabel.textContent=CITIES[city].name;
   const def=CITIES[city];
+  // ป้ายปุ่มเมือง: ถ้าเป็นชั้นย่อย ให้โชว์ชื่อเมืองแม่
+  const par=parentCity(city);
+  cityBtnLabel.textContent=(par&&par.name)||def.name;
+  renderFloorbar(city);
   const welcomeEl=document.getElementById('welcome');
   if(def.welcome){
     welcomeEl.style.display='flex';
@@ -781,7 +837,7 @@ function updateProgress(){
 /* ============ Export / Import / Load-from-web ============ */
 document.getElementById('exportBtn').onclick=()=>{
   const out={markers:{}};
-  CITY_LIST.forEach(c=>out.markers[c.key]=(state.markers[c.key]||[]).map(m=>({id:m.id,type:m.type,x:m.x,y:m.y})));
+  ALL_KEYS.forEach(k=>out.markers[k]=(state.markers[k]||[]).map(m=>({id:m.id,type:m.type,x:m.x,y:m.y})));
   const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download='markers.json'; a.click();
@@ -793,7 +849,7 @@ fileInput.onchange=e=>{
   const f=e.target.files[0]; if(!f)return;
   const r=new FileReader();
   r.onload=()=>{try{const j=JSON.parse(r.result); const src=j.markers||j;
-    CITY_LIST.forEach(c=>state.markers[c.key]=cleanMarkers(src[c.key]));
+    ALL_KEYS.forEach(k=>state.markers[k]=cleanMarkers(src[k]));
     nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
     saveDraft();renderMarkers();updateProgress();toast('โหลดไฟล์แล้ว (เป็นฉบับร่างในเครื่อง)');
   }catch(err){toast('ไฟล์ไม่ถูกต้อง');}};
@@ -803,7 +859,7 @@ document.getElementById('pubBtn').onclick=async()=>{
   if(!confirm('จะใช้โหลดข้อมูลหลักมาใช้  เมื่อกด icon ต่างๆที่แก้ไขจะหายไป'))return;
   localStorage.removeItem(DRAFT_KEY);
   const pub=await loadPublished();
-  if(pub){published=pub; CITY_LIST.forEach(c=>state.markers[c.key]=(pub[c.key]||[]).map(m=>({...m})));
+  if(pub){published=pub; ALL_KEYS.forEach(k=>state.markers[k]=(pub[k]||[]).map(m=>({...m})));
     nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
     renderMarkers();updateProgress();toast('โหลดข้อมูลหลักแล้ว');
   }else{toast('ยังไม่พบ markers.json บนเว็บ');}
@@ -826,7 +882,7 @@ async function init(){
   refreshLockUI();
   published = await loadPublished();
   if(published && !__hadDraft){
-    CITY_LIST.forEach(c=>state.markers[c.key]=(published[c.key]||[]).map(m=>({...m})));
+    ALL_KEYS.forEach(k=>state.markers[k]=(published[k]||[]).map(m=>({...m})));
     nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
   }
   switchCity(CITY);
