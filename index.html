@@ -952,16 +952,14 @@ function fitView(){
 
 /* ============ Popup รวมมือกัน / ฝากกดติดตามช่อง (เด้งครั้งแรก) ============ */
 (function(){
-  const POP_KEY='row_collab_popup_v1';
   const ov=document.getElementById('collabPopup');
   if(!ov)return;
-  function closePopup(){ ov.classList.remove('show'); try{localStorage.setItem(POP_KEY,'1');}catch(e){} }
+  function closePopup(){ ov.classList.remove('show'); }
   document.getElementById('collabClose').addEventListener('click',closePopup);
   document.getElementById('collabEnter').addEventListener('click',closePopup);
   ov.addEventListener('click',e=>{ if(e.target===ov) closePopup(); });   // คลิกพื้นหลังเพื่อปิด
   document.addEventListener('keydown',e=>{ if(e.key==='Escape') closePopup(); });
-  let seen=false; try{seen=localStorage.getItem(POP_KEY)==='1';}catch(e){}
-  if(!seen) ov.classList.add('show');
+  ov.classList.add('show');   // เด้งทุกครั้งที่เปิดเว็บ
 })();
 
 /* ============ Init ============ */
