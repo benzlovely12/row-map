@@ -156,6 +156,8 @@
   .prow .pcount{font-variant-numeric:tabular-nums;font-weight:700;}
   .prow .pcount .c{color:var(--good);}
   hr.sep{border:none;border-top:1px solid var(--border);margin:12px 0;}
+  .side-actions{padding:8px 10px 12px;display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--border);}
+  .side-actions .btn{width:100%;justify-content:center;}
 
   /* ---------- Welcome / Main ---------- */
   .welcome{position:absolute;inset:0;z-index:60;background:
@@ -197,7 +199,7 @@
       transform:translateX(-100%);transition:transform .25s ease;}
     .sidebar.open{transform:translateX(0);box-shadow:0 0 40px rgba(0,0,0,.6);}
     .scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;}
-    #pubBtn,#exportBtn,#importBtn,#lockBtn{display:none;}
+    #lockBtn{display:none;}
     .topbar{gap:10px;padding:0 12px;}
     .city-select{flex:1;}
     .welcome{padding:12px;}
@@ -271,6 +273,12 @@
       <div id="panel-icons" style="display:none;">
         <div class="palette-hint">ลากไอคอนไปวางบนแผนที่ (เฉพาะโหมดแก้ไข). คลิกไอคอนบนแผนที่เพื่อกากบาท = เก็บแล้ว.</div>
         <div class="ico-grid" id="icoGrid"></div>
+        <div class="side-actions">
+          <button class="btn" id="pubBtn" title="โหลดข้อมูลหลักมาใช้ (ของที่แก้ไขในเครื่องจะหายไป)">☁ ใช้ไฟล์หลัก</button>
+          <button class="btn" id="exportBtn" title="บันทึกเป็น markers.json เพื่อนำไป commit ขึ้น GitHub">⬇ บันทึกข้อมูลใหม่</button>
+          <button class="btn" id="importBtn" title="โหลดไฟล์ markers.json">⬆ โหลดข้อมูลใหม่</button>
+          <button class="btn danger" id="clearBtn" title="ลบไอคอนทั้งหมดในแมพที่เปิดอยู่">🗑 ลบไอคอนทั้งหมด</button>
+        </div>
       </div>
     </div>
   </aside>
@@ -284,10 +292,10 @@
         <button type="button" class="city-select city-btn" id="cityBtn"><span id="cityBtnLabel">Home (Donate)</span><span class="dd-caret">▾</span></button>
         <div class="city-menu" id="cityMenu"></div>
       </div>
+      <a href="https://hits.seeyoufarm.com" target="_blank" style="display:flex;align-items:center;flex:none;">
+        <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbenzlovely12.github.io%2Frow-map%2F&count_bg=%235b8cff&title_bg=%231c1f27&icon=eye-fill.svg&icon_color=%23E7E7E7&title=%E0%B8%9C%E0%B8%B9%E0%B9%89%E0%B9%80%E0%B8%82%E0%B9%89%E0%B8%B2%E0%B8%8A%E0%B8%A1&edge_flat=true" alt="ผู้เข้าชม" style="height:22px;border-radius:3px;">
+      </a>
       <div class="spacer"></div>
-      <button class="btn" id="pubBtn" title="โหลดข้อมูลหลักมาใช้ (ของที่แก้ไขในเครื่องจะหายไป)">☁ ใช้ไฟล์หลัก</button>
-      <button class="btn" id="exportBtn" title="บันทึกเป็น markers.json เพื่อนำไป commit ขึ้น GitHub">⬇ บันทึกข้อมูลใหม่</button>
-      <button class="btn" id="importBtn" title="โหลดไฟล์ markers.json">⬆ โหลดข้อมูลใหม่</button>
       <button class="btn primary" id="lockBtn">🔓 เปิดแก้ไขกล่อง</button>
     </div>
     <div class="stage-wrap" id="stageWrap">
@@ -918,6 +926,15 @@ document.getElementById('exportBtn').onclick=()=>{
 };
 const fileInput=document.getElementById('fileInput');
 document.getElementById('importBtn').onclick=()=>fileInput.click();
+document.getElementById('clearBtn').onclick=()=>{
+  const cityName = CITIES[CITY]?.name || CITY;
+  const count = (state.markers[CITY]||[]).length;
+  if(!count){toast('ไม่มีไอคอนในแมพนี้');return;}
+  if(!confirm(`ลบไอคอนทั้งหมด ${count} ตัว ในแมพ "${cityName}" ใช่ไหม?`))return;
+  state.markers[CITY]=[];
+  saveDraft(); renderMarkers(); updateProgress();
+  toast(`ลบไอคอนทั้งหมดใน ${cityName} แล้ว`);
+};
 fileInput.onchange=e=>{
   const f=e.target.files[0]; if(!f)return;
   const r=new FileReader();
