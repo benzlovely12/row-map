@@ -379,6 +379,7 @@ const ICONS = {
   rain:    {name:"กล่องฝนตก",         group:"strange", color:"#3aa3ff", svg:waterball(),desc:"ลูกบอลน้ำตอนฝนตก เดินเข้าไปสัมผัสเหมือนกล่องกระดาษ โผล่มากสุด 3 ลูกใกล้ๆ กัน"},
   snowman: {name:"กล่องหิมะตก",       group:"strange", color:"#5ec8e0", svg:snowman(),  desc:"ตุ๊กตาหิมะตอนหิมะตก กวาดหิมะที่กองอยู่ให้เสร็จ จะปรากฏกล่องไม้"},
   winter:  {name:"กล่องพิเศษ",        group:"strange", color:"#cf5ad0", svg:winterChest(),desc:"หีบพิเศษฤดูหนาว/หีบไอเทมเฉพาะ — มีตามอีเวนต์/ฤดูกาล เช่น Prontera ทะเลสาบเป็นน้ำแข็ง"},
+  mystery: {name:"กล่องลึกลับ",       group:"strange", color:"#8d7ab5", svg:mysteryBox(), desc:"กล่องลึกลับที่ยังหาไม่เจอ — ใช้ปักหมุดตำแหน่งที่สงสัยหรือยังไม่แน่ใจว่าเป็นกล่องอะไร"},
   landmark:{name:"กล่องถ่ายรูป (Landmark)", group:"landmark", color:"#5bb6ff", svg:camera(), desc:"จุดถ่ายรูป Landmark — ไปถึงจุดที่กำหนดแล้วถ่ายรูปเพื่อเก็บความคืบหน้า"},
 };
 
@@ -473,6 +474,13 @@ function shieldMon(){return `<svg viewBox="0 0 40 40"><g class="body">
   <circle cx="15.5" cy="17" r="2.4" fill="#ffffff"/><circle cx="24.5" cy="17" r="2.4" fill="#ffffff"/>
   <circle cx="15.5" cy="17" r="1.1" fill="#0c5e54"/><circle cx="24.5" cy="17" r="1.1" fill="#0c5e54"/>
   <path d="M13.5 23 l2.2 3 l2.3 -2.2 l2 2.2 l2.3 -2.2 l2.2 3" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</g></svg>`;}
+function mysteryBox(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="15" width="26" height="17" rx="2" fill="#4a4060" stroke="#1e1830" stroke-width="2"/>
+  <path d="M7 15 l13 -5 l13 5" fill="#6a5a88" stroke="#1e1830" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="20" y1="10" x2="20" y2="32" stroke="#1e1830" stroke-width="1.6"/>
+  <line x1="7" y1="23" x2="33" y2="23" stroke="#1e1830" stroke-width="1.6"/>
+  <text x="20" y="29" font-size="15" font-weight="900" fill="#e8d8ff" text-anchor="middle" font-family="sans-serif">?</text>
 </g></svg>`;}
 function camera(){return `<svg viewBox="0 0 40 40"><g class="body">
   <rect x="6" y="13" width="28" height="20" rx="4" fill="#5bb6ff" stroke="#1f5a8c" stroke-width="2"/>
