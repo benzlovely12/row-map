@@ -953,7 +953,7 @@ fileInput.onchange=e=>{
   r.readAsText(f); fileInput.value='';
 };
 document.getElementById('pubBtn').onclick=async()=>{
-  if(!confirm('จะใช้โหลดข้อมูลหลักมาใช้  เมื่อกด icon ต่างๆที่แก้ไขจะหายไป'))return;
+  if(!confirm('หากมีการอัปเดตแล้วหลังวันที่ที่ระบุ ไม่จำเป็นต้องกดอีก\nกด OK เพื่อโหลดข้อมูลล่าสุด'))return;
   localStorage.removeItem(DRAFT_KEY);
   const pub=await loadPublished();
   if(pub){published=pub; ALL_KEYS.forEach(k=>state.markers[k]=(pub[k]||[]).map(m=>({...m})));
