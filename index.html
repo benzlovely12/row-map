@@ -363,7 +363,7 @@
       </div>
       <button class="btn" id="pubBtn" title="โหลดข้อมูลหลักมาใช้ (ของที่แก้ไขในเครื่องจะหายไป)">☁ Update</button>
       <span class="topbar-meta">
-        <span class="update-date">อัปเดตล่าสุดวันที่ 29/6/2569</span>
+        <span class="update-date">อัปเดตล่าสุดวันที่ 7/7/2569</span>
         <img src="https://visitor-badge.laobi.icu/badge?page_id=benzlovely12.row-map&left_color=%231c1f27&right_color=%235b8cff&left_text=visitors" alt="visitors" class="visitor-badge">
       </span>
       <div class="spacer"></div>
@@ -423,7 +423,8 @@
             <div class="cl-row"><span class="cl-date">15/06/2569</span><span class="cl-ver">V 3.03</span><span class="cl-desc">[อัปเดตแสดงเพจผู้พัฒนาเพื่อช่วยกันปรับปรุง]</span></div>
             <div class="cl-row"><span class="cl-date">19/06/2569</span><span class="cl-ver">V 3.04</span><span class="cl-desc">[อัปเดตกล่องฝนตก เมือง Morroc]</span></div>
             <div class="cl-row"><span class="cl-date">23/06/2569</span><span class="cl-ver">V 4.00</span><span class="cl-desc">[เพิ่มปุ่มลบข้อมูลการเก็บกล่อง]</span></div>
-            <div class="cl-row latest"><span class="cl-date">29/06/2569</span><span class="cl-ver">V 4.01</span><span class="cl-desc">[แก้ไขปัญหาการแสดงผลผิดพลาด] <span class="cl-tag">ล่าสุด</span></span></div>
+            <div class="cl-row"><span class="cl-date">29/06/2569</span><span class="cl-ver">V 4.01</span><span class="cl-desc">[แก้ไขปัญหาการแสดงผลผิดพลาด]</span></div>
+            <div class="cl-row latest"><span class="cl-date">07/07/2569</span><span class="cl-ver">V 5.00</span><span class="cl-desc">[ปรับระบบครั้งใหญ่ — รองรับมือถือ ลากเลื่อน/ซูมสองนิ้ว] <span class="cl-tag">ล่าสุด</span></span></div>
           </div>
         </div>
       </div>
@@ -902,6 +903,54 @@ window.addEventListener('mousemove',e=>{
 });
 window.addEventListener('mouseup',()=>{panning=null; endMarkerDrag();});
 
+/* ============ Touch: pan (1 นิ้ว) + pinch zoom (2 นิ้ว) สำหรับมือถือ ============ */
+let touchPan=null, pinch=null;
+function _tDist(t){const dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy);}
+function _tMid(t){return {x:(t[0].clientX+t[1].clientX)/2, y:(t[0].clientY+t[1].clientY)/2};}
+function _welcomeOpen(){const w=document.getElementById('welcome'); return w&&w.style.display!=='none';}
+
+stageWrap.addEventListener('touchstart',e=>{
+  if(_welcomeOpen())return;                       // หน้า Home: ปล่อยให้เลื่อน/สกอลล์ปกติ
+  if(e.touches.length===2){
+    touchPan=null;
+    pinch={dist:_tDist(e.touches), mid:_tMid(e.touches)};
+  }else if(e.touches.length===1){
+    if(e.target.closest('.marker'))return;        // แตะที่กล่อง = ปล่อยให้เป็นแตะกากบาท (click)
+    const t=e.touches[0];
+    touchPan={sx:t.clientX, sy:t.clientY, ox:view.x, oy:view.y, moved:false};
+  }
+},{passive:true});
+
+stageWrap.addEventListener('touchmove',e=>{
+  if(_welcomeOpen())return;
+  if(pinch && e.touches.length===2){
+    e.preventDefault();
+    const nd=_tDist(e.touches), nm=_tMid(e.touches);
+    const rect=stageWrap.getBoundingClientRect();
+    const mx=nm.x-rect.left, my=nm.y-rect.top;
+    const old=view.scale, ns=clampScale(old*(nd/(pinch.dist||nd)));
+    // ซูมเข้าหาจุดกึ่งกลางสองนิ้ว
+    view.x = mx-(mx-view.x)*(ns/old);
+    view.y = my-(my-view.y)*(ns/old);
+    // เลื่อนตามการขยับจุดกึ่งกลาง (สองนิ้วลากไปพร้อมกัน)
+    view.x += nm.x-pinch.mid.x;
+    view.y += nm.y-pinch.mid.y;
+    view.scale=ns; applyView();
+    pinch.dist=nd; pinch.mid=nm;
+  }else if(touchPan && e.touches.length===1){
+    const t=e.touches[0];
+    if(Math.abs(t.clientX-touchPan.sx)+Math.abs(t.clientY-touchPan.sy)>3){touchPan.moved=true; e.preventDefault();}
+    view.x=touchPan.ox+(t.clientX-touchPan.sx);
+    view.y=touchPan.oy+(t.clientY-touchPan.sy);
+    applyView();
+  }
+},{passive:false});
+
+stageWrap.addEventListener('touchend',e=>{
+  if(e.touches.length===0){touchPan=null; pinch=null;}
+  else if(e.touches.length<2){pinch=null;}        // ยกจาก 2 นิ้วเหลือ 1 นิ้ว: เลิกโหมด pinch
+},{passive:true});
+
 /* ============ Coordinate helpers ============ */
 function clientToMap(cx,cy){
   const rect=stageWrap.getBoundingClientRect();
@@ -1114,6 +1163,8 @@ function fitView(){
 
 /* ============ Init ============ */
 async function init(){
+  // โหมดแก้ไข (admin): เปิดผ่าน URL เช่น index.html?admin — คนทั่วไปจะไม่เห็นปุ่มแก้ไขกล่อง
+  if(new URLSearchParams(location.search).has('admin')) lockBtn.style.display='';
   refreshLockUI();
   published = await loadPublished();
   if(published && !__hadDraft){
