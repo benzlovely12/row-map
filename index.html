@@ -75,17 +75,86 @@
   .city-menu{position:absolute;top:calc(100% + 4px);left:0;min-width:250px;max-width:86vw;max-height:72vh;overflow-y:auto;
     background:var(--panel);border:1px solid var(--border);border-radius:9px;box-shadow:var(--shadow);z-index:120;padding:4px;display:none;}
   .city-menu.open{display:block;}
-  .city-item{display:flex;align-items:center;justify-content:space-between;gap:14px;
-    padding:8px 12px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;}
+  .city-item{display:flex;align-items:center;justify-content:space-between;gap:9px;
+    padding:7px 10px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;}
   .city-item:hover{background:var(--panel2);}
   .city-item.active{background:#222a3d;}
   .city-item.soon{color:var(--muted);cursor:not-allowed;}
+  .city-item .city-name{flex:1;min-width:0;}
   .city-item .city-pct{color:#9be29b;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;}
   .city-item .soon-tag{color:var(--muted);font-size:11px;font-weight:500;}
+  .city-erase{flex:none;width:28px;height:28px;border-radius:7px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:0;transition:border-color .12s,background .12s,color .12s;}
+  .city-erase:hover{color:var(--accent);border-color:var(--accent);background:rgba(91,140,255,.16);}
+  .city-erase svg{width:16px;height:16px;}
+  .city-erase.all{color:#e88;border-color:#5a2b2b;background:#241a1c;}
+  .city-erase.all:hover{color:#fff;background:var(--danger);border-color:var(--danger);}
+  .erase-cap{flex:none;width:28px;}
+  /* Preset dropdown */
+  .preset-dd{position:relative;}
+  .preset-btn{display:flex;align-items:center;gap:9px;min-width:150px;justify-content:space-between;cursor:pointer;}
+  .preset-btn .preset-lead{display:inline-flex;align-items:center;gap:7px;min-width:0;}
+  .preset-btn .preset-lead svg{width:15px;height:15px;color:var(--accent);flex:none;}
+  .preset-menu{min-width:290px;}
+  .preset-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:7px;cursor:pointer;font-size:14px;font-weight:600;color:var(--text);}
+  .preset-item:hover{background:var(--panel2);}
+  .preset-item.active{background:#222a3d;}
+  .preset-item .p-check{flex:none;width:16px;height:16px;color:var(--accent);display:flex;align-items:center;justify-content:center;}
+  .preset-item .p-check svg{width:15px;height:15px;}
+  .preset-item .p-name{flex:1;min-width:0;}
+  .preset-item .p-pct{flex:none;color:#9be29b;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;margin-left:6px;}
+  .preset-item .p-input{flex:1;min-width:0;width:100%;background:var(--bg);border:1px solid var(--accent);border-radius:5px;color:var(--text);font-size:14px;padding:3px 6px;font-family:inherit;font-weight:600;}
+  .preset-item .p-edit{flex:none;width:28px;height:28px;border-radius:7px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:0;}
+  .preset-item .p-edit:hover{color:var(--accent);border-color:var(--accent);}
+  .preset-item .p-edit svg{width:15px;height:15px;}
+  .preset-sheet-head,.preset-sheet-foot{display:none;}  /* โผล่เฉพาะมือถือ (เต็มจอ) */
+  /* มือถือ: แตะ Preset แล้วกางเต็มหน้าจอ */
+  @media(max-width:768px){
+    .preset-menu.open{position:fixed;inset:0;width:100vw;max-width:none;max-height:none;border:none;border-radius:0;
+      display:flex;flex-direction:column;z-index:500;background:var(--bg);padding:0;box-shadow:none;}
+    .preset-sheet-head{display:flex;align-items:center;gap:10px;padding:16px 16px 12px;border-bottom:1px solid var(--border);}
+    .psh-title{flex:1;display:inline-flex;align-items:center;gap:9px;font-size:16px;font-weight:800;min-width:0;}
+    .psh-title svg{width:18px;height:18px;color:var(--accent);flex:none;}
+    .preset-close{width:38px;height:38px;flex:none;border:1px solid var(--border);background:var(--panel2);border-radius:9px;
+      color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .preset-list{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px;}
+    .preset-menu .preset-item{padding:15px 14px;border-radius:12px;background:var(--panel2);border:1px solid var(--border);font-size:16px;}
+    .preset-menu .preset-item.active{border-color:var(--accent);background:#222a3d;}
+    .preset-menu .p-check{width:20px;height:20px;}
+    .preset-menu .p-edit{width:38px;height:38px;border-radius:9px;}
+    .preset-menu .p-input{font-size:16px;padding:6px 9px;}
+    .preset-menu .p-pct{font-size:13px;}
+    .preset-sheet-foot{display:block;padding:12px 16px 18px;font-size:11.5px;color:var(--muted);text-align:center;border-top:1px solid var(--border);}
+  }
+  /* Popup รีเซ็ต */
+  .reset-ov{position:fixed;inset:0;z-index:600;background:rgba(8,10,14,.72);backdrop-filter:blur(3px);
+    display:none;align-items:center;justify-content:center;padding:20px;}
+  .reset-ov.show{display:flex;}
+  .reset-dlg{width:100%;max-width:340px;text-align:center;background:linear-gradient(160deg,#1d212b,#15181f);
+    border:1px solid var(--border);border-radius:16px;padding:24px 22px 18px;box-shadow:0 18px 55px rgba(0,0,0,.6);
+    animation:collabPop .3s cubic-bezier(.2,.9,.3,1.2);}
+  .reset-dlg .r-ic{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;
+    justify-content:center;background:rgba(91,140,255,.14);color:var(--accent);}
+  .reset-ov.is-all .reset-dlg .r-ic{background:rgba(226,85,85,.16);color:var(--danger);}
+  .reset-dlg .r-ic svg{width:26px;height:26px;}
+  .reset-dlg .r-title{font-size:18px;font-weight:800;margin-bottom:7px;}
+  .reset-dlg .r-msg{font-size:14px;line-height:1.6;margin-bottom:5px;color:var(--text);}
+  .reset-dlg .r-msg b{color:#9be29b;}
+  .reset-ov.is-all .reset-dlg .r-msg b{color:#ff9b9b;}
+  .reset-dlg .r-msg .r-preset{color:#8fb2ff;font-weight:800;}
+  .reset-dlg .r-sub{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+  .reset-dlg .r-btns{display:flex;gap:10px;}
+  .reset-dlg .r-btns button{flex:1;padding:11px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;border:1px solid var(--border);}
+  .reset-dlg .r-cancel{background:var(--panel2);color:var(--text);}
+  .reset-dlg .r-cancel:hover{border-color:var(--accent);}
+  .reset-dlg .r-ok{background:var(--danger);color:#fff;border-color:var(--danger);}
+  .reset-dlg .r-ok:hover{filter:brightness(1.1);}
   .spacer{flex:1;}
   .btn{background:var(--panel2);color:var(--text);border:1px solid var(--border);
     padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;}
   .btn:hover{border-color:var(--accent);}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .btn:disabled:hover{border-color:var(--border);}
   .btn.primary{background:var(--accent2);border-color:var(--accent);}
   .btn.danger:hover{border-color:var(--danger);color:#ffb4b4;}
   .lockpill{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);}
@@ -183,6 +252,10 @@
   .welcome p,.welcome li{font-size:17px;line-height:1.85;color:var(--text);}
   .welcome ol{margin:0;padding-left:24px;}
   .welcome ol li{margin:8px 0;}
+  .welcome .ic-erasebtn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+    border-radius:6px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);vertical-align:-6px;margin:0 2px;}
+  .welcome .ic-erasebtn svg{width:15px;height:15px;}
+  .welcome .ic-erasebtn.red{color:#e88;border-color:#5a2b2b;background:#241a1c;}
   .welcome .cols{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:start;margin-top:6px;}
   .welcome .donate{background:var(--panel2);border:2px solid var(--accent);border-radius:16px;
     padding:22px;text-align:center;box-shadow:0 0 0 4px rgba(91,140,255,.12);}
@@ -256,8 +329,10 @@
     .city-dd{order:2;flex:1;min-width:0;}
     .city-select{width:100%;flex:1;}
     .city-btn{min-width:0;}
-    #pubBtn{order:3;flex:none;white-space:nowrap;}
-    .topbar-meta{order:4;width:100%;justify-content:space-between;gap:8px;}
+    #pubBtn{order:4;flex:none;white-space:nowrap;}
+    .preset-dd{order:3;flex:none;}
+    .preset-btn{min-width:0;}
+    .topbar-meta{order:5;width:100%;justify-content:space-between;gap:8px;}
     .update-date{font-size:12.5px;}
     .welcome{padding:12px;}
     .welcome-card{padding:22px 16px;border-radius:14px;}
@@ -330,12 +405,6 @@
       <div id="panel-cities">
         <div class="progress" id="progress"></div>
         <hr class="sep">
-        <div class="reset-box">
-          <div class="reset-title">↺ รีเซ็ตความคืบหน้า</div>
-          <button class="reset-btn" id="resetCityBtn">📍 รีเซ็ตเฉพาะเมืองนี้</button>
-          <button class="reset-btn danger" id="resetAllBtn">🌐 รีเซ็ตทุกเมือง</button>
-        </div>
-        <hr class="sep">
         <div class="legend-title">คำอธิบายกล่องแต่ละแบบ</div>
         <div class="legend-body" id="legendBody"></div>
       </div>
@@ -361,9 +430,23 @@
         <button type="button" class="city-select city-btn" id="cityBtn"><span id="cityBtnLabel">Home (Donate)</span><span class="dd-caret">▾</span></button>
         <div class="city-menu" id="cityMenu"></div>
       </div>
-      <button class="btn" id="pubBtn" title="โหลดข้อมูลหลักมาใช้ (ของที่แก้ไขในเครื่องจะหายไป)">☁ Update</button>
+      <div class="preset-dd" id="presetDD">
+        <button type="button" class="city-select city-btn preset-btn" id="presetBtn" title="สลับพรีเซ็ตสำหรับคนเล่นหลายตัวละคร">
+          <span class="preset-lead"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3.2"/><path d="M2.5 21v-1.2a6 6 0 0 1 6-6"/><path d="M16 3.3a4 4 0 0 1 0 7.7"/><path d="M21.5 21v-1.2a6 6 0 0 0-4.2-5.7"/></svg><span id="presetLabel">Preset1</span></span>
+          <span class="dd-caret">▾</span>
+        </button>
+        <div class="city-menu preset-menu" id="presetMenu">
+          <div class="preset-sheet-head">
+            <span class="psh-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3.2"/><path d="M2.5 21v-1.2a6 6 0 0 1 6-6"/><path d="M16 3.3a4 4 0 0 1 0 7.7"/><path d="M21.5 21v-1.2a6 6 0 0 0-4.2-5.7"/></svg>เลือกพรีเซ็ต (หลายตัวละคร)</span>
+            <button class="preset-close" id="presetClose" aria-label="ปิด">✕</button>
+          </div>
+          <div class="preset-list" id="presetList"></div>
+          <div class="preset-sheet-foot">แตะเลือกเพื่อสลับตัวละคร · แตะดินสอเพื่อเปลี่ยนชื่อ (ไม่เกิน 8 ตัวอักษร)</div>
+        </div>
+      </div>
+      <button class="btn" id="pubBtn" style="display:none;" title="โหลดข้อมูลหลัก (ล้างฉบับร่างในเครื่อง) — สำหรับแอดมิน">☁ Update</button>
       <span class="topbar-meta">
-        <span class="update-date">อัปเดตล่าสุดวันที่ 7/7/2569</span>
+        <span class="update-date">อัปเดตล่าสุดวันที่ 10/7/2569</span>
         <img src="https://visitor-badge.laobi.icu/badge?page_id=benzlovely12.row-map&left_color=%231c1f27&right_color=%235b8cff&left_text=visitors" alt="visitors" class="visitor-badge">
       </span>
       <div class="spacer"></div>
@@ -406,10 +489,10 @@
           </div>
           <h2 class="howto-h">วิธีใช้งาน</h2>
           <ol>
-            <li><b>กด ☁ Update ก่อนเสมอ</b> เพื่อโหลดข้อมูลล่าสุด โดยเฉพาะครั้งแรกที่เข้าใช้งาน</li>
-            <li>เลือกเมืองจากเมนูด้านบน</li>
-            <li>ซูมด้วยลูกกลิ้งเมาส์ และลากเพื่อเลื่อนแผนที่</li>
-            <li>คลิกที่กล่องเพื่อกากบาทว่า "เก็บแล้ว" (บันทึกในเครื่องคุณเอง)</li>
+            <li>เลือกเมืองจากเมนูด้านบนซ้าย</li>
+            <li>สำหรับคนเล่นหลายตัวละคร มีระบบพรีเซ็ต ตั้งชื่อได้อิสระ (ไม่เกิน 8 ตัวอักษร)</li>
+            <li>คลิกที่กล่องเพื่อบันทึกว่า "เก็บกล่องนั้นแล้ว"</li>
+            <li>กดปุ่มยางลบ <span class="ic-erasebtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg></span> หน้าเมืองเพื่อรีเซ็ตกล่อง และยางลบสีแดง <span class="ic-erasebtn red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg></span> เพื่อลบทั้งหมด</li>
           </ol>
           <h2 class="changelog-h">📋 การอัปเดต</h2>
           <div class="changelog">
@@ -424,7 +507,12 @@
             <div class="cl-row"><span class="cl-date">19/06/2569</span><span class="cl-ver">V 3.04</span><span class="cl-desc">[อัปเดตกล่องฝนตก เมือง Morroc]</span></div>
             <div class="cl-row"><span class="cl-date">23/06/2569</span><span class="cl-ver">V 4.00</span><span class="cl-desc">[เพิ่มปุ่มลบข้อมูลการเก็บกล่อง]</span></div>
             <div class="cl-row"><span class="cl-date">29/06/2569</span><span class="cl-ver">V 4.01</span><span class="cl-desc">[แก้ไขปัญหาการแสดงผลผิดพลาด]</span></div>
-            <div class="cl-row latest"><span class="cl-date">07/07/2569</span><span class="cl-ver">V 5.00</span><span class="cl-desc">[ปรับระบบครั้งใหญ่ — รองรับมือถือ ลากเลื่อน/ซูมสองนิ้ว] <span class="cl-tag">ล่าสุด</span></span></div>
+            <div class="cl-row"><span class="cl-date">07/07/2569</span><span class="cl-ver">V 5.00</span><span class="cl-desc">[ปรับระบบครั้งใหญ่ — รองรับมือถือ ลากเลื่อน/ซูมสองนิ้ว]</span></div>
+            <div class="cl-row"><span class="cl-date">09/07/2569</span><span class="cl-ver">V 5.01</span><span class="cl-desc">[แก้บัคการโหลดแมพทับซ้อน]</span></div>
+            <div class="cl-row"><span class="cl-date">09/07/2569</span><span class="cl-ver">V 5.02</span><span class="cl-desc">[อัปเดตข้อมูลอัตโนมัติทุกครั้งที่เปิดเว็บ ไม่ต้องกดปุ่ม]</span></div>
+            <div class="cl-row"><span class="cl-date">09/07/2569</span><span class="cl-ver">V 5.03</span><span class="cl-desc">[ย้ายปุ่มลบข้อมูลให้ใช้งานง่ายขึ้นและสะดวกขึ้น]</span></div>
+            <div class="cl-row"><span class="cl-date">10/07/2569</span><span class="cl-ver">V 6.00</span><span class="cl-desc">[เพิ่มระบบพรีเซ็ต สูงสุด 5 อัน]</span></div>
+            <div class="cl-row latest"><span class="cl-date">10/07/2569</span><span class="cl-ver">V 6.00</span><span class="cl-desc">[เพิ่มระบบล็อกอิน Google + ซิงค์ข้ามเครื่อง] <span class="cl-tag">ล่าสุด</span></span></div>
           </div>
         </div>
       </div>
@@ -433,6 +521,17 @@
 </div>
 
 <input type="file" id="fileInput" accept="application/json" style="display:none;">
+
+<!-- ===== Popup ยืนยันรีเซ็ตความคืบหน้า ===== -->
+<div class="reset-ov" id="resetOverlay">
+  <div class="reset-dlg">
+    <div class="r-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg></div>
+    <div class="r-title">รีเซ็ตความคืบหน้า</div>
+    <div class="r-msg" id="resetMsg"></div>
+    <div class="r-sub">เฉพาะในเครื่องคุณ — ตำแหน่งกล่องไม่หาย และย้อนกลับไม่ได้</div>
+    <div class="r-btns"><button class="r-cancel" id="resetCancel">ยกเลิก</button><button class="r-ok" id="resetOk">ลบเลย</button></div>
+  </div>
+</div>
 
 <!-- ===== Popup รวมมือกัน / ฝากกดติดตามช่อง ===== -->
 <div class="collab-ov" id="collabPopup">
@@ -464,6 +563,7 @@
         <div class="donor-card">คุณปิยะ <span class="donor-amt">100 บาท</span></div>
         <div class="donor-card">คุณโชติกร <span class="donor-amt">100 บาท</span></div>
         <div class="donor-card">คุณกรรณิกา <span class="donor-amt">50 บาท</span></div>
+        <div class="donor-card">คุณณฐวัฒน์ <span class="donor-amt">20 บาท</span></div>
       </div>
     </div>
   </div>
@@ -653,9 +753,15 @@ const LEGACY_KEY   = "row_tracker_v1";   // ของเวอร์ชันเ
 const TYPE_MIGRATE={expl:"box", guard:"treasure", landmark:"box", strange:"high"};
 
 let state = {locked:true, hidden:{}, markers:{}};  // markers[city] = [{id,type,x,y}]
-let personal = {collected:{}};                     // collected[city][id] = true
+/* ===== พรีเซ็ต: 5 โปรไฟล์เก็บกล่องแยกกัน (สำหรับหลายตัวละคร) =====
+   personal.profiles[i][city][id]=true ; personal.collected = โปรไฟล์ที่ใช้อยู่ (อ้างอิงตัวเดียวกัน) */
+const PRESET_COUNT=5, PRESET_MAXLEN=8;
+let personal = {activePreset:0, presetNames:[], profiles:[], collected:null};
 let published = null;                              // ตำแหน่งจาก markers.json
-ALL_KEYS.forEach(k=>{state.markers[k]=[]; personal.collected[k]={};});
+function blankProfile(){ const o={}; ALL_KEYS.forEach(k=>o[k]={}); return o; }
+for(let i=0;i<PRESET_COUNT;i++){ personal.profiles[i]=blankProfile(); personal.presetNames[i]='Preset'+(i+1); }
+personal.collected=personal.profiles[0];
+ALL_KEYS.forEach(k=>{state.markers[k]=[];});
 
 function cleanMarkers(arr){
   return (arr||[]).filter(Boolean).map(m=>{
@@ -666,16 +772,28 @@ function cleanMarkers(arr){
 function loadPersonal(){
   try{const p=JSON.parse(localStorage.getItem(PERSONAL_KEY));
     if(p){ state.locked = p.locked!==false; state.hidden=p.hidden||{};
-      ALL_KEYS.forEach(k=>personal.collected[k]=(p.collected&&p.collected[k])||{});
+      if(p.profiles){                       // รูปแบบใหม่ (มีพรีเซ็ต)
+        for(let i=0;i<PRESET_COUNT;i++){
+          const src=p.profiles[i]||{}; const prof=blankProfile();
+          ALL_KEYS.forEach(k=>prof[k]=src[k]||{}); personal.profiles[i]=prof;
+        }
+        for(let i=0;i<PRESET_COUNT;i++){ personal.presetNames[i]=(p.presetNames&&p.presetNames[i])||('Preset'+(i+1)); }
+        personal.activePreset=(p.activePreset>=0&&p.activePreset<PRESET_COUNT)?p.activePreset:0;
+      }else if(p.collected){                 // รูปแบบเก่า (collected เดียว) → ย้ายเข้าพรีเซ็ต 1
+        const prof=blankProfile(); ALL_KEYS.forEach(k=>prof[k]=p.collected[k]||{});
+        personal.profiles[0]=prof; personal.activePreset=0;
+      }
+      personal.collected=personal.profiles[personal.activePreset];
       return; }
   }catch(e){}
-  // ย้ายข้อมูลส่วนตัวจากเวอร์ชันเก่า (collected ฝังในตัว marker)
+  // ย้ายข้อมูลส่วนตัวจากเวอร์ชันเก่ามาก (collected ฝังในตัว marker) → พรีเซ็ต 1
   try{const s=JSON.parse(localStorage.getItem(LEGACY_KEY));
     if(s){ state.hidden=s.hidden||{}; state.locked=!!s.locked;
       if(s.markers) ALL_KEYS.forEach(k=>(s.markers[k]||[]).forEach(m=>{
-        if(m&&m.collected) personal.collected[k][m.id]=true; }));
+        if(m&&m.collected) personal.profiles[0][k][m.id]=true; }));
     }
   }catch(e){}
+  personal.collected=personal.profiles[personal.activePreset];
 }
 /* คืนค่า true ถ้ามีฉบับร่างในเครื่อง (จะได้ไม่ทับด้วยฉบับเผยแพร่) */
 function loadDraftOrLegacy(){
@@ -688,14 +806,15 @@ function loadDraftOrLegacy(){
   return false;
 }
 async function loadPublished(){
-  try{const r=await fetch('markers.json',{cache:'no-store'});
+  try{const r=await fetch('markers.json?_='+Date.now(),{cache:'no-store'});
     if(r.ok){const j=await r.json(); const src=j.markers||j; const out={};
       ALL_KEYS.forEach(k=>out[k]=cleanMarkers(src[k])); return out;}
   }catch(e){}
   return null;
 }
 function savePersonal(){ try{localStorage.setItem(PERSONAL_KEY,
-  JSON.stringify({locked:state.locked,hidden:state.hidden,collected:personal.collected}));}catch(e){} }
+  JSON.stringify({locked:state.locked,hidden:state.hidden,
+    activePreset:personal.activePreset,presetNames:personal.presetNames,profiles:personal.profiles}));}catch(e){} }
 function saveDraft(){ try{localStorage.setItem(DRAFT_KEY, JSON.stringify({markers:state.markers}));}catch(e){} }
 function save(){ savePersonal(); }   // โค้ดเดิมเรียก save() ตอนแก้ hidden/locked
 
@@ -705,7 +824,10 @@ function setCollected(m,v){ if(!personal.collected[CITY])personal.collected[CITY
 
 function allMarkers(){return Object.values(state.markers).flat();}
 loadPersonal();
-let __hadDraft = loadDraftOrLegacy();
+/* คนทั่วไป: โหลดจุดกล่องล่าสุดอัตโนมัติทุกครั้งที่เปิดเว็บ (ไม่สนฉบับร่าง)
+   โหมดแก้ไข (?admin) เท่านั้น: ใช้ฉบับร่างในเครื่องต่อได้ */
+const IS_ADMIN = new URLSearchParams(location.search).has('admin');
+let __hadDraft = IS_ADMIN ? loadDraftOrLegacy() : false;
 let nextId = Math.max(0,...allMarkers().map(m=>m.id||0))+1;
 
 /* ============ DOM refs ============ */
@@ -795,21 +917,150 @@ function cityPercent(key){
   keys.forEach(k=>{const r=cityPercentOne(k); total+=r.total; got+=r.got;});
   return {total,got,pct: total? Math.round(got/total*100):0};
 }
+/* ความคืบหน้ารวมทุกเมือง (แสดงหลัง Home) */
+function overallPercent(){
+  let total=0,got=0;
+  CITY_LIST.forEach(c=>{ if(c.map){ const r=cityPercent(c.key); total+=r.total; got+=r.got; } });
+  return {total,got,pct: total? Math.round(got/total*100):0};
+}
+const ERASE_SVG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg>`;
 function buildCityMenu(){
   cityMenu.innerHTML='';
   CITY_LIST.forEach(c=>{
     const item=document.createElement('div');
     item.className='city-item'+(c.key===CITY?' active':'')+((!c.map&&!c.welcome)?' soon':'');
     item.dataset.key=c.key;
-    let right='';
-    if(c.map){ const p=cityPercent(c.key); right=`<span class="city-pct">${p.pct}% (${p.got}/${p.total})</span>`; }
-    else if(!c.welcome){ right='<span class="soon-tag">เร็วๆ นี้</span>'; }
-    item.innerHTML=`<span>${c.name}</span>${right}`;
-    if(c.map||c.welcome) item.addEventListener('click',()=>{ closeCityMenu(); switchCity(c.key); });
+    let front='',right='';
+    if(c.welcome){
+      front=`<button class="city-erase all" data-erase="all" title="รีเซ็ตทุกเมือง">${ERASE_SVG}</button>`;
+      right='';
+    }else if(c.map){
+      front=`<button class="city-erase" data-erase="${c.key}" title="รีเซ็ตเมืองนี้">${ERASE_SVG}</button>`;
+      const p=cityPercent(c.key); right=`<span class="city-pct">${p.pct}% (${p.got}/${p.total})</span>`;
+    }else{
+      front=`<span class="erase-cap"></span>`;
+      right='<span class="soon-tag">เร็วๆ นี้</span>';
+    }
+    item.innerHTML=`${front}<span class="city-name">${c.name}</span>${right}`;
+    if(c.map||c.welcome) item.addEventListener('click',e=>{
+      if(e.target.closest('.city-erase'))return;
+      closeCityMenu(); switchCity(c.key);
+    });
     cityMenu.appendChild(item);
   });
+  cityMenu.querySelectorAll('.city-erase').forEach(btn=>{
+    btn.addEventListener('click',e=>{ e.stopPropagation(); openResetDialog(btn.dataset.erase); });
+  });
 }
-function openCityMenu(){ buildCityMenu(); cityMenu.classList.add('open'); }
+/* ============ Popup ยืนยันรีเซ็ต (ยางลบใน dropdown เมือง) ============ */
+function resetKeysForCity(key){
+  const c=CITIES[key];
+  return (c&&c.floors)?c.floors.map(f=>f.key):[key];
+}
+let __resetPending=null;
+function openResetDialog(target){
+  const ov=document.getElementById('resetOverlay'), msg=document.getElementById('resetMsg');
+  const preset=' ในพรีเซ็ต <span class="r-preset">'+escHtml(personal.presetNames[personal.activePreset])+'</span>';
+  if(target==='all'){
+    __resetPending={all:true};
+    ov.classList.add('is-all');
+    msg.innerHTML='ลบความคืบหน้า <b>ทุกเมือง</b>'+preset+' ใช่ไหม?';
+  }else{
+    __resetPending={all:false,key:target};
+    ov.classList.remove('is-all');
+    const nm=escHtml((CITIES[target]&&CITIES[target].name)||target);
+    msg.innerHTML='ลบความคืบหน้าของเมือง <b>'+nm+'</b>'+preset+' ใช่ไหม?';
+  }
+  ov.classList.add('show');
+}
+function closeResetDialog(){ const ov=document.getElementById('resetOverlay'); if(ov)ov.classList.remove('show'); __resetPending=null; }
+(function(){
+  const ov=document.getElementById('resetOverlay'); if(!ov)return;
+  document.getElementById('resetCancel').addEventListener('click',closeResetDialog);
+  ov.addEventListener('click',e=>{ if(e.target===ov) closeResetDialog(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&ov.classList.contains('show')) closeResetDialog(); });
+  document.getElementById('resetOk').addEventListener('click',()=>{
+    if(__resetPending){
+      if(__resetPending.all){ resetCollectedKeys(ALL_KEYS); toast('รีเซ็ตความคืบหน้าทุกเมืองแล้ว'); }
+      else{ const nm=(CITIES[__resetPending.key]&&CITIES[__resetPending.key].name)||__resetPending.key;
+            resetCollectedKeys(resetKeysForCity(__resetPending.key)); toast('รีเซ็ตเมือง '+nm+' แล้ว'); }
+    }
+    closeResetDialog();
+    if(cityMenu.classList.contains('open')) buildCityMenu();
+  });
+})();
+/* ============ Preset dropdown — สลับโปรไฟล์เก็บกล่อง (หลายตัวละคร) ============ */
+const P_CHECK=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>`;
+const P_PENCIL=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L18 10l-4-4L4 16z"/><path d="M13 7l4 4"/></svg>`;
+function escHtml(s){return (s+'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function updatePresetLabel(){ const l=document.getElementById('presetLabel'); if(l)l.textContent=personal.presetNames[personal.activePreset]; }
+function switchPreset(idx){
+  if(idx<0||idx>=PRESET_COUNT)return;
+  personal.activePreset=idx; personal.collected=personal.profiles[idx];
+  savePersonal(); updatePresetLabel(); renderMarkers(); updateProgress();
+  if(cityMenu.classList.contains('open')) buildCityMenu();
+  toast('สลับไปพรีเซ็ต "'+personal.presetNames[idx]+'"');
+}
+function renamePreset(idx,name){
+  name=(name||'').trim().slice(0,PRESET_MAXLEN);
+  personal.presetNames[idx]=name||('Preset'+(idx+1));
+  savePersonal(); updatePresetLabel();
+}
+/* ความคืบหน้ารวมทุกเมืองของโปรไฟล์หนึ่ง (โชว์หลังแต่ละพรีเซ็ต) */
+function overallPercentForProfile(prof){
+  let total=0,got=0;
+  CITY_LIST.forEach(c=>{ if(!c.map)return;
+    const keys=c.floors?c.floors.map(f=>f.key):[c.key];
+    keys.forEach(k=>(state.markers[k]||[]).forEach(m=>{
+      const def=ICONS[m.type]; if(!def||!GROUPS[def.group])return;
+      total++; if(prof[k]&&prof[k][m.id])got++;
+    }));
+  });
+  return {total,got,pct: total?Math.round(got/total*100):0};
+}
+function buildPresetMenu(){
+  const list=document.getElementById('presetList'); if(!list)return;
+  list.innerHTML='';
+  for(let i=0;i<PRESET_COUNT;i++){
+    const item=document.createElement('div');
+    item.className='preset-item'+(i===personal.activePreset?' active':'');
+    item.dataset.idx=i;
+    const p=overallPercentForProfile(personal.profiles[i]);
+    item.innerHTML=`<span class="p-check">${i===personal.activePreset?P_CHECK:''}</span>`+
+      `<span class="p-name">${escHtml(personal.presetNames[i])}</span>`+
+      `<span class="p-pct">${p.pct}% (${p.got}/${p.total})</span>`+
+      `<button class="p-edit" title="เปลี่ยนชื่อ (ไม่เกิน ${PRESET_MAXLEN} ตัวอักษร)">${P_PENCIL}</button>`;
+    list.appendChild(item);
+  }
+  list.querySelectorAll('.preset-item').forEach(item=>{
+    item.addEventListener('click',e=>{ if(e.target.closest('.p-edit'))return; closePresetMenu(); switchPreset(+item.dataset.idx); });
+  });
+  list.querySelectorAll('.p-edit').forEach(btn=>{
+    btn.addEventListener('click',e=>{ e.stopPropagation(); startRename(+btn.closest('.preset-item').dataset.idx, btn.closest('.preset-item')); });
+  });
+}
+function startRename(idx,row){
+  const nameSpan=row.querySelector('.p-name'); if(!nameSpan)return;
+  const cur=personal.presetNames[idx];
+  const inp=document.createElement('input');
+  inp.className='p-input'; inp.value=cur; inp.maxLength=PRESET_MAXLEN;
+  nameSpan.replaceWith(inp); inp.focus(); inp.select();
+  let ended=false;
+  function done(){ if(ended)return; ended=true; renamePreset(idx,inp.value); buildPresetMenu(); }
+  inp.addEventListener('blur',done);
+  inp.addEventListener('keydown',ev=>{ if(ev.key==='Enter'){ev.preventDefault();inp.blur();} else if(ev.key==='Escape'){inp.value=cur;inp.blur();} });
+  inp.addEventListener('click',ev=>ev.stopPropagation());
+}
+function openPresetMenu(){ closeCityMenu(); buildPresetMenu(); document.getElementById('presetMenu').classList.add('open'); }
+function closePresetMenu(){ const m=document.getElementById('presetMenu'); if(m)m.classList.remove('open'); }
+(function(){
+  const btn=document.getElementById('presetBtn'), dd=document.getElementById('presetDD'); if(!btn)return;
+  btn.addEventListener('click',e=>{ e.stopPropagation(); const m=document.getElementById('presetMenu'); m.classList.contains('open')?closePresetMenu():openPresetMenu(); });
+  document.addEventListener('click',e=>{ if(dd&&!dd.contains(e.target)) closePresetMenu(); });
+  const pc=document.getElementById('presetClose'); if(pc) pc.addEventListener('click',e=>{ e.stopPropagation(); closePresetMenu(); });
+  updatePresetLabel();
+})();
+function openCityMenu(){ closePresetMenu(); buildCityMenu(); cityMenu.classList.add('open'); }
 function closeCityMenu(){ cityMenu.classList.remove('open'); }
 cityBtn.addEventListener('click',e=>{ e.stopPropagation(); cityMenu.classList.contains('open')?closeCityMenu():openCityMenu(); });
 document.addEventListener('click',e=>{ if(!cityDD.contains(e.target)) closeCityMenu(); });
@@ -858,7 +1109,7 @@ function switchCity(city){
     mapImg.style.display='';
     mapImg.src=def.map;
     renderMarkers();
-    if(mapImg.complete) fitView(); else mapImg.onload=fitView;
+    if(mapImg.complete && mapImg.naturalWidth) fitView(); else mapImg.addEventListener('load',fitView,{once:true});
   }else{
     welcomeEl.style.display='none';
     mapImg.removeAttribute('src'); mapImg.style.display='none';
@@ -1105,6 +1356,7 @@ document.getElementById('exportBtn').onclick=()=>{
   const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download='markers.json'; a.click();
+  URL.revokeObjectURL(a.href);   // คืนแรมที่พักไฟล์ไว้ กัน memory รั่ว
   toast('บันทึก markers.json แล้ว — นำไปวางทับใน repo แล้ว commit เพื่อเผยแพร่');
 };
 const fileInput=document.getElementById('fileInput');
@@ -1164,7 +1416,10 @@ function fitView(){
 /* ============ Init ============ */
 async function init(){
   // โหมดแก้ไข (admin): เปิดผ่าน URL เช่น index.html?admin — คนทั่วไปจะไม่เห็นปุ่มแก้ไขกล่อง
-  if(new URLSearchParams(location.search).has('admin')) lockBtn.style.display='';
+  if(IS_ADMIN){
+    lockBtn.style.display='';
+    const pb=document.getElementById('pubBtn'); if(pb){ pb.style.display=''; pb.disabled=false; }   // ปุ่ม Update เห็นเฉพาะแอดมิน
+  }
   refreshLockUI();
   published = await loadPublished();
   if(published && !__hadDraft){
@@ -1174,6 +1429,135 @@ async function init(){
   switchCity(CITY);
 }
 init();
+</script>
+
+<!-- ===== Firebase: ล็อกอิน Google + ซิงค์ข้ามเครื่อง (V7.00 — 13/7/2569) ===== -->
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const firebaseConfig={
+    apiKey:"AIzaSyBc9jOLV2BaVGAgUjnTC6SIL4kxxHsExkw",
+    authDomain:"row-map-tracker.firebaseapp.com",
+    projectId:"row-map-tracker",
+    storageBucket:"row-map-tracker.firebasestorage.app",
+    messagingSenderId:"718645945734",
+    appId:"1:718645945734:web:0000a9b46e33934933f807"
+  };
+  if(!window.firebase||!firebaseConfig.apiKey)return;
+  try{ firebase.initializeApp(firebaseConfig); }catch(e){ return; }
+  const auth=firebase.auth(), db=firebase.firestore();
+  const provider=new firebase.auth.GoogleAuthProvider();
+
+  const G='<svg viewBox="0 0 48 48" width="16" height="16"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>';
+  const OUT='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>';
+  const CLD='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 17.6A4.5 4.5 0 0 0 17 9.5a6 6 0 0 0-11.3-1.6A4 4 0 0 0 6 16"/><path d="M9 14l2 2 4-4"/></svg>';
+
+  const css=document.createElement('style');
+  css.textContent=`
+  .user-dd{position:relative;margin-left:6px;}
+  .gbtn-top{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#3c4043;border:1px solid #dadce0;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;}
+  .gbtn-top:hover{background:#f5f6f7;}
+  .userchip{display:flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--border);border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer;}
+  .userchip img,.userchip .av{width:28px;height:28px;border-radius:50%;flex:none;object-fit:cover;}
+  .userchip .av{background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;}
+  .userchip .un{font-size:13px;font-weight:600;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .userchip .cv{color:var(--muted);font-size:10px;}
+  .usermenu{position:absolute;top:calc(100% + 6px);right:0;width:290px;background:var(--panel);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);z-index:130;overflow:hidden;display:none;}
+  .usermenu.open{display:block;}
+  .um-head{display:none;}
+  .um-acct{display:flex;align-items:center;gap:11px;padding:15px 16px;border-bottom:1px solid var(--border);}
+  .um-acct img,.um-acct .av{width:42px;height:42px;border-radius:50%;flex:none;object-fit:cover;}
+  .um-acct .av{background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;}
+  .um-acct .an{font-size:14px;font-weight:700;}
+  .um-acct .ae{font-size:12px;color:var(--muted);max-width:205px;overflow:hidden;text-overflow:ellipsis;}
+  .um-sync{display:flex;align-items:center;gap:9px;padding:12px 16px;border-bottom:1px solid var(--border);}
+  .um-sync .si{width:30px;height:30px;border-radius:8px;background:rgba(70,196,106,.14);color:var(--good);display:flex;align-items:center;justify-content:center;flex:none;}
+  .um-sync .st{font-size:12.5px;font-weight:700;color:var(--good);}
+  .um-sync .ss{font-size:11px;color:var(--muted);}
+  .um-out{display:flex;align-items:center;gap:9px;padding:13px 16px;font-size:13.5px;color:var(--text);cursor:pointer;}
+  .um-out:hover{background:var(--panel2);}
+  .member-pill{font-size:11.5px;color:var(--muted);white-space:nowrap;}
+  .member-pill b{color:#9be29b;font-weight:700;}
+  @media(max-width:768px){
+    .user-dd{order:3;}
+    .gbtn-top{padding:7px;border-radius:50%;}
+    .gbtn-top .lbl{display:none;}
+    .userchip{padding:2px;border-radius:50%;}
+    .userchip .un,.userchip .cv{display:none;}
+    .usermenu.open{position:fixed;inset:0;width:100vw;max-width:none;border:none;border-radius:0;z-index:600;}
+    .um-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);}
+    .um-head .t{font-size:15px;font-weight:800;}
+    .um-close{width:34px;height:34px;border:1px solid var(--border);background:var(--panel2);border-radius:9px;color:var(--text);font-size:16px;cursor:pointer;}
+    .um-acct{padding:20px 16px;}
+  }`;
+  document.head.appendChild(css);
+
+  const dd=document.createElement('div'); dd.className='user-dd';
+  dd.innerHTML=
+    '<button class="gbtn-top" id="loginBtn">'+G+'<span class="lbl">เข้าสู่ระบบ</span></button>'+
+    '<div class="userchip" id="userChip" style="display:none"></div>'+
+    '<div class="usermenu" id="userMenu">'+
+      '<div class="um-head"><span class="t">บัญชีของฉัน</span><button class="um-close" id="umClose">✕</button></div>'+
+      '<div class="um-acct" id="umAcct"></div>'+
+      '<div class="um-sync"><span class="si">'+CLD+'</span><span><div class="st">ซิงค์อัตโนมัติเปิดอยู่</div><div class="ss" id="umSs">พร้อมใช้งาน</div></span></div>'+
+      '<div class="um-out" id="logoutBtn">'+OUT+'ออกจากระบบ</div>'+
+    '</div>';
+  const topbar=document.querySelector('.topbar');
+  if(topbar) topbar.appendChild(dd);
+  const meta=document.querySelector('.topbar-meta');
+  const pill=document.createElement('span'); pill.className='member-pill'; pill.id='memberPill'; pill.innerHTML='· <b>สมาชิก 0</b> คน';
+  if(meta) meta.appendChild(pill);
+
+  const loginBtn=dd.querySelector('#loginBtn'), userChip=dd.querySelector('#userChip'), userMenu=dd.querySelector('#userMenu');
+  function ss(t){ const el=dd.querySelector('#umSs'); if(el) el.textContent=t; }
+  function avatarHTML(u){ const ini=((u.displayName||u.email||'?').trim().charAt(0)||'?').toUpperCase();
+    return u.photoURL ? '<img src="'+u.photoURL+'" referrerpolicy="no-referrer" alt="">' : '<span class="av">'+ini+'</span>'; }
+
+  let pushT=null;
+  function cloudData(){ return {profiles:personal.profiles,presetNames:personal.presetNames,activePreset:personal.activePreset,updatedAt:firebase.firestore.FieldValue.serverTimestamp()}; }
+  function pushNow(){ const u=auth.currentUser; if(!u)return; db.collection('users').doc(u.uid).set(cloudData()).then(function(){ss('บันทึกขึ้นคลาวด์แล้ว เมื่อสักครู่');}).catch(function(){ss('ซิงค์ไม่สำเร็จ จะลองใหม่');}); }
+  function schedulePush(){ if(!auth.currentUser)return; clearTimeout(pushT); pushT=setTimeout(pushNow,4000); ss('กำลังบันทึก...'); }
+
+  const _origSave=savePersonal;
+  savePersonal=function(){ _origSave(); schedulePush(); };
+
+  function applyCloud(d){
+    if(!d||!d.profiles)return;
+    for(var i=0;i<PRESET_COUNT;i++){ var src=d.profiles[i]||{}, prof=blankProfile();
+      ALL_KEYS.forEach(function(k){ prof[k]=src[k]||{}; }); personal.profiles[i]=prof; }
+    for(var j=0;j<PRESET_COUNT;j++){ personal.presetNames[j]=(d.presetNames&&d.presetNames[j])||('Preset'+(j+1)); }
+    personal.activePreset=(d.activePreset>=0&&d.activePreset<PRESET_COUNT)?d.activePreset:0;
+    personal.collected=personal.profiles[personal.activePreset];
+    _origSave();
+    renderMarkers(); updateProgress(); if(typeof updatePresetLabel==='function') updatePresetLabel();
+    if(typeof cityMenu!=='undefined'&&cityMenu.classList.contains('open')&&typeof buildCityMenu==='function') buildCityMenu();
+  }
+
+  async function onLogin(u){
+    loginBtn.style.display='none'; userChip.style.display='flex';
+    userChip.innerHTML=avatarHTML(u)+'<span class="un">'+(u.displayName||'บัญชี')+'</span><span class="cv">▾</span>';
+    dd.querySelector('#umAcct').innerHTML=avatarHTML(u)+'<span><div class="an">'+(u.displayName||'')+'</div><div class="ae">'+(u.email||'')+'</div></span>';
+    try{
+      var ref=db.collection('users').doc(u.uid), snap=await ref.get();
+      if(snap.exists){ applyCloud(snap.data()); ss('ดึงเซฟจากคลาวด์แล้ว'); }
+      else{ await ref.set(cloudData()); db.collection('stats').doc('global').set({members:firebase.firestore.FieldValue.increment(1)},{merge:true}).catch(function(){}); ss('สร้างเซฟใหม่จากข้อมูลในเครื่อง'); }
+    }catch(e){ ss('เชื่อมต่อคลาวด์ไม่ได้'); }
+    loadMembers();
+  }
+  function onLogout(){ loginBtn.style.display=''; userChip.style.display='none'; userMenu.classList.remove('open'); }
+
+  auth.onAuthStateChanged(function(u){ u?onLogin(u):onLogout(); });
+  loginBtn.addEventListener('click',function(){ auth.signInWithPopup(provider).catch(function(e){ if(typeof toast==='function') toast('ล็อกอินไม่สำเร็จ: '+(e.code||'')); }); });
+  userChip.addEventListener('click',function(e){ e.stopPropagation(); userMenu.classList.toggle('open'); });
+  document.addEventListener('click',function(e){ if(!dd.contains(e.target)) userMenu.classList.remove('open'); });
+  dd.querySelector('#umClose').addEventListener('click',function(){ userMenu.classList.remove('open'); });
+  dd.querySelector('#logoutBtn').addEventListener('click',function(){ auth.signOut(); if(typeof toast==='function') toast('ออกจากระบบแล้ว'); });
+
+  function loadMembers(){ db.collection('stats').doc('global').get().then(function(s){ var n=(s.exists&&s.data().members)||0; if(pill) pill.innerHTML='· <b>สมาชิก '+n+'</b> คน'; }).catch(function(){}); }
+  loadMembers();
+})();
 </script>
 </body>
 </html>
