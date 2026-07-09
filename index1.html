@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROW Map Tracker</title>
+<style>
+  :root{
+    --bg:#15171c; --panel:#1c1f27; --panel2:#232733; --border:#2e3440;
+    --text:#e6e9ef; --muted:#8b93a7; --accent:#5b8cff; --accent2:#3a5bbf;
+    --good:#46c46a; --warn:#e0a13a; --danger:#e25555;
+    --shadow:0 4px 18px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
+    font-family:"Segoe UI",system-ui,"Noto Sans Thai",sans-serif;overflow:hidden;}
+  .app{display:flex;height:100vh;}
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{width:280px;min-width:280px;background:var(--panel);border-right:1px solid var(--border);
+    display:flex;flex-direction:column;}
+  .brand{padding:16px 18px;font-size:18px;font-weight:700;letter-spacing:.5px;
+    border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
+  .maintabs{display:flex;border-bottom:1px solid var(--border);}
+  .maintab{flex:1;padding:12px;text-align:center;cursor:pointer;color:var(--muted);
+    font-weight:600;font-size:14px;border-bottom:2px solid transparent;user-select:none;}
+  .maintab.active{color:var(--text);border-bottom-color:var(--accent);background:var(--panel2);}
+  .maintab:hover{color:var(--text);}
+  .side-body{flex:1;overflow-y:auto;padding:10px;}
+
+  .subtab{padding:11px 14px;margin:5px 0;border-radius:9px;cursor:pointer;
+    background:var(--panel2);border:1px solid transparent;display:flex;align-items:center;
+    justify-content:space-between;font-size:14px;user-select:none;}
+  .subtab:hover{border-color:var(--border);}
+  .subtab.active{border-color:var(--accent);background:#222a3d;}
+  .subtab.disabled{opacity:.45;cursor:not-allowed;}
+  .subtab .soon{font-size:11px;color:var(--muted);background:#2b3142;padding:2px 7px;border-radius:20px;}
+
+  /* icon palette */
+  .palette-hint{font-size:12px;color:var(--muted);padding:4px 6px 10px;line-height:1.5;}
+  .ico-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  .ico-card{background:var(--panel2);border:1px solid var(--border);border-radius:10px;
+    padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;
+    cursor:grab;user-select:none;transition:transform .08s,border-color .12s;}
+  .ico-card{border-left-width:4px;}
+  .ico-card:hover{transform:translateY(-2px);filter:brightness(1.12);}
+  .ico-card:active{cursor:grabbing;}
+  .ico-card .lbl{font-size:11.5px;color:var(--text);text-align:center;line-height:1.25;}
+  .ico-card .ico-badge{display:flex;align-items:center;justify-content:center;
+    width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.06);
+    border:2px solid;}
+  .ico-card svg{width:34px;height:34px;display:block;}
+  .ico-card.locked{opacity:.4;pointer-events:none;}
+
+  /* ---------- Main ---------- */
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .topbar{height:54px;min-height:54px;background:var(--panel);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:14px;padding:0 16px;}
+  .topbar .title{font-weight:700;font-size:16px;}
+  .topbar-meta{display:inline-flex;align-items:center;gap:14px;min-width:0;}
+  .update-date{font-size:12px;color:#8b93a7;white-space:nowrap;}
+  .visitor-badge{height:22px;border-radius:3px;flex:none;}
+  .city-select{font-size:15px;font-weight:700;color:var(--text);background:var(--panel2);
+    border:1px solid var(--border);border-radius:8px;padding:8px 30px 8px 12px;cursor:pointer;
+    -webkit-appearance:none;appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4 L6 8 L10 4' stroke='%238b93a7' stroke-width='1.6' fill='none'/></svg>");
+    background-repeat:no-repeat;background-position:right 10px center;}
+  .city-select:hover{border-color:var(--accent);}
+  .city-select option{background:var(--panel);color:var(--text);}
+  .city-select option:disabled{color:var(--muted);}
+  .city-dd{position:relative;}
+  .city-btn{background-image:none;display:flex;align-items:center;gap:10px;min-width:210px;justify-content:space-between;}
+  .city-btn .dd-caret{color:var(--muted);font-size:11px;}
+  .city-menu{position:absolute;top:calc(100% + 4px);left:0;min-width:250px;max-width:86vw;max-height:72vh;overflow-y:auto;
+    background:var(--panel);border:1px solid var(--border);border-radius:9px;box-shadow:var(--shadow);z-index:120;padding:4px;display:none;}
+  .city-menu.open{display:block;}
+  .city-item{display:flex;align-items:center;justify-content:space-between;gap:9px;
+    padding:7px 10px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;}
+  .city-item:hover{background:var(--panel2);}
+  .city-item.active{background:#222a3d;}
+  .city-item.soon{color:var(--muted);cursor:not-allowed;}
+  .city-item .city-name{flex:1;min-width:0;}
+  .city-item .city-pct{color:#9be29b;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .city-item .soon-tag{color:var(--muted);font-size:11px;font-weight:500;}
+  .city-erase{flex:none;width:28px;height:28px;border-radius:7px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:0;transition:border-color .12s,background .12s,color .12s;}
+  .city-erase:hover{color:var(--accent);border-color:var(--accent);background:rgba(91,140,255,.16);}
+  .city-erase svg{width:16px;height:16px;}
+  .city-erase.all{color:#e88;border-color:#5a2b2b;background:#241a1c;}
+  .city-erase.all:hover{color:#fff;background:var(--danger);border-color:var(--danger);}
+  .erase-cap{flex:none;width:28px;}
+  /* Preset dropdown */
+  .preset-dd{position:relative;}
+  .preset-btn{display:flex;align-items:center;gap:9px;min-width:150px;justify-content:space-between;cursor:pointer;}
+  .preset-btn .preset-lead{display:inline-flex;align-items:center;gap:7px;min-width:0;}
+  .preset-btn .preset-lead svg{width:15px;height:15px;color:var(--accent);flex:none;}
+  .preset-menu{min-width:290px;}
+  .preset-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:7px;cursor:pointer;font-size:14px;font-weight:600;color:var(--text);}
+  .preset-item:hover{background:var(--panel2);}
+  .preset-item.active{background:#222a3d;}
+  .preset-item .p-check{flex:none;width:16px;height:16px;color:var(--accent);display:flex;align-items:center;justify-content:center;}
+  .preset-item .p-check svg{width:15px;height:15px;}
+  .preset-item .p-name{flex:1;min-width:0;}
+  .preset-item .p-pct{flex:none;color:#9be29b;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;margin-left:6px;}
+  .preset-item .p-input{flex:1;min-width:0;width:100%;background:var(--bg);border:1px solid var(--accent);border-radius:5px;color:var(--text);font-size:14px;padding:3px 6px;font-family:inherit;font-weight:600;}
+  .preset-item .p-edit{flex:none;width:28px;height:28px;border-radius:7px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:0;}
+  .preset-item .p-edit:hover{color:var(--accent);border-color:var(--accent);}
+  .preset-item .p-edit svg{width:15px;height:15px;}
+  .preset-sheet-head,.preset-sheet-foot{display:none;}  /* โผล่เฉพาะมือถือ (เต็มจอ) */
+  /* มือถือ: แตะ Preset แล้วกางเต็มหน้าจอ */
+  @media(max-width:768px){
+    .preset-menu.open{position:fixed;inset:0;width:100vw;max-width:none;max-height:none;border:none;border-radius:0;
+      display:flex;flex-direction:column;z-index:500;background:var(--bg);padding:0;box-shadow:none;}
+    .preset-sheet-head{display:flex;align-items:center;gap:10px;padding:16px 16px 12px;border-bottom:1px solid var(--border);}
+    .psh-title{flex:1;display:inline-flex;align-items:center;gap:9px;font-size:16px;font-weight:800;min-width:0;}
+    .psh-title svg{width:18px;height:18px;color:var(--accent);flex:none;}
+    .preset-close{width:38px;height:38px;flex:none;border:1px solid var(--border);background:var(--panel2);border-radius:9px;
+      color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .preset-list{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px;}
+    .preset-menu .preset-item{padding:15px 14px;border-radius:12px;background:var(--panel2);border:1px solid var(--border);font-size:16px;}
+    .preset-menu .preset-item.active{border-color:var(--accent);background:#222a3d;}
+    .preset-menu .p-check{width:20px;height:20px;}
+    .preset-menu .p-edit{width:38px;height:38px;border-radius:9px;}
+    .preset-menu .p-input{font-size:16px;padding:6px 9px;}
+    .preset-menu .p-pct{font-size:13px;}
+    .preset-sheet-foot{display:block;padding:12px 16px 18px;font-size:11.5px;color:var(--muted);text-align:center;border-top:1px solid var(--border);}
+  }
+  /* Popup รีเซ็ต */
+  .reset-ov{position:fixed;inset:0;z-index:600;background:rgba(8,10,14,.72);backdrop-filter:blur(3px);
+    display:none;align-items:center;justify-content:center;padding:20px;}
+  .reset-ov.show{display:flex;}
+  .reset-dlg{width:100%;max-width:340px;text-align:center;background:linear-gradient(160deg,#1d212b,#15181f);
+    border:1px solid var(--border);border-radius:16px;padding:24px 22px 18px;box-shadow:0 18px 55px rgba(0,0,0,.6);
+    animation:collabPop .3s cubic-bezier(.2,.9,.3,1.2);}
+  .reset-dlg .r-ic{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;
+    justify-content:center;background:rgba(91,140,255,.14);color:var(--accent);}
+  .reset-ov.is-all .reset-dlg .r-ic{background:rgba(226,85,85,.16);color:var(--danger);}
+  .reset-dlg .r-ic svg{width:26px;height:26px;}
+  .reset-dlg .r-title{font-size:18px;font-weight:800;margin-bottom:7px;}
+  .reset-dlg .r-msg{font-size:14px;line-height:1.6;margin-bottom:5px;color:var(--text);}
+  .reset-dlg .r-msg b{color:#9be29b;}
+  .reset-ov.is-all .reset-dlg .r-msg b{color:#ff9b9b;}
+  .reset-dlg .r-msg .r-preset{color:#8fb2ff;font-weight:800;}
+  .reset-dlg .r-sub{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+  .reset-dlg .r-btns{display:flex;gap:10px;}
+  .reset-dlg .r-btns button{flex:1;padding:11px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;border:1px solid var(--border);}
+  .reset-dlg .r-cancel{background:var(--panel2);color:var(--text);}
+  .reset-dlg .r-cancel:hover{border-color:var(--accent);}
+  .reset-dlg .r-ok{background:var(--danger);color:#fff;border-color:var(--danger);}
+  .reset-dlg .r-ok:hover{filter:brightness(1.1);}
+  .spacer{flex:1;}
+  .btn{background:var(--panel2);color:var(--text);border:1px solid var(--border);
+    padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;}
+  .btn:hover{border-color:var(--accent);}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .btn:disabled:hover{border-color:var(--border);}
+  .btn.primary{background:var(--accent2);border-color:var(--accent);}
+  .btn.danger:hover{border-color:var(--danger);color:#ffb4b4;}
+  .lockpill{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);}
+  .lockpill b{color:var(--text);}
+
+  .stage-wrap{flex:1;position:relative;overflow:hidden;background:
+    radial-gradient(circle at 30% 20%,#1b2330,#101218);}
+  .stage{position:absolute;left:0;top:0;transform-origin:0 0;}
+  .map-img{display:block;pointer-events:none;-webkit-user-drag:none;}
+  .marker{position:absolute;transform:translate(-50%,-50%);cursor:pointer;
+    width:50px;height:50px;display:flex;align-items:center;justify-content:center;
+    border-radius:50%;background:rgba(20,23,28,.78);
+    border:3px solid var(--ring,#888);box-sizing:border-box;
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,.7));}
+  .marker svg{width:38px;height:38px;display:block;pointer-events:none;}
+  .marker .xmark{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    pointer-events:none;}
+  .marker.collected{opacity:.55;border-style:dashed;}
+  .marker.collected svg .body{opacity:.4;}
+  .marker.collected .xmark{display:flex;}
+  .marker.dragging{opacity:.85;}
+  .marker .del{position:absolute;top:-8px;right:-8px;width:18px;height:18px;border-radius:50%;
+    background:var(--danger);color:#fff;font-size:12px;line-height:18px;text-align:center;
+    display:none;cursor:pointer;border:2px solid var(--bg);}
+  .editing .marker:hover .del{display:block;}
+
+  .empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:var(--muted);font-size:15px;text-align:center;padding:40px;}
+
+  .floorbar{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:40;
+    display:flex;gap:4px;background:rgba(24,27,34,.92);border:1px solid var(--border);
+    border-radius:10px;padding:4px;box-shadow:var(--shadow);}
+  .floorbar button{background:transparent;border:none;color:var(--muted);cursor:pointer;
+    font-size:13px;font-weight:600;padding:7px 14px;border-radius:7px;white-space:nowrap;}
+  .floorbar button:hover{color:var(--text);background:var(--panel2);}
+  .floorbar button.active{background:var(--accent2);color:#fff;}
+  .zoomctl{position:absolute;right:16px;bottom:16px;display:flex;flex-direction:column;gap:6px;}
+  .zoomctl button{width:38px;height:38px;border-radius:9px;background:var(--panel);
+    border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;}
+  .zoomctl button:hover{border-color:var(--accent);}
+
+  .legend-title{font-size:12px;color:var(--muted);font-weight:700;padding:2px 4px 8px;}
+  .reset-box{padding:2px 4px 4px;display:flex;flex-direction:column;gap:7px;}
+  .reset-title{font-size:12px;color:var(--muted);font-weight:700;padding:0 0 2px;}
+  .reset-btn{width:100%;background:var(--panel2);color:var(--text);border:1px solid var(--border);
+    border-radius:8px;padding:9px 10px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:center;}
+  .reset-btn:hover{border-color:var(--accent);}
+  .reset-btn.danger{border-color:#5a2b2b;color:#ffb4b4;}
+  .reset-btn.danger:hover{border-color:var(--danger);background:#2a1c1f;}
+  .legend-body{padding:0 2px;}
+  .lg-row{display:flex;gap:8px;align-items:center;padding:5px 2px;}
+  .lg-ic{width:26px;height:26px;flex:none;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;background:rgba(255,255,255,.05);border:2px solid;}
+  .lg-ic svg{width:19px;height:19px;}
+  .lg-txt{line-height:1.3;flex:1;min-width:0;cursor:pointer;}
+  .lg-name{font-weight:700;color:var(--text);font-size:12.5px;display:flex;align-items:center;gap:5px;}
+  .lg-name .caret{font-size:9px;color:var(--muted);transition:transform .15s;}
+  .lg-row.open .lg-name .caret{transform:rotate(90deg);}
+  .lg-desc{color:var(--muted);font-size:11px;margin-top:3px;display:none;}
+  .lg-row.open .lg-desc{display:block;}
+  .lg-toggle{flex:none;width:34px;height:19px;border-radius:19px;border:none;cursor:pointer;
+    background:#3a3f4d;position:relative;margin-top:5px;transition:background .15s;padding:0;}
+  .lg-toggle .knob{position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;
+    background:#cfd3dc;transition:left .15s;}
+  .lg-toggle.on{background:var(--accent);}
+  .lg-toggle.on .knob{left:17px;background:#fff;}
+
+  .toast{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+    background:var(--panel);border:1px solid var(--border);padding:9px 16px;border-radius:9px;
+    font-size:13px;box-shadow:var(--shadow);opacity:0;transition:opacity .25s;pointer-events:none;}
+  .toast.show{opacity:1;}
+
+  /* progress summary */
+  .progress{padding:10px 6px 4px;}
+  .prow{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:6px 2px;}
+  .prow .pi{width:20px;height:20px;flex:none;}
+  .prow .pname{flex:1;color:var(--muted);}
+  .prow .pcount{font-variant-numeric:tabular-nums;font-weight:700;}
+  .prow .pcount .c{color:var(--good);}
+  hr.sep{border:none;border-top:1px solid var(--border);margin:12px 0;}
+  .side-actions{padding:8px 10px 12px;display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--border);}
+  .side-actions .btn{width:100%;justify-content:center;}
+
+  /* ---------- Welcome / Main ---------- */
+  .welcome{position:absolute;inset:0;z-index:60;background:
+    radial-gradient(circle at 30% 15%,#1b2330,#101218);
+    display:flex;justify-content:center;padding:28px;overflow:auto;}
+  .welcome-card{background:var(--panel);border:1px solid var(--border);border-radius:18px;
+    width:100%;max-width:1060px;margin:auto;padding:40px 52px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;position:relative;}
+  .welcome h1{margin:0;font-size:34px;display:flex;align-items:center;gap:12px;}
+  .welcome h1 .dot{width:15px;height:15px;}
+  .welcome .sub{color:var(--muted);font-size:17px;margin:8px 0 12px;}
+  .welcome h2{font-size:21px;margin:30px 0 14px;color:var(--accent);}
+  .welcome p,.welcome li{font-size:17px;line-height:1.85;color:var(--text);}
+  .welcome ol{margin:0;padding-left:24px;}
+  .welcome ol li{margin:8px 0;}
+  .welcome .ic-erasebtn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+    border-radius:6px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);vertical-align:-6px;margin:0 2px;}
+  .welcome .ic-erasebtn svg{width:15px;height:15px;}
+  .welcome .ic-erasebtn.red{color:#e88;border-color:#5a2b2b;background:#241a1c;}
+  .welcome .cols{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:start;margin-top:6px;}
+  .welcome .donate{background:var(--panel2);border:2px solid var(--accent);border-radius:16px;
+    padding:22px;text-align:center;box-shadow:0 0 0 4px rgba(91,140,255,.12);}
+  .welcome .donate img{width:300px;max-width:100%;aspect-ratio:1/1;height:auto;border-radius:12px;background:#fff;padding:12px;display:block;margin:0 auto 14px;}
+  .welcome .donate .who{font-size:18px;color:var(--text);font-weight:700;}
+  .welcome .donate .small{font-size:14px;color:var(--muted);margin-top:3px;}
+  .welcome .donate-inline{text-align:center;margin:12px 0 6px;}
+  .welcome .donate-inline img{width:220px;max-width:72%;aspect-ratio:1/1;height:auto;border-radius:12px;background:#fff;padding:10px;display:block;margin:0 auto 8px;}
+  .welcome .donate-inline .who{font-size:16px;color:var(--text);font-weight:700;}
+  .welcome .donate-inline .acct{font-size:15px;color:var(--muted);font-weight:600;letter-spacing:1px;margin-top:2px;font-variant-numeric:tabular-nums;}
+  .welcome .donate-inline .small{font-size:13px;color:var(--muted);margin-top:2px;}
+  /* support text (left) + facebook card (อยู่ขวาบนเสมอบนจอคอม) */
+  .welcome .support-text{margin:14px 0 6px;max-width:560px;}
+  .welcome .support-text h2{margin-top:0;}
+  .welcome .support-text p{margin:0;}
+  .welcome .fb-card{background:var(--panel2);border:1px solid #f06fa0;border-radius:12px;padding:16px 18px;
+    position:absolute;top:40px;right:52px;width:330px;}
+  .welcome .fb-head{display:flex;align-items:center;gap:11px;margin-bottom:10px;}
+  .welcome .fb-ava{width:46px;height:46px;border-radius:50%;object-fit:cover;background:#f4b8c6;border:2px solid #f06fa0;flex:none;}
+  .welcome .fb-headtxt{display:flex;flex-direction:column;line-height:1.25;}
+  .welcome .fb-title{color:var(--text);font-weight:700;font-size:16px;}
+  .welcome .fb-page{color:var(--muted);font-size:13px;}
+  .welcome .fb-desc{color:var(--muted);font-size:14px;line-height:1.6;margin:0 0 12px;}
+  .welcome .fb-btn{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;background:#f0568f;color:#fff;font-weight:700;font-size:15px;padding:11px 12px;border-radius:9px;transition:filter .12s;}
+  .welcome .fb-btn:hover{filter:brightness(1.08);}
+  /* changelog การอัปเดต (3 คอลัมน์ตรงกัน) */
+  .welcome .changelog{margin:6px 0 4px;}
+  .welcome .cl-row{display:flex;align-items:baseline;gap:14px;font-size:14px;padding:5px 0;line-height:1.5;}
+  .welcome .cl-date{color:var(--muted);font-variant-numeric:tabular-nums;flex:none;width:108px;}
+  .welcome .cl-ver{color:#5ec8e0;font-weight:700;flex:none;width:62px;}
+  .welcome .cl-desc{color:var(--text);flex:1;min-width:0;}
+  .welcome .cl-row.latest{background:#222a3d;border-radius:7px;margin:0 -10px;padding:7px 10px;}
+  .welcome .cl-row.latest .cl-date{color:#9be29b;}
+  .welcome .cl-row.latest .cl-ver{color:var(--accent);}
+  .welcome .cl-tag{color:#9be29b;font-size:12px;font-weight:700;margin-left:6px;}
+  .welcome .enter{margin-top:auto;width:100%;padding:20px;font-size:19px;font-weight:700;
+    background:var(--accent2);color:#fff;border:1px solid var(--accent);border-radius:12px;cursor:pointer;}
+  .welcome .enter:hover{filter:brightness(1.12);}
+  @media(max-width:820px){.welcome .cols{grid-template-columns:1fr;}.welcome-card{padding:28px;}
+    .welcome-card>*{order:5;}
+    .welcome-card>h1{order:0;}
+    .welcome-card>.sub{order:1;}
+    .welcome .support-text{order:2;}
+    .welcome .donate-inline{order:3;}
+    .welcome .howto-h{order:4;}
+    .welcome-card>ol{order:5;}
+    .welcome .fb-card{position:static;width:auto;order:6;margin-top:20px;}
+    .welcome .changelog-h{order:7;}
+    .welcome .changelog{order:8;}
+    .welcome .cl-date{width:96px;}}
+  .donor-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .donor-card{background:var(--panel2);border:1px solid var(--border);border-radius:10px;
+    padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:13.5px;}
+  .donor-card .donor-amt{color:var(--good);font-weight:700;font-size:12px;}
+
+  /* ---------- Mobile responsive ---------- */
+  .menu-btn{display:none;background:var(--panel2);color:var(--text);border:1px solid var(--border);
+    border-radius:8px;width:38px;height:38px;font-size:18px;cursor:pointer;align-items:center;justify-content:center;flex:none;}
+  .scrim{display:none;}
+  .scrim.show{display:block;}
+  @media (max-width:768px){
+    .menu-btn{display:flex;}
+    .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:200;width:84vw;max-width:330px;
+      transform:translateX(-100%);transition:transform .25s ease;}
+    .sidebar.open{transform:translateX(0);box-shadow:0 0 40px rgba(0,0,0,.6);}
+    .scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;}
+    #lockBtn{display:none;}
+    .topbar{height:auto;min-height:0;flex-wrap:wrap;gap:8px 10px;padding:8px 12px;overflow:visible;}
+    .topbar .spacer{display:none;}
+    .menu-btn{order:1;}
+    .city-dd{order:2;flex:1;min-width:0;}
+    .city-select{width:100%;flex:1;}
+    .city-btn{min-width:0;}
+    #pubBtn{order:4;flex:none;white-space:nowrap;}
+    .preset-dd{order:3;flex:none;}
+    .preset-btn{min-width:0;}
+    .topbar-meta{order:5;width:100%;justify-content:space-between;gap:8px;}
+    .update-date{font-size:12.5px;}
+    .welcome{padding:12px;}
+    .welcome-card{padding:22px 16px;border-radius:14px;}
+    .welcome h1{font-size:23px;}
+    .welcome h1 .dot{width:12px;height:12px;}
+    .welcome .sub{font-size:13.5px;}
+    .welcome h2{font-size:17px;margin:20px 0 10px;}
+    .welcome p,.welcome li{font-size:14.5px;line-height:1.7;}
+    .welcome .cols{gap:24px;}
+    .welcome .donate{padding:16px;}
+    .welcome .donate img{width:230px;}
+    .welcome .fb-title{font-size:15px;}
+    .welcome .fb-desc{font-size:13px;}
+    .welcome .fb-btn{font-size:14px;}
+    .welcome .enter{padding:16px;font-size:17px;}
+    .zoomctl button{width:44px;height:44px;font-size:22px;}
+  }
+
+  /* ---------- Collab / Subscribe popup ---------- */
+  .collab-ov{position:fixed;inset:0;z-index:500;background:rgba(8,10,14,.74);
+    backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:20px;}
+  .collab-ov.show{display:flex;}
+  .collab-card{position:relative;width:100%;max-width:460px;text-align:center;
+    background:linear-gradient(160deg,#1d212b,#15181f);border:1px solid var(--border);
+    border-radius:20px;padding:30px 28px 24px;box-shadow:0 18px 60px rgba(0,0,0,.6);
+    animation:collabPop .35s cubic-bezier(.2,.9,.3,1.2);}
+  @keyframes collabPop{from{transform:translateY(20px) scale(.95);opacity:0;}to{transform:none;opacity:1;}}
+  .collab-card .cx{position:absolute;top:12px;right:14px;width:30px;height:30px;border-radius:50%;
+    background:var(--panel2);border:1px solid var(--border);color:var(--muted);font-size:15px;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+  .collab-card .cx:hover{color:var(--text);border-color:var(--accent);}
+  .collab-ava{display:flex;align-items:center;justify-content:center;gap:12px;margin:4px 0 18px;}
+  .collab-ava .av{width:96px;height:96px;border-radius:50%;object-fit:cover;background:#fff;
+    border:3px solid var(--accent);box-shadow:0 4px 16px rgba(0,0,0,.5);}
+  .collab-ava .hand{font-size:30px;animation:handShake 1.4s ease-in-out infinite;}
+  @keyframes handShake{0%,100%{transform:rotate(-12deg);}50%{transform:rotate(12deg);}}
+  .collab-title{font-size:21px;font-weight:800;margin:0 0 6px;}
+  .collab-sub{color:var(--muted);font-size:14px;line-height:1.7;margin:0 0 20px;}
+  .collab-sub b{color:var(--text);}
+  .collab-btns{display:flex;flex-direction:row;gap:10px;}
+  .yt-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+    background:#ff0033;color:#fff;font-weight:700;font-size:14px;padding:11px 10px;border-radius:11px;
+    border:1px solid #ff3355;transition:filter .12s,transform .08s;}
+  .yt-btn:hover{filter:brightness(1.12);transform:translateY(-1px);}
+  .yt-btn .av-mini{width:26px;height:26px;border-radius:50%;object-fit:cover;background:#fff;flex:none;}
+  .collab-donor{margin-top:16px;border-top:1px solid var(--border);padding-top:14px;}
+  .collab-donor-title{font-size:13px;color:var(--muted);margin:0 0 10px;text-align:center;}
+  .collab-donor .donor-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .collab-donor .donor-card{justify-content:center;text-align:center;flex-direction:column;gap:2px;padding:8px 6px;}
+  .collab-enter{margin-top:15px;background:transparent;border:none;color:var(--muted);
+    font-size:13px;cursor:pointer;text-decoration:underline;}
+  .collab-enter:hover{color:var(--text);}
+  @media(max-width:768px){
+    .collab-ava .av{width:78px;height:78px;}
+    .collab-title{font-size:19px;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span>ROW Map Tracker</div>
+    <div class="maintabs">
+      <div class="maintab active" data-main="cities">สรุป</div>
+      <div class="maintab" id="tabIcons" data-main="icons">ไอคอนต่างๆ</div>
+    </div>
+    <div class="side-body">
+      <!-- Cities panel -->
+      <div id="panel-cities">
+        <div class="progress" id="progress"></div>
+        <hr class="sep">
+        <div class="legend-title">คำอธิบายกล่องแต่ละแบบ</div>
+        <div class="legend-body" id="legendBody"></div>
+      </div>
+      <!-- Icons panel -->
+      <div id="panel-icons" style="display:none;">
+        <div class="palette-hint">ลากไอคอนไปวางบนแผนที่ (เฉพาะโหมดแก้ไข). คลิกไอคอนบนแผนที่เพื่อกากบาท = เก็บแล้ว.</div>
+        <div class="ico-grid" id="icoGrid"></div>
+        <div class="side-actions">
+          <button class="btn" id="exportBtn" title="บันทึกเป็น markers.json เพื่อนำไป commit ขึ้น GitHub">⬇ บันทึกข้อมูลใหม่</button>
+          <button class="btn" id="importBtn" title="โหลดไฟล์ markers.json">⬆ โหลดข้อมูลใหม่</button>
+          <button class="btn danger" id="clearBtn" title="ลบไอคอนทั้งหมดในแมพที่เปิดอยู่">🗑 ลบไอคอนทั้งหมด</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-btn" id="menuBtn" aria-label="เมนู" title="เมนู">☰</button>
+      <div class="city-dd" id="cityDD">
+        <button type="button" class="city-select city-btn" id="cityBtn"><span id="cityBtnLabel">Home (Donate)</span><span class="dd-caret">▾</span></button>
+        <div class="city-menu" id="cityMenu"></div>
+      </div>
+      <div class="preset-dd" id="presetDD">
+        <button type="button" class="city-select city-btn preset-btn" id="presetBtn" title="สลับพรีเซ็ตสำหรับคนเล่นหลายตัวละคร">
+          <span class="preset-lead"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3.2"/><path d="M2.5 21v-1.2a6 6 0 0 1 6-6"/><path d="M16 3.3a4 4 0 0 1 0 7.7"/><path d="M21.5 21v-1.2a6 6 0 0 0-4.2-5.7"/></svg><span id="presetLabel">Preset1</span></span>
+          <span class="dd-caret">▾</span>
+        </button>
+        <div class="city-menu preset-menu" id="presetMenu">
+          <div class="preset-sheet-head">
+            <span class="psh-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3.2"/><path d="M2.5 21v-1.2a6 6 0 0 1 6-6"/><path d="M16 3.3a4 4 0 0 1 0 7.7"/><path d="M21.5 21v-1.2a6 6 0 0 0-4.2-5.7"/></svg>เลือกพรีเซ็ต (หลายตัวละคร)</span>
+            <button class="preset-close" id="presetClose" aria-label="ปิด">✕</button>
+          </div>
+          <div class="preset-list" id="presetList"></div>
+          <div class="preset-sheet-foot">แตะเลือกเพื่อสลับตัวละคร · แตะดินสอเพื่อเปลี่ยนชื่อ (ไม่เกิน 8 ตัวอักษร)</div>
+        </div>
+      </div>
+      <button class="btn" id="pubBtn" style="display:none;" title="โหลดข้อมูลหลัก (ล้างฉบับร่างในเครื่อง) — สำหรับแอดมิน">☁ Update</button>
+      <span class="topbar-meta">
+        <span class="update-date">อัปเดตล่าสุดวันที่ 10/7/2569</span>
+        <img src="https://visitor-badge.laobi.icu/badge?page_id=benzlovely12.row-map&left_color=%231c1f27&right_color=%235b8cff&left_text=visitors" alt="visitors" class="visitor-badge">
+      </span>
+      <div class="spacer"></div>
+      <button class="btn primary" id="lockBtn" style="display:none;">🔓 เปิดแก้ไขกล่อง</button>
+    </div>
+    <div class="stage-wrap" id="stageWrap">
+      <div class="floorbar" id="floorbar" style="display:none;"></div>
+      <div class="stage" id="stage">
+        <img class="map-img" id="mapImg" src="Novice%20village/Novice_village_full_map.png" alt="Novice Village map">
+        <!-- markers injected here -->
+      </div>
+      <div class="zoomctl">
+        <button id="zin">＋</button>
+        <button id="zout">－</button>
+        <button id="zreset" style="font-size:13px;">⟳</button>
+      </div>
+      <div class="empty" id="emptyMsg" style="display:none;">เมืองนี้ยังไม่มีแผนที่ — เร็วๆ นี้</div>
+      <div class="toast" id="toast"></div>
+      <div class="welcome" id="welcome" style="display:none;">
+        <div class="welcome-card">
+          <h1><span class="dot"></span>ROW Map Tracker</h1>
+          <div class="sub">แผนที่เก็บกล่องครบทุกเมืองใน Ragnarok: New World</div>
+          <div class="fb-card">
+            <div class="fb-head">
+              <img class="fb-ava" src="benzlovely12.png" alt="benzlovely12">
+              <div class="fb-headtxt"><span class="fb-title">เพจ Facebook</span><span class="fb-page">benzlovely12</span></div>
+            </div>
+            <p class="fb-desc">แนะนำปรับปรุงและพัฒนาร่วมกันได้ที่</p>
+            <a class="fb-btn" href="https://www.facebook.com/profile.php?id=61590701282418" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="17" height="17" fill="#fff"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>ไปที่เพจ benzlovely12</a>
+          </div>
+          <div class="support-text">
+            <h2>☕ สนับสนุนผู้พัฒนา</h2>
+            <p>เว็บนี้ทำขึ้นด้วยใจรัก หากสามารถช่วยให้คุณใช้งานได้อย่างสะดวก รบกวนโดเนทเลี้ยงกาแฟสักแก้วนะครับ — <b>ทุกยอดมีความหมายและเป็นกำลังใจให้พัฒนาต่อครับ 🙏</b></p>
+          </div>
+          <div class="donate-inline">
+            <img src="qr_donate.png" alt="Donate QR PromptPay">
+            <div class="who">วัชรพล วชิรชูเกียรติ</div>
+            <div class="acct">140000863205007</div>
+            <div class="small">PromptPay / TrueMoney</div>
+          </div>
+          <h2 class="howto-h">วิธีใช้งาน</h2>
+          <ol>
+            <li>เลือกเมืองจากเมนูด้านบนซ้าย</li>
+            <li>สำหรับคนเล่นหลายตัวละคร มีระบบพรีเซ็ต ตั้งชื่อได้อิสระ (ไม่เกิน 8 ตัวอักษร)</li>
+            <li>คลิกที่กล่องเพื่อบันทึกว่า "เก็บกล่องนั้นแล้ว"</li>
+            <li>กดปุ่มยางลบ <span class="ic-erasebtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg></span> หน้าเมืองเพื่อรีเซ็ตกล่อง และยางลบสีแดง <span class="ic-erasebtn red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg></span> เพื่อลบทั้งหมด</li>
+          </ol>
+          <h2 class="changelog-h">📋 การอัปเดต</h2>
+          <div class="changelog">
+            <div class="cl-row"><span class="cl-date">01/06/2569</span><span class="cl-ver">V 1.00</span><span class="cl-desc">เปิดตัวเว็บครั้งแรก</span></div>
+            <div class="cl-row"><span class="cl-date">05/06/2569</span><span class="cl-ver">V 2.00</span><span class="cl-desc">[เพิ่มส่วนกล้องถ่ายรูปในแต่ละแผนที่]</span></div>
+            <div class="cl-row"><span class="cl-date">07/06/2569</span><span class="cl-ver">V 2.01</span><span class="cl-desc">[แก้ไขปัญหาการแสดงหน้าจอ]</span></div>
+            <div class="cl-row"><span class="cl-date">08/06/2569</span><span class="cl-ver">V 2.02</span><span class="cl-desc">[ปรับปรุงการแสดงผลในมือถือให้สวยงาม]</span></div>
+            <div class="cl-row"><span class="cl-date">09/06/2569</span><span class="cl-ver">V 3.00</span><span class="cl-desc">[เพิ่มกล่องลึกลับที่ยังไม่รู้ว่าด้วยวิธีการใด]</span></div>
+            <div class="cl-row"><span class="cl-date">11/06/2569</span><span class="cl-ver">V 3.01</span><span class="cl-desc">[ปรับปรุงแสดงจำนวนผู้เข้าใช้งาน]</span></div>
+            <div class="cl-row"><span class="cl-date">15/06/2569</span><span class="cl-ver">V 3.02</span><span class="cl-desc">[อัปเดตกล่องหิมะใหม่ในเมือง Geffen]</span></div>
+            <div class="cl-row"><span class="cl-date">15/06/2569</span><span class="cl-ver">V 3.03</span><span class="cl-desc">[อัปเดตแสดงเพจผู้พัฒนาเพื่อช่วยกันปรับปรุง]</span></div>
+            <div class="cl-row"><span class="cl-date">19/06/2569</span><span class="cl-ver">V 3.04</span><span class="cl-desc">[อัปเดตกล่องฝนตก เมือง Morroc]</span></div>
+            <div class="cl-row"><span class="cl-date">23/06/2569</span><span class="cl-ver">V 4.00</span><span class="cl-desc">[เพิ่มปุ่มลบข้อมูลการเก็บกล่อง]</span></div>
+            <div class="cl-row"><span class="cl-date">29/06/2569</span><span class="cl-ver">V 4.01</span><span class="cl-desc">[แก้ไขปัญหาการแสดงผลผิดพลาด]</span></div>
+            <div class="cl-row"><span class="cl-date">07/07/2569</span><span class="cl-ver">V 5.00</span><span class="cl-desc">[ปรับระบบครั้งใหญ่ — รองรับมือถือ ลากเลื่อน/ซูมสองนิ้ว]</span></div>
+            <div class="cl-row"><span class="cl-date">09/07/2569</span><span class="cl-ver">V 5.01</span><span class="cl-desc">[แก้บัคการโหลดแมพทับซ้อน]</span></div>
+            <div class="cl-row"><span class="cl-date">09/07/2569</span><span class="cl-ver">V 5.02</span><span class="cl-desc">[อัปเดตข้อมูลอัตโนมัติทุกครั้งที่เปิดเว็บ ไม่ต้องกดปุ่ม]</span></div>
+            <div class="cl-row"><span class="cl-date">09/07/2569</span><span class="cl-ver">V 5.03</span><span class="cl-desc">[ย้ายปุ่มลบข้อมูลให้ใช้งานง่ายขึ้นและสะดวกขึ้น]</span></div>
+            <div class="cl-row latest"><span class="cl-date">10/07/2569</span><span class="cl-ver">V 6.00</span><span class="cl-desc">[เพิ่มระบบพรีเซ็ต สูงสุด 5 อัน] <span class="cl-tag">ล่าสุด</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<input type="file" id="fileInput" accept="application/json" style="display:none;">
+
+<!-- ===== Popup ยืนยันรีเซ็ตความคืบหน้า ===== -->
+<div class="reset-ov" id="resetOverlay">
+  <div class="reset-dlg">
+    <div class="r-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg></div>
+    <div class="r-title">รีเซ็ตความคืบหน้า</div>
+    <div class="r-msg" id="resetMsg"></div>
+    <div class="r-sub">เฉพาะในเครื่องคุณ — ตำแหน่งกล่องไม่หาย และย้อนกลับไม่ได้</div>
+    <div class="r-btns"><button class="r-cancel" id="resetCancel">ยกเลิก</button><button class="r-ok" id="resetOk">ลบเลย</button></div>
+  </div>
+</div>
+
+<!-- ===== Popup รวมมือกัน / ฝากกดติดตามช่อง ===== -->
+<div class="collab-ov" id="collabPopup">
+  <div class="collab-card">
+    <button class="cx" id="collabClose" aria-label="ปิด">✕</button>
+    <div class="collab-ava">
+      <img class="av" src="benzlovely12.png" alt="benzlovely12">
+      <span class="hand">🤝</span>
+      <img class="av" src="SamehoTV.jpg" alt="SamehoTV">
+    </div>
+    <div class="collab-title">รวมพลัง 2 ช่อง! 🎬</div>
+    <p class="collab-sub">เว็บแผนที่เก็บกล่อง ROW นี้เกิดจากความร่วมมือของ<br>
+      <b>benzlovely12</b> × <b>SamehoTV</b><br>
+      ฝากกดติดตามทั้ง 2 ช่อง เป็นกำลังใจให้พวกเราด้วยนะครับ 🙏</p>
+    <div class="collab-btns">
+      <a class="yt-btn" href="https://www.youtube.com/@Benzlovely12-TV" target="_blank" rel="noopener">
+        <img class="av-mini" src="benzlovely12.png" alt="">ติดตามช่อง benzlovely12</a>
+      <a class="yt-btn" href="https://www.youtube.com/@SamehoTV" target="_blank" rel="noopener">
+        <img class="av-mini" src="SamehoTV.jpg" alt="">ติดตามช่อง SamehoTV</a>
+    </div>
+    <div class="collab-donor">
+      <p class="collab-donor-title">🙏 ขอบคุณผู้สนับสนุนโปรเจกต์นี้</p>
+      <div class="donor-list">
+        <div class="donor-card">คุณเจษฎา <span class="donor-amt">50 บาท</span></div>
+        <div class="donor-card">คุณอัษฎา <span class="donor-amt">50 บาท</span></div>
+        <div class="donor-card">คุณธัญญพัฒน์ <span class="donor-amt">100 บาท</span></div>
+        <div class="donor-card">คุณธวัชชัย <span class="donor-amt">20 บาท</span></div>
+        <div class="donor-card">คุณทิวากร <span class="donor-amt">30 บาท</span></div>
+        <div class="donor-card">คุณปิยะ <span class="donor-amt">100 บาท</span></div>
+        <div class="donor-card">คุณโชติกร <span class="donor-amt">100 บาท</span></div>
+        <div class="donor-card">คุณกรรณิกา <span class="donor-amt">50 บาท</span></div>
+        <div class="donor-card">คุณณฐวัฒน์ <span class="donor-amt">20 บาท</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ Icon definitions — ลากวาง 8 แบบ, สรุปรวมเป็น 4 หมวดเกม (group) ============ */
+const ICONS = {
+  box:     {name:"กล่อง",            group:"expl",    color:"#3ec46a", svg:woodBox(),    desc:"กล่องกระดาษ/ไม้/มอนผู้พิทักษ์ — กล่องกระดาษเดินชนเปิดเอง, กล่องไม้กดเปิด, แบบมอนผู้พิทักษ์ตีมอนให้หมดก่อน"},
+  treasure:{name:"กล่องใช้คนช่วย",   group:"expl",    color:"#e2553f", svg:redBox(),     desc:"หีบที่ต้องยืนบนสวิตช์ (มากสุด 2 จุด) หรือใช้คนช่วยปลดล็อก — ตอนล็อกจะมีรูปมือจับสีทอง (นับรวมในหมวด Expl. Chest)"},
+  guard:   {name:"Guard Chest",       group:"guard",   color:"#e6b800", svg:goldBox(),    desc:"Guard Chest — กล่องการ์ด/ผู้พิทักษ์ ต้องจัดการเงื่อนไข (เช่น เคลียร์มอนผู้พิทักษ์) ก่อนถึงจะเปิดได้"},
+  monster: {name:"กล่องมอนสเตอร์",     group:"strange", color:"#16b39e", svg:shieldMon(),  desc:"กล่องที่กดแล้วจะมีมอนสเตอร์โผล่ออกมาให้ตี — เคลียร์มอนให้หมดเพื่อรับรางวัล"},
+  high:    {name:"กล่องที่สูง",       group:"strange", color:"#9a7bff", svg:highChest(), desc:"หีบที่อยู่ที่สูง ไม่อยู่บนเส้นทางปกติ ต้องกระโดด/ว่ายน้ำ/ลื่นน้ำแข็ง/บิน ถึงจะไปถึง"},
+  butterfly:{name:"ผีเสื้อ",          group:"strange", color:"#ff7ab0", svg:butterfly(),desc:"ผีเสื้อเรืองแสงฟ้า 2 ตัว เข้าไปสัมผัสแล้วมันจะนำทาง พอจบจะปรากฏกล่องไม้"},
+  sun:     {name:"กล่องกลางวัน",      group:"strange", color:"#f6953a", svg:sun(),      desc:"อุปกรณ์แสงอาทิตย์ตอนแดดออก เปิดแล้วเก็บดวงอาทิตย์เล็ก 5 ดวงใน 60 วิ จะได้กล่องไม้"},
+  rain:    {name:"กล่องฝนตก",         group:"strange", color:"#3aa3ff", svg:waterball(),desc:"ลูกบอลน้ำตอนฝนตก เดินเข้าไปสัมผัสเหมือนกล่องกระดาษ โผล่มากสุด 3 ลูกใกล้ๆ กัน"},
+  snowman: {name:"กล่องหิมะตก",       group:"strange", color:"#5ec8e0", svg:snowman(),  desc:"ตุ๊กตาหิมะตอนหิมะตก กวาดหิมะที่กองอยู่ให้เสร็จ จะปรากฏกล่องไม้"},
+  winter:  {name:"กล่องพิเศษ",        group:"strange", color:"#cf5ad0", svg:winterChest(),desc:"หีบพิเศษฤดูหนาว/หีบไอเทมเฉพาะ — มีตามอีเวนต์/ฤดูกาล เช่น Prontera ทะเลสาบเป็นน้ำแข็ง"},
+  mystery: {name:"กล่องลึกลับ",       group:"strange", color:"#8d7ab5", svg:mysteryBox(), desc:"กล่องลึกลับที่ยังหาไม่เจอ — ใช้ปักหมุดตำแหน่งที่สงสัยหรือยังไม่แน่ใจว่าเป็นกล่องอะไร"},
+  landmark:{name:"กล้องถ่ายรูป (Landmark)", group:"landmark", color:"#5bb6ff", svg:camera(), desc:"จุดถ่ายรูป Landmark — ไปถึงจุดที่กำหนดแล้วถ่ายรูปเพื่อเก็บความคืบหน้า"},
+};
+
+/* หมวดสรุปตามเกม (รวมหลายไอคอนเข้าด้วยกัน) */
+const GROUPS = {
+  expl:    {name:"Expl. Chest (กล่อง)",       color:"#e0a13a", svg:explIcon()},
+  guard:   {name:"Guard Chest (กล่องเหลือง)", color:"#e6b800", svg:guardIcon()},
+  landmark:{name:"Landmark (ถ่ายรูป)",        color:"#5bb6ff", svg:camera()},
+  strange: {name:"Strange Chest (กล่องพิเศษ)", color:"#9a7bff", svg:strangeIcon()},
+};
+
+/* ---- ไอคอนลากวาง 8 แบบ ---- */
+function woodBox(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="15" width="26" height="17" rx="2" fill="#c79a5b" stroke="#7c5824" stroke-width="2"/>
+  <path d="M7 15 l13 -5 l13 5" fill="#d8ad6e" stroke="#7c5824" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="20" y1="10" x2="20" y2="32" stroke="#7c5824" stroke-width="1.6"/>
+  <line x1="7" y1="23" x2="33" y2="23" stroke="#7c5824" stroke-width="1.6"/>
+  <circle cx="20" cy="11" r="2.4" fill="#f6c0d0" stroke="#7c5824" stroke-width="1"/>
+</g></svg>`;}
+function redBox(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="15" width="26" height="17" rx="2" fill="#d83a3a" stroke="#7c1c1c" stroke-width="2"/>
+  <path d="M7 15 l13 -5 l13 5" fill="#e85b5b" stroke="#7c1c1c" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="20" y1="10" x2="20" y2="32" stroke="#7c1c1c" stroke-width="1.6"/>
+  <line x1="7" y1="23" x2="33" y2="23" stroke="#7c1c1c" stroke-width="1.6"/>
+  <circle cx="20" cy="23" r="3" fill="#ffd24a" stroke="#7c1c1c" stroke-width="1.2"/>
+</g></svg>`;}
+function highChest(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="9" y="22" width="22" height="11" rx="2" fill="#9a86e0" stroke="#473a86" stroke-width="2"/>
+  <path d="M9 22 q11 -8 22 0" fill="#b6a6ef" stroke="#473a86" stroke-width="2"/>
+  <rect x="8" y="25" width="24" height="3.5" fill="#473a86"/>
+  <path d="M20 5 l6 8 h-4 v6 h-4 v-6 h-4z" fill="#cfc4f7" stroke="#473a86" stroke-width="1.8" stroke-linejoin="round"/>
+</g></svg>`;}
+function butterfly(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <ellipse cx="13" cy="15" rx="8" ry="7" fill="#5bb6ff" stroke="#1f5a8c" stroke-width="1.6"/>
+  <ellipse cx="27" cy="15" rx="8" ry="7" fill="#5bb6ff" stroke="#1f5a8c" stroke-width="1.6"/>
+  <ellipse cx="14" cy="27" rx="6" ry="6" fill="#7ec8ff" stroke="#1f5a8c" stroke-width="1.6"/>
+  <ellipse cx="26" cy="27" rx="6" ry="6" fill="#7ec8ff" stroke="#1f5a8c" stroke-width="1.6"/>
+  <rect x="18.6" y="10" width="2.8" height="22" rx="1.4" fill="#27405a"/>
+  <path d="M20 10 q-3 -5 -6 -5 M20 10 q3 -5 6 -5" fill="none" stroke="#27405a" stroke-width="1.4"/>
+</g></svg>`;}
+function sun(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <circle cx="20" cy="20" r="8" fill="#f6b51e" stroke="#9c6a06" stroke-width="2"/>
+  <g stroke="#f6b51e" stroke-width="3" stroke-linecap="round">
+    <line x1="20" y1="4" x2="20" y2="9"/><line x1="20" y1="31" x2="20" y2="36"/>
+    <line x1="4" y1="20" x2="9" y2="20"/><line x1="31" y1="20" x2="36" y2="20"/>
+    <line x1="8.5" y1="8.5" x2="12" y2="12"/><line x1="28" y1="28" x2="31.5" y2="31.5"/>
+    <line x1="31.5" y1="8.5" x2="28" y2="12"/><line x1="12" y1="28" x2="8.5" y2="31.5"/>
+  </g></g></svg>`;}
+function waterball(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <circle cx="20" cy="22" r="11" fill="#7ec8ff" fill-opacity="0.55" stroke="#1f5a8c" stroke-width="2"/>
+  <path d="M20 8 q5 7 5 11 a5 5 0 0 1 -10 0 q0 -4 5 -11z" fill="#3a93e0" stroke="#1f5a8c" stroke-width="1.6"/>
+  <ellipse cx="16" cy="19" rx="2.5" ry="3.5" fill="#ffffff" fill-opacity="0.7"/>
+</g></svg>`;}
+function snowman(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <circle cx="20" cy="21" r="13" fill="#eaf4ff" stroke="#7fa8c9" stroke-width="2"/>
+  <circle cx="15" cy="19" r="2" fill="#2c3e50"/><circle cx="25" cy="19" r="2" fill="#2c3e50"/>
+  <path d="M20 22 l5 1.5 -5 1.5z" fill="#f0922e"/>
+  <path d="M14 28 q6 4 12 0" fill="none" stroke="#7fa8c9" stroke-width="1.6" stroke-linecap="round"/>
+</g></svg>`;}
+function winterChest(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="8" y="20" width="24" height="13" rx="2" fill="#d96a86" stroke="#7c2840" stroke-width="2"/>
+  <path d="M8 20 q12 -9 24 0" fill="#e88aa0" stroke="#7c2840" stroke-width="2"/>
+  <rect x="7" y="23.5" width="26" height="3.5" fill="#7c2840"/>
+  <g stroke="#eaf4ff" stroke-width="1.6" stroke-linecap="round">
+    <line x1="20" y1="3" x2="20" y2="14"/><line x1="14.5" y1="5" x2="25.5" y2="12"/><line x1="25.5" y1="5" x2="14.5" y2="12"/>
+  </g></g></svg>`;}
+
+/* ---- ไอคอนหมวดสรุป 4 หมวด ---- */
+function explIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="17" width="26" height="15" rx="2" fill="#e0a13a" stroke="#7c4f10" stroke-width="2"/>
+  <path d="M7 17 q13 -10 26 0" fill="#f0bf63" stroke="#7c4f10" stroke-width="2"/>
+  <rect x="6" y="21" width="28" height="4" fill="#7c4f10"/>
+  <rect x="18" y="19" width="4" height="8" rx="1.5" fill="#ffe9a8" stroke="#7c4f10" stroke-width="1"/>
+</g></svg>`;}
+function guardIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="17" width="26" height="15" rx="2" fill="#e6b800" stroke="#8a6a00" stroke-width="2"/>
+  <path d="M7 17 q13 -10 26 0" fill="#f2cf45" stroke="#8a6a00" stroke-width="2"/>
+  <rect x="6" y="21" width="28" height="4" fill="#8a6a00"/>
+  <path d="M14 7 l6 7 M26 7 l-6 7" stroke="#fff1b0" stroke-width="2.2" stroke-linecap="round"/>
+</g></svg>`;}
+/* กล่องเหลือง (Guard Chest) — ลากวาง */
+function goldBox(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="15" width="26" height="17" rx="2" fill="#e8c020" stroke="#8a6a00" stroke-width="2"/>
+  <path d="M7 15 l13 -5 l13 5" fill="#f2d24a" stroke="#8a6a00" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="20" y1="10" x2="20" y2="32" stroke="#8a6a00" stroke-width="1.6"/>
+  <line x1="7" y1="23" x2="33" y2="23" stroke="#8a6a00" stroke-width="1.6"/>
+  <circle cx="20" cy="23" r="3" fill="#fff1b0" stroke="#8a6a00" stroke-width="1.2"/>
+</g></svg>`;}
+/* โล่มอนสเตอร์ (กดแล้วมีมอนออกมาให้ตี) */
+function shieldMon(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <path d="M20 5 l12 4 v9 c0 8 -5 13 -12 17 c-7 -4 -12 -9 -12 -17 v-9 z" fill="#16b39e" stroke="#0c5e54" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="15.5" cy="17" r="2.4" fill="#ffffff"/><circle cx="24.5" cy="17" r="2.4" fill="#ffffff"/>
+  <circle cx="15.5" cy="17" r="1.1" fill="#0c5e54"/><circle cx="24.5" cy="17" r="1.1" fill="#0c5e54"/>
+  <path d="M13.5 23 l2.2 3 l2.3 -2.2 l2 2.2 l2.3 -2.2 l2.2 3" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</g></svg>`;}
+function mysteryBox(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="15" width="26" height="17" rx="2" fill="#4a4060" stroke="#1e1830" stroke-width="2"/>
+  <path d="M7 15 l13 -5 l13 5" fill="#6a5a88" stroke="#1e1830" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="20" y1="10" x2="20" y2="32" stroke="#1e1830" stroke-width="1.6"/>
+  <line x1="7" y1="23" x2="33" y2="23" stroke="#1e1830" stroke-width="1.6"/>
+  <text x="20" y="29" font-size="15" font-weight="900" fill="#e8d8ff" text-anchor="middle" font-family="sans-serif">?</text>
+</g></svg>`;}
+function camera(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="6" y="13" width="28" height="20" rx="4" fill="#5bb6ff" stroke="#1f5a8c" stroke-width="2"/>
+  <rect x="14" y="9" width="11" height="6" rx="2" fill="#5bb6ff" stroke="#1f5a8c" stroke-width="2"/>
+  <circle cx="20" cy="23" r="6" fill="#cdebff" stroke="#1f5a8c" stroke-width="2"/>
+  <circle cx="20" cy="23" r="2.5" fill="#1f5a8c"/>
+  <circle cx="29" cy="18" r="1.6" fill="#ffe9a8"/>
+</g></svg>`;}
+function strangeIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <rect x="7" y="17" width="26" height="15" rx="2" fill="#9a86e0" stroke="#473a86" stroke-width="2"/>
+  <path d="M7 17 q13 -10 26 0" fill="#b6a6ef" stroke="#473a86" stroke-width="2"/>
+  <rect x="6" y="21" width="28" height="4" fill="#473a86"/>
+  <text x="20" y="30" font-size="11" font-weight="800" fill="#ffe9a8" text-anchor="middle" font-family="sans-serif">?</text>
+</g></svg>`;}
+
+const XMARK = `<svg viewBox="0 0 40 40"><path d="M9 9 L31 31 M31 9 L9 31" stroke="#ff4b4b" stroke-width="5" stroke-linecap="round"/></svg>`;
+
+/* ============ Cities (เรียงตามลำดับ; map=null คือยังไม่มีแผนที่) ============ */
+const CITY_LIST = [
+  {key:"main",       name:"Home (Donate)", map:null, welcome:true},
+  {key:"prontera",   name:"Prontera",      map:"Prontera/Prontera_full_map.png"},
+  {key:"morroc",     name:"Morroc",        map:"Morroc/Morroc_full_map.png"},
+  {key:"novice",     name:"Novice Village",map:"Novice%20village/Novice_village_full_map.png"},
+  {key:"alberta",    name:"Alberta",       map:"Alberta/Alberta_full_map.png"},
+  {key:"byalan",     name:"Byalan Island", map:"Byalan%20Island/Byalan_full_map.png",
+     floors:[
+       {key:"byalan",  label:"ด้านนอก",            map:"Byalan%20Island/Byalan_full_map.png"},
+       {key:"byalan2", label:"Undersea Tunnel 1F", map:"Byalan%20Island/Byalan_full_map_2.png"},
+       {key:"byalan3", label:"Undersea Tunnel 2F", map:"Byalan%20Island/Byalan_full_map_3.png"},
+     ]},
+  {key:"payon",      name:"Payon",         map:"Payon/Payon_full_map.png"},
+  {key:"goblin",     name:"Goblin Forest", map:"Goblin%20Forest/Goblin_full_map.png"},
+  {key:"geffen",     name:"Geffen",        map:"Geffen/Geffen_full_map.png"},
+  {key:"geffenriver",name:"Geffen River",  map:"Geffen%20River/GeffenRiver_full_map.png"},
+  {key:"mjolnir",    name:"Mt. Mjolnir",   map:"Mt.%20Mjolnir/Mjolnir_full_map.png"},
+  {key:"poring",     name:"Poring Island", map:"Poring%20Island/Poring_full_map.png"},
+  {key:"izlude",     name:"Izlude",        map:"Izlude/Izlude_full_map.png"},
+  {key:"glastheim",  name:"Glast Heim",    map:"Glast%20Heim/Glast_full_map.png",
+     floors:[
+       {key:"glastheim",  label:"ด้านนอก",     map:"Glast%20Heim/Glast_full_map.png"},
+       {key:"glastheim2", label:"ในปราสาท",    map:"Glast%20Heim/Glast_full_map_2.png"},
+       {key:"glastheim3", label:"คุกใต้ดิน",   map:"Glast%20Heim/Glast_full_map_3.png"},
+     ]},
+];
+/* ชั้นย่อยของเมืองที่มีหลายแมพ (key แยก เพื่อให้ marker/ความคืบหน้าแยกกัน) แต่ไม่โชว์ใน dropdown */
+const SUBFLOORS = [
+  {key:"glastheim2", name:"Glast Heim (ในปราสาท)",  map:"Glast%20Heim/Glast_full_map_2.png", parent:"glastheim"},
+  {key:"glastheim3", name:"Glast Heim (คุกใต้ดิน)", map:"Glast%20Heim/Glast_full_map_3.png", parent:"glastheim"},
+  {key:"byalan2",    name:"Byalan (Undersea Tunnel 1F)", map:"Byalan%20Island/Byalan_full_map_2.png", parent:"byalan"},
+  {key:"byalan3",    name:"Byalan (Undersea Tunnel 2F)", map:"Byalan%20Island/Byalan_full_map_3.png", parent:"byalan"},
+];
+const CITIES = {}; CITY_LIST.forEach(c=>CITIES[c.key]=c);
+SUBFLOORS.forEach(c=>CITIES[c.key]=c);   // ให้ switchCity/markers รู้จัก key ชั้นย่อยด้วย
+/* รายการ key ทั้งหมดที่ต้องมี marker/collected slot */
+const ALL_KEYS = CITY_LIST.map(c=>c.key).concat(SUBFLOORS.map(c=>c.key));
+let CITY = "main";
+
+/* ============ State & persistence (ไฮบริด) ============
+   - ตำแหน่งกล่อง (id,type,x,y): "ฉบับเผยแพร่" มาจากไฟล์ markers.json ใน repo → ทุกคนเห็นเหมือนกัน
+   - ฉบับร่าง (ที่ยังไม่ publish) เก็บใน DRAFT_KEY ของเครื่องเจ้าของเอง
+   - collected/hidden/locked = ข้อมูลส่วนตัวของผู้เปิดเว็บแต่ละคน เก็บใน PERSONAL_KEY
+*/
+const PERSONAL_KEY = "row_tracker_personal_v1";
+const DRAFT_KEY    = "row_tracker_draft_v1";
+const LEGACY_KEY   = "row_tracker_v1";   // ของเวอร์ชันเก่า ใช้ย้ายข้อมูลครั้งเดียว
+/* แปลง type เก่าจากเวอร์ชัน 4-ไอคอน กลับเป็น type ใน 8 แบบ (กันของที่วางไว้หาย) */
+const TYPE_MIGRATE={expl:"box", guard:"treasure", landmark:"box", strange:"high"};
+
+let state = {locked:true, hidden:{}, markers:{}};  // markers[city] = [{id,type,x,y}]
+/* ===== พรีเซ็ต: 5 โปรไฟล์เก็บกล่องแยกกัน (สำหรับหลายตัวละคร) =====
+   personal.profiles[i][city][id]=true ; personal.collected = โปรไฟล์ที่ใช้อยู่ (อ้างอิงตัวเดียวกัน) */
+const PRESET_COUNT=5, PRESET_MAXLEN=8;
+let personal = {activePreset:0, presetNames:[], profiles:[], collected:null};
+let published = null;                              // ตำแหน่งจาก markers.json
+function blankProfile(){ const o={}; ALL_KEYS.forEach(k=>o[k]={}); return o; }
+for(let i=0;i<PRESET_COUNT;i++){ personal.profiles[i]=blankProfile(); personal.presetNames[i]='Preset'+(i+1); }
+personal.collected=personal.profiles[0];
+ALL_KEYS.forEach(k=>{state.markers[k]=[];});
+
+function cleanMarkers(arr){
+  return (arr||[]).filter(Boolean).map(m=>{
+    let t=m.type; if(!ICONS[t]&&TYPE_MIGRATE[t]) t=TYPE_MIGRATE[t];
+    return {id:m.id, type:t, x:Math.round(m.x), y:Math.round(m.y)};
+  }).filter(m=>ICONS[m.type]);
+}
+function loadPersonal(){
+  try{const p=JSON.parse(localStorage.getItem(PERSONAL_KEY));
+    if(p){ state.locked = p.locked!==false; state.hidden=p.hidden||{};
+      if(p.profiles){                       // รูปแบบใหม่ (มีพรีเซ็ต)
+        for(let i=0;i<PRESET_COUNT;i++){
+          const src=p.profiles[i]||{}; const prof=blankProfile();
+          ALL_KEYS.forEach(k=>prof[k]=src[k]||{}); personal.profiles[i]=prof;
+        }
+        for(let i=0;i<PRESET_COUNT;i++){ personal.presetNames[i]=(p.presetNames&&p.presetNames[i])||('Preset'+(i+1)); }
+        personal.activePreset=(p.activePreset>=0&&p.activePreset<PRESET_COUNT)?p.activePreset:0;
+      }else if(p.collected){                 // รูปแบบเก่า (collected เดียว) → ย้ายเข้าพรีเซ็ต 1
+        const prof=blankProfile(); ALL_KEYS.forEach(k=>prof[k]=p.collected[k]||{});
+        personal.profiles[0]=prof; personal.activePreset=0;
+      }
+      personal.collected=personal.profiles[personal.activePreset];
+      return; }
+  }catch(e){}
+  // ย้ายข้อมูลส่วนตัวจากเวอร์ชันเก่ามาก (collected ฝังในตัว marker) → พรีเซ็ต 1
+  try{const s=JSON.parse(localStorage.getItem(LEGACY_KEY));
+    if(s){ state.hidden=s.hidden||{}; state.locked=!!s.locked;
+      if(s.markers) ALL_KEYS.forEach(k=>(s.markers[k]||[]).forEach(m=>{
+        if(m&&m.collected) personal.profiles[0][k][m.id]=true; }));
+    }
+  }catch(e){}
+  personal.collected=personal.profiles[personal.activePreset];
+}
+/* คืนค่า true ถ้ามีฉบับร่างในเครื่อง (จะได้ไม่ทับด้วยฉบับเผยแพร่) */
+function loadDraftOrLegacy(){
+  try{const d=JSON.parse(localStorage.getItem(DRAFT_KEY));
+    if(d&&d.markers){ ALL_KEYS.forEach(k=>state.markers[k]=cleanMarkers(d.markers[k])); return true; }
+  }catch(e){}
+  try{const s=JSON.parse(localStorage.getItem(LEGACY_KEY));
+    if(s&&s.markers){ ALL_KEYS.forEach(k=>state.markers[k]=cleanMarkers(s.markers[k])); return true; }
+  }catch(e){}
+  return false;
+}
+async function loadPublished(){
+  try{const r=await fetch('markers.json?_='+Date.now(),{cache:'no-store'});
+    if(r.ok){const j=await r.json(); const src=j.markers||j; const out={};
+      ALL_KEYS.forEach(k=>out[k]=cleanMarkers(src[k])); return out;}
+  }catch(e){}
+  return null;
+}
+function savePersonal(){ try{localStorage.setItem(PERSONAL_KEY,
+  JSON.stringify({locked:state.locked,hidden:state.hidden,
+    activePreset:personal.activePreset,presetNames:personal.presetNames,profiles:personal.profiles}));}catch(e){} }
+function saveDraft(){ try{localStorage.setItem(DRAFT_KEY, JSON.stringify({markers:state.markers}));}catch(e){} }
+function save(){ savePersonal(); }   // โค้ดเดิมเรียก save() ตอนแก้ hidden/locked
+
+function isCollected(m){ const c=personal.collected[CITY]; return !!(c&&c[m.id]); }
+function setCollected(m,v){ if(!personal.collected[CITY])personal.collected[CITY]={};
+  if(v)personal.collected[CITY][m.id]=true; else delete personal.collected[CITY][m.id]; savePersonal(); }
+
+function allMarkers(){return Object.values(state.markers).flat();}
+loadPersonal();
+/* คนทั่วไป: โหลดจุดกล่องล่าสุดอัตโนมัติทุกครั้งที่เปิดเว็บ (ไม่สนฉบับร่าง)
+   โหมดแก้ไข (?admin) เท่านั้น: ใช้ฉบับร่างในเครื่องต่อได้ */
+const IS_ADMIN = new URLSearchParams(location.search).has('admin');
+let __hadDraft = IS_ADMIN ? loadDraftOrLegacy() : false;
+let nextId = Math.max(0,...allMarkers().map(m=>m.id||0))+1;
+
+/* ============ DOM refs ============ */
+const stage=document.getElementById('stage'), stageWrap=document.getElementById('stageWrap');
+const mapImg=document.getElementById('mapImg');
+const lockBtn=document.getElementById('lockBtn');
+const toastEl=document.getElementById('toast');
+let view={scale:0.35, x:60, y:30};
+
+/* ============ Build icon palette ============ */
+const icoGrid=document.getElementById('icoGrid');
+Object.entries(ICONS).forEach(([key,def])=>{
+  const card=document.createElement('div');
+  card.className='ico-card'; card.draggable=true; card.dataset.type=key;
+  card.style.borderColor=def.color;
+  card.innerHTML=`<span class="ico-badge" style="border-color:${def.color}">${def.svg}</span><span class="lbl">${def.name}</span>`;
+  card.addEventListener('dragstart',e=>{
+    if(state.locked){e.preventDefault();return;}
+    e.dataTransfer.setData('text/icon',key);
+  });
+  icoGrid.appendChild(card);
+});
+
+/* ============ Build legend (คำอธิบายกล่อง + toggle ซ่อน/แสดงบนแผนที่) ============ */
+const legendBody=document.getElementById('legendBody');
+Object.entries(ICONS).forEach(([key,def])=>{
+  const row=document.createElement('div'); row.className='lg-row';
+  const on = !state.hidden[key];
+  row.innerHTML=`<span class="lg-ic" style="border-color:${def.color}">${def.svg}</span>
+    <span class="lg-txt"><span class="lg-name"><span class="caret">▶</span>${def.name}</span><span class="lg-desc">${def.desc||''}</span></span>
+    <button class="lg-toggle${on?' on':''}" data-type="${key}" title="ซ่อน/แสดงบนแผนที่" aria-label="ซ่อน/แสดง"><span class="knob"></span></button>`;
+  legendBody.appendChild(row);
+});
+legendBody.addEventListener('click',e=>{
+  const btn=e.target.closest('.lg-toggle');
+  if(btn){
+    const t=btn.dataset.type;
+    state.hidden[t]=!state.hidden[t];
+    btn.classList.toggle('on',!state.hidden[t]);
+    save(); renderMarkers();
+    return;
+  }
+  const txt=e.target.closest('.lg-txt');
+  if(txt){ txt.closest('.lg-row').classList.toggle('open'); }
+});
+
+/* ============ Tabs ============ */
+document.querySelectorAll('.maintab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.maintab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  const m=t.dataset.main;
+  document.getElementById('panel-cities').style.display = m==='cities'?'':'none';
+  document.getElementById('panel-icons').style.display  = m==='icons'?'':'none';
+}));
+
+/* ============ Mobile drawer ============ */
+(function(){
+  const sidebar=document.querySelector('.sidebar');
+  const scrim=document.getElementById('scrim');
+  const menuBtn=document.getElementById('menuBtn');
+  function setDrawer(open){ sidebar.classList.toggle('open',open); scrim.classList.toggle('show',open); }
+  menuBtn.addEventListener('click',()=>setDrawer(!sidebar.classList.contains('open')));
+  scrim.addEventListener('click',()=>setDrawer(false));
+})();
+
+/* ============ City switching (custom dropdown + % hint) ============ */
+const cityBtn=document.getElementById('cityBtn');
+const cityBtnLabel=document.getElementById('cityBtnLabel');
+const cityMenu=document.getElementById('cityMenu');
+const cityDD=document.getElementById('cityDD');
+const emptyMsg=document.getElementById('emptyMsg');
+
+function cityPercentOne(key){
+  let total=0,got=0;
+  (state.markers[key]||[]).forEach(m=>{
+    const def=ICONS[m.type]; if(!def||!GROUPS[def.group])return;
+    total++; if(personal.collected[key]&&personal.collected[key][m.id])got++;
+  });
+  return {total,got};
+}
+function cityPercent(key){
+  // ถ้าเมืองมีหลายชั้น (floors) ให้รวมทุกชั้น
+  const c=CITIES[key];
+  let keys=[key];
+  if(c&&c.floors) keys=c.floors.map(f=>f.key);
+  let total=0,got=0;
+  keys.forEach(k=>{const r=cityPercentOne(k); total+=r.total; got+=r.got;});
+  return {total,got,pct: total? Math.round(got/total*100):0};
+}
+/* ความคืบหน้ารวมทุกเมือง (แสดงหลัง Home) */
+function overallPercent(){
+  let total=0,got=0;
+  CITY_LIST.forEach(c=>{ if(c.map){ const r=cityPercent(c.key); total+=r.total; got+=r.got; } });
+  return {total,got,pct: total? Math.round(got/total*100):0};
+}
+const ERASE_SVG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg>`;
+function buildCityMenu(){
+  cityMenu.innerHTML='';
+  CITY_LIST.forEach(c=>{
+    const item=document.createElement('div');
+    item.className='city-item'+(c.key===CITY?' active':'')+((!c.map&&!c.welcome)?' soon':'');
+    item.dataset.key=c.key;
+    let front='',right='';
+    if(c.welcome){
+      front=`<button class="city-erase all" data-erase="all" title="รีเซ็ตทุกเมือง">${ERASE_SVG}</button>`;
+      right='';
+    }else if(c.map){
+      front=`<button class="city-erase" data-erase="${c.key}" title="รีเซ็ตเมืองนี้">${ERASE_SVG}</button>`;
+      const p=cityPercent(c.key); right=`<span class="city-pct">${p.pct}% (${p.got}/${p.total})</span>`;
+    }else{
+      front=`<span class="erase-cap"></span>`;
+      right='<span class="soon-tag">เร็วๆ นี้</span>';
+    }
+    item.innerHTML=`${front}<span class="city-name">${c.name}</span>${right}`;
+    if(c.map||c.welcome) item.addEventListener('click',e=>{
+      if(e.target.closest('.city-erase'))return;
+      closeCityMenu(); switchCity(c.key);
+    });
+    cityMenu.appendChild(item);
+  });
+  cityMenu.querySelectorAll('.city-erase').forEach(btn=>{
+    btn.addEventListener('click',e=>{ e.stopPropagation(); openResetDialog(btn.dataset.erase); });
+  });
+}
+/* ============ Popup ยืนยันรีเซ็ต (ยางลบใน dropdown เมือง) ============ */
+function resetKeysForCity(key){
+  const c=CITIES[key];
+  return (c&&c.floors)?c.floors.map(f=>f.key):[key];
+}
+let __resetPending=null;
+function openResetDialog(target){
+  const ov=document.getElementById('resetOverlay'), msg=document.getElementById('resetMsg');
+  const preset=' ในพรีเซ็ต <span class="r-preset">'+escHtml(personal.presetNames[personal.activePreset])+'</span>';
+  if(target==='all'){
+    __resetPending={all:true};
+    ov.classList.add('is-all');
+    msg.innerHTML='ลบความคืบหน้า <b>ทุกเมือง</b>'+preset+' ใช่ไหม?';
+  }else{
+    __resetPending={all:false,key:target};
+    ov.classList.remove('is-all');
+    const nm=escHtml((CITIES[target]&&CITIES[target].name)||target);
+    msg.innerHTML='ลบความคืบหน้าของเมือง <b>'+nm+'</b>'+preset+' ใช่ไหม?';
+  }
+  ov.classList.add('show');
+}
+function closeResetDialog(){ const ov=document.getElementById('resetOverlay'); if(ov)ov.classList.remove('show'); __resetPending=null; }
+(function(){
+  const ov=document.getElementById('resetOverlay'); if(!ov)return;
+  document.getElementById('resetCancel').addEventListener('click',closeResetDialog);
+  ov.addEventListener('click',e=>{ if(e.target===ov) closeResetDialog(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&ov.classList.contains('show')) closeResetDialog(); });
+  document.getElementById('resetOk').addEventListener('click',()=>{
+    if(__resetPending){
+      if(__resetPending.all){ resetCollectedKeys(ALL_KEYS); toast('รีเซ็ตความคืบหน้าทุกเมืองแล้ว'); }
+      else{ const nm=(CITIES[__resetPending.key]&&CITIES[__resetPending.key].name)||__resetPending.key;
+            resetCollectedKeys(resetKeysForCity(__resetPending.key)); toast('รีเซ็ตเมือง '+nm+' แล้ว'); }
+    }
+    closeResetDialog();
+    if(cityMenu.classList.contains('open')) buildCityMenu();
+  });
+})();
+/* ============ Preset dropdown — สลับโปรไฟล์เก็บกล่อง (หลายตัวละคร) ============ */
+const P_CHECK=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>`;
+const P_PENCIL=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L18 10l-4-4L4 16z"/><path d="M13 7l4 4"/></svg>`;
+function escHtml(s){return (s+'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function updatePresetLabel(){ const l=document.getElementById('presetLabel'); if(l)l.textContent=personal.presetNames[personal.activePreset]; }
+function switchPreset(idx){
+  if(idx<0||idx>=PRESET_COUNT)return;
+  personal.activePreset=idx; personal.collected=personal.profiles[idx];
+  savePersonal(); updatePresetLabel(); renderMarkers(); updateProgress();
+  if(cityMenu.classList.contains('open')) buildCityMenu();
+  toast('สลับไปพรีเซ็ต "'+personal.presetNames[idx]+'"');
+}
+function renamePreset(idx,name){
+  name=(name||'').trim().slice(0,PRESET_MAXLEN);
+  personal.presetNames[idx]=name||('Preset'+(idx+1));
+  savePersonal(); updatePresetLabel();
+}
+/* ความคืบหน้ารวมทุกเมืองของโปรไฟล์หนึ่ง (โชว์หลังแต่ละพรีเซ็ต) */
+function overallPercentForProfile(prof){
+  let total=0,got=0;
+  CITY_LIST.forEach(c=>{ if(!c.map)return;
+    const keys=c.floors?c.floors.map(f=>f.key):[c.key];
+    keys.forEach(k=>(state.markers[k]||[]).forEach(m=>{
+      const def=ICONS[m.type]; if(!def||!GROUPS[def.group])return;
+      total++; if(prof[k]&&prof[k][m.id])got++;
+    }));
+  });
+  return {total,got,pct: total?Math.round(got/total*100):0};
+}
+function buildPresetMenu(){
+  const list=document.getElementById('presetList'); if(!list)return;
+  list.innerHTML='';
+  for(let i=0;i<PRESET_COUNT;i++){
+    const item=document.createElement('div');
+    item.className='preset-item'+(i===personal.activePreset?' active':'');
+    item.dataset.idx=i;
+    const p=overallPercentForProfile(personal.profiles[i]);
+    item.innerHTML=`<span class="p-check">${i===personal.activePreset?P_CHECK:''}</span>`+
+      `<span class="p-name">${escHtml(personal.presetNames[i])}</span>`+
+      `<span class="p-pct">${p.pct}% (${p.got}/${p.total})</span>`+
+      `<button class="p-edit" title="เปลี่ยนชื่อ (ไม่เกิน ${PRESET_MAXLEN} ตัวอักษร)">${P_PENCIL}</button>`;
+    list.appendChild(item);
+  }
+  list.querySelectorAll('.preset-item').forEach(item=>{
+    item.addEventListener('click',e=>{ if(e.target.closest('.p-edit'))return; closePresetMenu(); switchPreset(+item.dataset.idx); });
+  });
+  list.querySelectorAll('.p-edit').forEach(btn=>{
+    btn.addEventListener('click',e=>{ e.stopPropagation(); startRename(+btn.closest('.preset-item').dataset.idx, btn.closest('.preset-item')); });
+  });
+}
+function startRename(idx,row){
+  const nameSpan=row.querySelector('.p-name'); if(!nameSpan)return;
+  const cur=personal.presetNames[idx];
+  const inp=document.createElement('input');
+  inp.className='p-input'; inp.value=cur; inp.maxLength=PRESET_MAXLEN;
+  nameSpan.replaceWith(inp); inp.focus(); inp.select();
+  let ended=false;
+  function done(){ if(ended)return; ended=true; renamePreset(idx,inp.value); buildPresetMenu(); }
+  inp.addEventListener('blur',done);
+  inp.addEventListener('keydown',ev=>{ if(ev.key==='Enter'){ev.preventDefault();inp.blur();} else if(ev.key==='Escape'){inp.value=cur;inp.blur();} });
+  inp.addEventListener('click',ev=>ev.stopPropagation());
+}
+function openPresetMenu(){ closeCityMenu(); buildPresetMenu(); document.getElementById('presetMenu').classList.add('open'); }
+function closePresetMenu(){ const m=document.getElementById('presetMenu'); if(m)m.classList.remove('open'); }
+(function(){
+  const btn=document.getElementById('presetBtn'), dd=document.getElementById('presetDD'); if(!btn)return;
+  btn.addEventListener('click',e=>{ e.stopPropagation(); const m=document.getElementById('presetMenu'); m.classList.contains('open')?closePresetMenu():openPresetMenu(); });
+  document.addEventListener('click',e=>{ if(dd&&!dd.contains(e.target)) closePresetMenu(); });
+  const pc=document.getElementById('presetClose'); if(pc) pc.addEventListener('click',e=>{ e.stopPropagation(); closePresetMenu(); });
+  updatePresetLabel();
+})();
+function openCityMenu(){ closePresetMenu(); buildCityMenu(); cityMenu.classList.add('open'); }
+function closeCityMenu(){ cityMenu.classList.remove('open'); }
+cityBtn.addEventListener('click',e=>{ e.stopPropagation(); cityMenu.classList.contains('open')?closeCityMenu():openCityMenu(); });
+document.addEventListener('click',e=>{ if(!cityDD.contains(e.target)) closeCityMenu(); });
+cityBtnLabel.textContent = CITIES[CITY] ? CITIES[CITY].name : '';
+
+/* หา "เมืองแม่" (ที่มี floors) ของ key หนึ่ง: ถ้า key เป็นชั้นย่อยให้คืน parent */
+function parentCity(key){
+  const c=CITIES[key];
+  if(c&&c.parent) return CITIES[c.parent];
+  return c;
+}
+function renderFloorbar(city){
+  const floorbar=document.getElementById('floorbar');
+  const par=parentCity(city);
+  if(par&&par.floors){
+    floorbar.innerHTML='';
+    par.floors.forEach(f=>{
+      const b=document.createElement('button');
+      b.textContent=f.label;
+      b.className=(f.key===city?'active':'');
+      b.addEventListener('click',()=>switchCity(f.key));
+      floorbar.appendChild(b);
+    });
+    floorbar.style.display='flex';
+  }else{
+    floorbar.style.display='none';
+  }
+}
+function switchCity(city){
+  if(!CITIES[city])return;
+  CITY=city;
+  const def=CITIES[city];
+  // ป้ายปุ่มเมือง: ถ้าเป็นชั้นย่อย ให้โชว์ชื่อเมืองแม่
+  const par=parentCity(city);
+  cityBtnLabel.textContent=(par&&par.name)||def.name;
+  renderFloorbar(city);
+  const welcomeEl=document.getElementById('welcome');
+  if(def.welcome){
+    welcomeEl.style.display='flex';
+    mapImg.removeAttribute('src'); mapImg.style.display='none';
+    stage.querySelectorAll('.marker').forEach(n=>n.remove());
+    emptyMsg.style.display='none';
+  }else if(def.map){
+    welcomeEl.style.display='none';
+    emptyMsg.style.display='none';
+    mapImg.style.display='';
+    mapImg.src=def.map;
+    renderMarkers();
+    if(mapImg.complete && mapImg.naturalWidth) fitView(); else mapImg.addEventListener('load',fitView,{once:true});
+  }else{
+    welcomeEl.style.display='none';
+    mapImg.removeAttribute('src'); mapImg.style.display='none';
+    stage.querySelectorAll('.marker').forEach(n=>n.remove());
+    emptyMsg.style.display='flex';
+  }
+  updateProgress();
+  document.querySelector('.sidebar') && document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('scrim') && document.getElementById('scrim').classList.remove('show');
+}
+
+/* ============ View transform ============ */
+function applyView(){ stage.style.transform=`translate(${view.x}px,${view.y}px) scale(${view.scale})`; }
+function clampScale(s){return Math.min(3,Math.max(0.12,s));}
+
+stageWrap.addEventListener('wheel',e=>{
+  const wel=document.getElementById('welcome'); if(wel&&wel.style.display!=='none') return; // หน้า Main: ปล่อยให้เลื่อนปกติ
+  e.preventDefault();
+  const rect=stageWrap.getBoundingClientRect();
+  const mx=e.clientX-rect.left, my=e.clientY-rect.top;
+  const old=view.scale; const ns=clampScale(old*(e.deltaY<0?1.12:0.89));
+  // zoom toward cursor
+  view.x = mx-(mx-view.x)*(ns/old);
+  view.y = my-(my-view.y)*(ns/old);
+  view.scale=ns; applyView();
+},{passive:false});
+
+document.getElementById('zin').onclick =()=>{view.scale=clampScale(view.scale*1.2);applyView();};
+document.getElementById('zout').onclick=()=>{view.scale=clampScale(view.scale/1.2);applyView();};
+document.getElementById('zreset').onclick=()=>{fitView();};
+
+/* pan with drag on empty stage */
+let panning=null;
+stageWrap.addEventListener('mousedown',e=>{
+  if(e.target.closest('.marker')) return;
+  if(e.target.closest('.welcome')) return;
+  panning={sx:e.clientX,sy:e.clientY,ox:view.x,oy:view.y};
+});
+window.addEventListener('mousemove',e=>{
+  if(panning){view.x=panning.ox+(e.clientX-panning.sx);view.y=panning.oy+(e.clientY-panning.sy);applyView();}
+  if(dragMarker) onMarkerDrag(e);
+});
+window.addEventListener('mouseup',()=>{panning=null; endMarkerDrag();});
+
+/* ============ Touch: pan (1 นิ้ว) + pinch zoom (2 นิ้ว) สำหรับมือถือ ============ */
+let touchPan=null, pinch=null;
+function _tDist(t){const dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy);}
+function _tMid(t){return {x:(t[0].clientX+t[1].clientX)/2, y:(t[0].clientY+t[1].clientY)/2};}
+function _welcomeOpen(){const w=document.getElementById('welcome'); return w&&w.style.display!=='none';}
+
+stageWrap.addEventListener('touchstart',e=>{
+  if(_welcomeOpen())return;                       // หน้า Home: ปล่อยให้เลื่อน/สกอลล์ปกติ
+  if(e.touches.length===2){
+    touchPan=null;
+    pinch={dist:_tDist(e.touches), mid:_tMid(e.touches)};
+  }else if(e.touches.length===1){
+    if(e.target.closest('.marker'))return;        // แตะที่กล่อง = ปล่อยให้เป็นแตะกากบาท (click)
+    const t=e.touches[0];
+    touchPan={sx:t.clientX, sy:t.clientY, ox:view.x, oy:view.y, moved:false};
+  }
+},{passive:true});
+
+stageWrap.addEventListener('touchmove',e=>{
+  if(_welcomeOpen())return;
+  if(pinch && e.touches.length===2){
+    e.preventDefault();
+    const nd=_tDist(e.touches), nm=_tMid(e.touches);
+    const rect=stageWrap.getBoundingClientRect();
+    const mx=nm.x-rect.left, my=nm.y-rect.top;
+    const old=view.scale, ns=clampScale(old*(nd/(pinch.dist||nd)));
+    // ซูมเข้าหาจุดกึ่งกลางสองนิ้ว
+    view.x = mx-(mx-view.x)*(ns/old);
+    view.y = my-(my-view.y)*(ns/old);
+    // เลื่อนตามการขยับจุดกึ่งกลาง (สองนิ้วลากไปพร้อมกัน)
+    view.x += nm.x-pinch.mid.x;
+    view.y += nm.y-pinch.mid.y;
+    view.scale=ns; applyView();
+    pinch.dist=nd; pinch.mid=nm;
+  }else if(touchPan && e.touches.length===1){
+    const t=e.touches[0];
+    if(Math.abs(t.clientX-touchPan.sx)+Math.abs(t.clientY-touchPan.sy)>3){touchPan.moved=true; e.preventDefault();}
+    view.x=touchPan.ox+(t.clientX-touchPan.sx);
+    view.y=touchPan.oy+(t.clientY-touchPan.sy);
+    applyView();
+  }
+},{passive:false});
+
+stageWrap.addEventListener('touchend',e=>{
+  if(e.touches.length===0){touchPan=null; pinch=null;}
+  else if(e.touches.length<2){pinch=null;}        // ยกจาก 2 นิ้วเหลือ 1 นิ้ว: เลิกโหมด pinch
+},{passive:true});
+
+/* ============ Coordinate helpers ============ */
+function clientToMap(cx,cy){
+  const rect=stageWrap.getBoundingClientRect();
+  return {x:(cx-rect.left-view.x)/view.scale, y:(cy-rect.top-view.y)/view.scale};
+}
+
+/* ============ Drop new icon ============ */
+stageWrap.addEventListener('dragover',e=>{if(!state.locked)e.preventDefault();});
+stageWrap.addEventListener('drop',e=>{
+  if(state.locked)return;
+  const type=e.dataTransfer.getData('text/icon'); if(!type)return;
+  e.preventDefault();
+  const p=clientToMap(e.clientX,e.clientY);
+  state.markers[CITY].push({id:nextId++,type,x:Math.round(p.x),y:Math.round(p.y)});
+  saveDraft(); renderMarkers(); updateProgress();
+  toast(`วาง ${ICONS[type].name} แล้ว`);
+});
+
+/* ============ Markers ============ */
+function renderMarkers(){
+  stage.querySelectorAll('.marker').forEach(n=>n.remove());
+  (state.markers[CITY]||[]).forEach(m=>{
+    const def=ICONS[m.type]; if(!def)return;
+    if(state.hidden[m.type])return;          // ซ่อนชนิดที่ปิด toggle ไว้
+    const el=document.createElement('div');
+    el.className='marker'+(isCollected(m)?' collected':'');
+    el.style.left=m.x+'px'; el.style.top=m.y+'px'; el.dataset.id=m.id;
+    el.style.setProperty('--ring',def.color);
+    el.innerHTML=def.svg+`<div class="xmark">${XMARK}</div><div class="del">×</div>`;
+    el.addEventListener('mousedown',ev=>onMarkerDown(ev,m,el));
+    el.querySelector('.del').addEventListener('click',ev=>{
+      ev.stopPropagation();
+      if(state.locked)return;
+      state.markers[CITY]=state.markers[CITY].filter(x=>x.id!==m.id);
+      saveDraft(); renderMarkers(); updateProgress();
+    });
+    stage.appendChild(el);
+  });
+  stageWrap.classList.toggle('editing',!state.locked);
+}
+
+/* marker drag (edit) or toggle collected (locked) */
+let dragMarker=null;
+function onMarkerDown(ev,m,el){
+  ev.stopPropagation();
+  if(state.locked){ return; } // handled on click below
+  dragMarker={m,el,moved:false,sx:ev.clientX,sy:ev.clientY,ox:m.x,oy:m.y};
+  el.classList.add('dragging');
+}
+function onMarkerDrag(e){
+  const d=dragMarker;
+  const dx=(e.clientX-d.sx)/view.scale, dy=(e.clientY-d.sy)/view.scale;
+  if(Math.abs(e.clientX-d.sx)+Math.abs(e.clientY-d.sy)>3) d.moved=true;
+  d.m.x=Math.round(d.ox+dx); d.m.y=Math.round(d.oy+dy);
+  d.el.style.left=d.m.x+'px'; d.el.style.top=d.m.y+'px';
+}
+let justDragged=false;
+function endMarkerDrag(){
+  if(!dragMarker)return;
+  dragMarker.el.classList.remove('dragging');
+  justDragged = dragMarker.moved;
+  if(dragMarker.moved){ saveDraft(); }
+  dragMarker=null;
+}
+/* click to toggle collected — works in locked mode (and in edit mode if not dragged) */
+stage.addEventListener('click',e=>{
+  const el=e.target.closest('.marker'); if(!el)return;
+  if(e.target.closest('.del'))return;          // delete handled separately
+  if(justDragged){ justDragged=false; return; } // ignore the click that ends a drag
+  const id=+el.dataset.id; const m=state.markers[CITY].find(x=>x.id===id); if(!m)return;
+  const v=!isCollected(m); setCollected(m,v); el.classList.toggle('collected',v);
+  updateProgress();
+});
+
+/* ============ Lock toggle ============ */
+function refreshLockUI(){
+  lockBtn.textContent = state.locked?'🔓 เปิดแก้ไขกล่อง':'🔒 ปิดแก้ไขกล่อง';
+  document.querySelectorAll('.ico-card').forEach(c=>c.classList.toggle('locked',state.locked));
+  stageWrap.classList.toggle('editing',!state.locked);
+  // แท็บ "ไอคอนต่างๆ" แสดงเฉพาะตอนเปิดแก้ไขกล่อง
+  const tabIcons=document.getElementById('tabIcons');
+  if(tabIcons){
+    tabIcons.style.display = state.locked ? 'none' : '';
+    if(state.locked){
+      document.querySelectorAll('.maintab').forEach(x=>x.classList.toggle('active', x.dataset.main==='cities'));
+      document.getElementById('panel-cities').style.display='';
+      document.getElementById('panel-icons').style.display='none';
+    }
+  }
+}
+lockBtn.onclick=()=>{
+  state.locked=!state.locked; save(); refreshLockUI();
+  toast(state.locked?'ปิดแก้ไขแล้ว — คลิกกล่องเพื่อกากบาทว่าเก็บแล้ว':'เปิดแก้ไขกล่องแล้ว — ลากเพิ่ม/ย้าย/ลบได้');
+};
+
+/* ============ Progress — รวม 8 ไอคอนเป็น 4 หมวดเกม ============ */
+/* ============ Reset progress (เฉพาะ collected ในเครื่องผู้ใช้) ============ */
+function resetCollectedKeys(keys){
+  keys.forEach(k=>{ personal.collected[k]={}; });
+  savePersonal(); renderMarkers(); updateProgress();
+}
+(function(){
+  const rc=document.getElementById('resetCityBtn');
+  const ra=document.getElementById('resetAllBtn');
+  if(rc) rc.addEventListener('click',()=>{
+    const par=parentCity(CITY);
+    const keys=(par&&par.floors)?par.floors.map(f=>f.key):[CITY];
+    const name=(par&&par.name)||(CITIES[CITY]&&CITIES[CITY].name)||CITY;
+    let got=0; keys.forEach(k=>got+=Object.keys(personal.collected[k]||{}).length);
+    if(!got){ toast('เมืองนี้ยังไม่มีกล่องที่เก็บไว้'); return; }
+    if(confirm('ล้างเครื่องหมาย "เก็บแล้ว" ทั้งหมด '+got+' กล่อง ในเมือง "'+name+'" ใช่ไหม?\n(ตำแหน่งกล่องไม่หาย ลบเฉพาะในเครื่องคุณ)')){
+      resetCollectedKeys(keys); toast('รีเซ็ตเมือง '+name+' แล้ว');
+    }
+  });
+  if(ra) ra.addEventListener('click',()=>{
+    let got=0; ALL_KEYS.forEach(k=>got+=Object.keys(personal.collected[k]||{}).length);
+    if(!got){ toast('ยังไม่มีกล่องที่เก็บไว้เลย'); return; }
+    if(confirm('⚠️ ล้างเครื่องหมาย "เก็บแล้ว" ทั้งหมด '+got+' กล่อง ทุกเมือง ใช่ไหม?\n(ตำแหน่งกล่องไม่หาย ลบเฉพาะในเครื่องคุณ และย้อนกลับไม่ได้)')){
+      resetCollectedKeys(ALL_KEYS); toast('รีเซ็ตทุกเมืองแล้ว');
+    }
+  });
+})();
+function updateProgress(){
+  const el=document.getElementById('progress'); el.innerHTML='';
+  const counts={};
+  Object.keys(GROUPS).forEach(g=>counts[g]={placed:0,collected:0});
+  // ถ้าเมืองมีหลายชั้น (Glast Heim) ให้รวมสรุปทุกชั้น ไม่แยกชั้น
+  const par=parentCity(CITY);
+  const keys = (par&&par.floors) ? par.floors.map(f=>f.key) : [CITY];
+  keys.forEach(k=>{
+    (state.markers[k]||[]).forEach(m=>{
+      const def=ICONS[m.type]; if(!def)return;
+      const g=def.group; if(!counts[g])return;
+      counts[g].placed++;
+      const col=personal.collected[k]; if(col&&col[m.id])counts[g].collected++;
+    });
+  });
+  Object.entries(GROUPS).forEach(([g,def])=>{
+    const c=counts[g];
+    const row=document.createElement('div'); row.className='prow';
+    row.innerHTML=`<span class="pi">${def.svg.replace('<svg','<svg width="20" height="20"')}</span>
+      <span class="pname">${def.name}</span>
+      <span class="pcount"><span class="c">${c.collected}</span>/${c.placed}</span>`;
+    el.appendChild(row);
+  });
+}
+
+/* ============ Export / Import / Load-from-web ============ */
+document.getElementById('exportBtn').onclick=()=>{
+  const out={markers:{}};
+  ALL_KEYS.forEach(k=>out.markers[k]=(state.markers[k]||[]).map(m=>({id:m.id,type:m.type,x:m.x,y:m.y})));
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='markers.json'; a.click();
+  URL.revokeObjectURL(a.href);   // คืนแรมที่พักไฟล์ไว้ กัน memory รั่ว
+  toast('บันทึก markers.json แล้ว — นำไปวางทับใน repo แล้ว commit เพื่อเผยแพร่');
+};
+const fileInput=document.getElementById('fileInput');
+document.getElementById('importBtn').onclick=()=>fileInput.click();
+document.getElementById('clearBtn').onclick=()=>{
+  const cityName = CITIES[CITY]?.name || CITY;
+  const count = (state.markers[CITY]||[]).length;
+  if(!count){toast('ไม่มีไอคอนในแมพนี้');return;}
+  if(!confirm(`ลบไอคอนทั้งหมด ${count} ตัว ในแมพ "${cityName}" ใช่ไหม?`))return;
+  state.markers[CITY]=[];
+  saveDraft(); renderMarkers(); updateProgress();
+  toast(`ลบไอคอนทั้งหมดใน ${cityName} แล้ว`);
+};
+fileInput.onchange=e=>{
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{const j=JSON.parse(r.result); const src=j.markers||j;
+    ALL_KEYS.forEach(k=>state.markers[k]=cleanMarkers(src[k]));
+    nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
+    saveDraft();renderMarkers();updateProgress();toast('โหลดไฟล์แล้ว (เป็นฉบับร่างในเครื่อง)');
+  }catch(err){toast('ไฟล์ไม่ถูกต้อง');}};
+  r.readAsText(f); fileInput.value='';
+};
+document.getElementById('pubBtn').onclick=async()=>{
+  if(!confirm('หากมีการอัปเดตแล้วหลังวันที่ที่ระบุ ไม่จำเป็นต้องกดอีก\nกด OK เพื่อโหลดข้อมูลล่าสุด'))return;
+  localStorage.removeItem(DRAFT_KEY);
+  const pub=await loadPublished();
+  if(pub){published=pub; ALL_KEYS.forEach(k=>state.markers[k]=(pub[k]||[]).map(m=>({...m})));
+    nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
+    renderMarkers();updateProgress();toast('โหลดข้อมูลหลักแล้ว');
+  }else{toast('ยังไม่พบ markers.json บนเว็บ');}
+};
+
+/* ============ Toast ============ */
+let toastT;
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('show'),2200);}
+
+/* ============ Fit view ============ */
+function fitView(){
+  const w=mapImg.naturalWidth||2660, h=mapImg.naturalHeight||2144;
+  const rect=stageWrap.getBoundingClientRect();
+  const s=Math.min(rect.width/w, rect.height/h)*0.95;
+  view.scale=s; view.x=(rect.width-w*s)/2; view.y=(rect.height-h*s)/2; applyView();
+}
+
+/* ============ Popup รวมมือกัน / ฝากกดติดตามช่อง (เด้งครั้งแรก) ============ */
+(function(){
+  const ov=document.getElementById('collabPopup');
+  if(!ov)return;
+  function closePopup(){ ov.classList.remove('show'); }
+  document.getElementById('collabClose').addEventListener('click',closePopup);
+  ov.addEventListener('click',e=>{ if(e.target===ov) closePopup(); });   // คลิกพื้นหลังเพื่อปิด
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closePopup(); });
+  ov.classList.add('show');   // เด้งทุกครั้งที่เปิดเว็บ
+})();
+
+/* ============ Init ============ */
+async function init(){
+  // โหมดแก้ไข (admin): เปิดผ่าน URL เช่น index.html?admin — คนทั่วไปจะไม่เห็นปุ่มแก้ไขกล่อง
+  if(IS_ADMIN){
+    lockBtn.style.display='';
+    const pb=document.getElementById('pubBtn'); if(pb){ pb.style.display=''; pb.disabled=false; }   // ปุ่ม Update เห็นเฉพาะแอดมิน
+  }
+  refreshLockUI();
+  published = await loadPublished();
+  if(published && !__hadDraft){
+    ALL_KEYS.forEach(k=>state.markers[k]=(published[k]||[]).map(m=>({...m})));
+    nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
+  }
+  switchCity(CITY);
+}
+init();
+</script>
+</body>
+</html>
