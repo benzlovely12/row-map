@@ -261,6 +261,9 @@
   .welcome p,.welcome li{font-size:17px;line-height:1.85;color:var(--text);}
   .welcome ol{margin:0;padding-left:24px;}
   .welcome ol li{margin:8px 0;}
+  .welcome .member-note{font-size:14px;line-height:1.7;color:var(--muted);background:var(--panel2);
+    border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:12px 15px;margin:10px 0 0;}
+  .welcome .member-note b{color:var(--text);}
   .welcome .ic-erasebtn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
     border-radius:6px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);vertical-align:-6px;margin:0 2px;}
   .welcome .ic-erasebtn svg{width:15px;height:15px;}
@@ -390,8 +393,18 @@
   .yt-btn:hover{filter:brightness(1.12);transform:translateY(-1px);}
   .yt-btn .av-mini{width:26px;height:26px;border-radius:50%;object-fit:cover;background:#fff;flex:none;}
   .collab-donor{margin-top:16px;border-top:1px solid var(--border);padding-top:14px;}
-  .collab-donor-title{font-size:13px;color:var(--muted);margin:0 0 10px;text-align:center;}
-  .collab-donor .donor-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .collab-donor-title{font-size:14.5px;font-weight:800;color:var(--text);margin:0;cursor:pointer;user-select:none;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    background:var(--panel2);border:1px solid var(--border);border-radius:11px;padding:12px 14px;transition:border-color .12s,background .12s;}
+  .collab-donor-title:hover{border-color:var(--accent);background:#222a3d;}
+  .collab-donor-title .dt-lead{display:inline-flex;align-items:center;gap:6px;}
+  .collab-donor-title .donor-count{color:var(--good);font-weight:800;}
+  .collab-donor-title .dt-hint{font-size:12.5px;color:var(--accent);font-weight:700;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
+  .collab-donor-title .donor-caret{font-size:12px;transition:transform .2s;}
+  .collab-donor.open .donor-caret{transform:rotate(180deg);}
+  .collab-donor .donor-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+    max-height:0;overflow:hidden;margin:0;transition:max-height .3s ease,margin .3s ease;}
+  .collab-donor.open .donor-list{max-height:600px;margin:10px 0 0;}
   .collab-donor .donor-card{justify-content:center;text-align:center;flex-direction:column;gap:2px;padding:8px 6px;}
   .collab-enter{margin-top:15px;background:transparent;border:none;color:var(--muted);
     font-size:13px;cursor:pointer;text-decoration:underline;}
@@ -510,6 +523,7 @@
             <li>สามารถเชื่อมต่อข้อมูลไปหลายเครื่องได้ผ่านการ login Gmail</li>
             <li>สามารถใช้ระบบเก็บข้อมูลเป็น Preset ได้อย่างอิสระ (หลายตัวละคร)</li>
           </ol>
+          <p class="member-note">🔒 <b>เราไม่เข้าถึงหรือเก็บข้อมูล Gmail ของคุณ</b> — การเข้าสู่ระบบด้วย Google ใช้เพียงเพื่อยืนยันว่าเป็นคนจริง (ป้องกันการสแปมระบบพรีเซ็ต) เราไม่มีการเก็บข้อมูลใดๆ ทั้งสิ้น</p>
           <h2 class="changelog-h">📋 การอัปเดต</h2>
           <div class="changelog">
             <div class="cl-row"><span class="cl-date">01/06/2569</span><span class="cl-ver">V 1.00</span><span class="cl-desc">เปิดตัวเว็บครั้งแรก</span></div>
@@ -568,8 +582,8 @@
       <a class="yt-btn" href="https://www.youtube.com/@SamehoTV" target="_blank" rel="noopener">
         <img class="av-mini" src="SamehoTV.jpg" alt="">ติดตามช่อง SamehoTV</a>
     </div>
-    <div class="collab-donor">
-      <p class="collab-donor-title">🙏 ขอบคุณผู้สนับสนุนโปรเจกต์นี้</p>
+    <div class="collab-donor" id="collabDonor">
+      <p class="collab-donor-title" id="donorToggle"><span class="dt-lead">🙏 ขอบคุณผู้สนับสนุนโปรเจกต์นี้ <span class="donor-count"></span></span><span class="dt-hint" id="donorHint">แตะดูรายชื่อ <span class="donor-caret">▾</span></span></p>
       <div class="donor-list">
         <div class="donor-card">คุณเจษฎา <span class="donor-amt">50 บาท</span></div>
         <div class="donor-card">คุณอัษฎา <span class="donor-amt">50 บาท</span></div>
@@ -580,6 +594,9 @@
         <div class="donor-card">คุณโชติกร <span class="donor-amt">100 บาท</span></div>
         <div class="donor-card">คุณกรรณิกา <span class="donor-amt">50 บาท</span></div>
         <div class="donor-card">คุณณฐวัฒน์ <span class="donor-amt">20 บาท</span></div>
+        <div class="donor-card">คุณพัฒนพล <span class="donor-amt">20 บาท</span></div>
+        <div class="donor-card">คุณนิศาชล <span class="donor-amt">100 บาท</span></div>
+        <div class="donor-card">คุณพิพัฒน์ <span class="donor-amt">50 บาท</span></div>
       </div>
     </div>
   </div>
@@ -1428,6 +1445,13 @@ function fitView(){
   document.getElementById('collabClose').addEventListener('click',closePopup);
   ov.addEventListener('click',e=>{ if(e.target===ov) closePopup(); });   // คลิกพื้นหลังเพื่อปิด
   document.addEventListener('keydown',e=>{ if(e.key==='Escape') closePopup(); });
+  // รายชื่อผู้บริจาค: ย่อไว้ก่อน โชว์แค่จำนวนคน (ไม่โชว์ยอดรวม) กดหัวข้อเพื่อกาง
+  const dWrap=document.getElementById('collabDonor'), dTog=document.getElementById('donorToggle');
+  if(dWrap&&dTog){
+    const cEl=dTog.querySelector('.donor-count'); if(cEl) cEl.textContent='('+dWrap.querySelectorAll('.donor-card').length+' คน)';
+    dTog.addEventListener('click',()=>{ dWrap.classList.toggle('open');
+      const h=document.getElementById('donorHint'); if(h&&h.firstChild) h.firstChild.nodeValue=dWrap.classList.contains('open')?'ซ่อนรายชื่อ ':'แตะดูรายชื่อ '; });
+  }
   ov.classList.add('show');   // เด้งทุกครั้งที่เปิดเว็บ
 })();
 
