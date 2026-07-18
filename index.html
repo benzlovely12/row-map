@@ -471,7 +471,7 @@
       </div>
       <button class="btn" id="pubBtn" style="display:none;" title="โหลดข้อมูลหลัก (ล้างฉบับร่างในเครื่อง) — สำหรับแอดมิน">☁ Update</button>
       <span class="topbar-meta">
-        <span class="update-date">อัปเดตล่าสุดวันที่ 10/7/2569</span>
+        <span class="update-date">อัปเดตล่าสุดวันที่ 18/7/2569</span>
         <img src="https://visitor-badge.laobi.icu/badge?page_id=benzlovely12.row-map&left_color=%231c1f27&right_color=%235b8cff&left_text=visitors" alt="visitors" class="visitor-badge">
       </span>
       <div class="spacer"></div>
@@ -541,8 +541,11 @@
             <div class="cl-row"><span class="cl-date">09/07/2569</span><span class="cl-ver">V 5.01</span><span class="cl-desc">[แก้บัคการโหลดแมพทับซ้อน]</span></div>
             <div class="cl-row"><span class="cl-date">09/07/2569</span><span class="cl-ver">V 5.02</span><span class="cl-desc">[อัปเดตข้อมูลอัตโนมัติทุกครั้งที่เปิดเว็บ ไม่ต้องกดปุ่ม]</span></div>
             <div class="cl-row"><span class="cl-date">09/07/2569</span><span class="cl-ver">V 5.03</span><span class="cl-desc">[ย้ายปุ่มลบข้อมูลให้ใช้งานง่ายขึ้นและสะดวกขึ้น]</span></div>
-            <div class="cl-row latest"><span class="cl-date">10/07/2569</span><span class="cl-ver">V 6.00</span><span class="cl-desc">[เพิ่มระบบพรีเซ็ต สูงสุด 5 อัน] <span class="cl-tag">ล่าสุด</span></span></div>
-            <div class="cl-row latest"><span class="cl-date">10/07/2569</span><span class="cl-ver">V 6.00</span><span class="cl-desc">[เพิ่มระบบล็อกอิน Google + ซิงค์ข้ามเครื่อง] <span class="cl-tag">ล่าสุด</span></span></div>
+            <div class="cl-row"><span class="cl-date">10/07/2569</span><span class="cl-ver">V 6.00</span><span class="cl-desc">[เพิ่มระบบพรีเซ็ต สูงสุด 5 อัน]</span></div>
+            <div class="cl-row"><span class="cl-date">10/07/2569</span><span class="cl-ver">V 6.00</span><span class="cl-desc">[เพิ่มระบบล็อกอิน Google + ซิงค์ข้ามเครื่อง]</span></div>
+            <div class="cl-row latest"><span class="cl-date">18/07/2569</span><span class="cl-ver">V 6.01</span><span class="cl-desc">[แก้ไขการบันทึกข้อมูลช้า] <span class="cl-tag">ล่าสุด</span></span></div>
+            <div class="cl-row latest"><span class="cl-date">18/07/2569</span><span class="cl-ver">V 6.01</span><span class="cl-desc">[แก้ไขระบบพรีเซ็ตใช้งานไม่ได้เพราะ server ตอบสนองช้า] <span class="cl-tag">ล่าสุด</span></span></div>
+            <div class="cl-row latest"><span class="cl-date">18/07/2569</span><span class="cl-ver">V 6.01</span><span class="cl-desc">[แก้ไขข้อมูลหายบางกรณี] <span class="cl-tag">ล่าสุด</span></span></div>
           </div>
         </div>
       </div>
@@ -1500,6 +1503,7 @@ init();
   if(!window.firebase||!firebaseConfig.apiKey)return;
   try{ firebase.initializeApp(firebaseConfig); }catch(e){ return; }
   const auth=firebase.auth(), db=firebase.firestore();
+  try{ db.enablePersistence({synchronizeTabs:true}).catch(function(){}); }catch(e){}   // คิวเขียนไว้ในเครื่อง เน็ตพร้อมค่อยซิงค์
   const provider=new firebase.auth.GoogleAuthProvider();
 
   const G='<svg viewBox="0 0 48 48" width="16" height="16"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>';
@@ -1532,6 +1536,11 @@ init();
   .um-out:hover{background:var(--panel2);}
   .member-pill{font-size:11.5px;color:var(--muted);white-space:nowrap;}
   .member-pill b{color:#9be29b;font-weight:700;}
+  .save-dot{position:absolute;top:-1px;right:-1px;width:12px;height:12px;border-radius:50%;border:2px solid var(--panel);display:none;z-index:5;pointer-events:none;}
+  .save-dot.saving{display:block;background:var(--warn);animation:sdpulse 1s infinite;}
+  .save-dot.saved{display:block;background:var(--good);}
+  .save-dot.pending{display:block;background:var(--danger);}
+  @keyframes sdpulse{0%,100%{opacity:1;}50%{opacity:.3;}}
   @media(max-width:768px){
     .user-dd{order:3;}
     .gbtn-top{padding:7px;border-radius:50%;}
@@ -1561,42 +1570,54 @@ init();
   const meta=document.querySelector('.topbar-meta');
   const pill=document.createElement('span'); pill.className='member-pill'; pill.id='memberPill'; pill.innerHTML='· <b>สมาชิก 0</b> คน';
   if(meta) meta.appendChild(pill);
+  const saveDot=document.createElement('span'); saveDot.className='save-dot'; saveDot.id='saveDot'; dd.appendChild(saveDot);
 
   const loginBtn=dd.querySelector('#loginBtn'), userChip=dd.querySelector('#userChip'), userMenu=dd.querySelector('#userMenu');
   function ss(t){ const el=dd.querySelector('#umSs'); if(el) el.textContent=t; }
   function avatarHTML(u){ const ini=((u.displayName||u.email||'?').trim().charAt(0)||'?').toUpperCase();
     return u.photoURL ? '<img src="'+u.photoURL+'" referrerpolicy="no-referrer" alt="">' : '<span class="av">'+ini+'</span>'; }
 
-  let pushT=null;
+  let pushT=null, pendingPush=false, savedTimer=null;
+  function setSaveState(s){ const d=document.getElementById('saveDot'); if(!d)return; d.className='save-dot'+(s?' '+s:''); if(s==='saved'){ clearTimeout(savedTimer); savedTimer=setTimeout(function(){ d.className='save-dot'; },1800); } }
   function cloudData(){ return {profiles:personal.profiles,presetNames:personal.presetNames,activePreset:personal.activePreset,updatedAt:firebase.firestore.FieldValue.serverTimestamp()}; }
-  function pushNow(){ const u=auth.currentUser; if(!u)return; db.collection('users').doc(u.uid).set(cloudData()).then(function(){ss('บันทึกขึ้นคลาวด์แล้ว เมื่อสักครู่');}).catch(function(){ss('ซิงค์ไม่สำเร็จ จะลองใหม่');}); }
-  function schedulePush(){ if(!auth.currentUser)return; clearTimeout(pushT); pushT=setTimeout(pushNow,4000); ss('กำลังบันทึก...'); }
+  function pushNow(){ const u=auth.currentUser; if(!u||!pendingPush)return; pendingPush=false; if(pushT){clearTimeout(pushT);pushT=null;}
+    db.collection('users').doc(u.uid).set(cloudData()).then(function(){ setSaveState('saved'); ss('บันทึกขึ้นคลาวด์แล้ว'); })
+      .catch(function(){ pendingPush=true; setSaveState('pending'); ss('ยังไม่ได้ซิงค์ — จะลองใหม่'); if(!pushT) pushT=setTimeout(function(){pushT=null;pushNow();},60000); }); }
+  /* เซฟลงเครื่องทันทีเสมอ (จุดเขียว) แล้วรวบส่งขึ้นคลาวด์ทุก ~10 นาที ลดจำนวนการเขียนมหาศาล กันชนโควตา */
+  function schedulePush(){ if(!auth.currentUser)return; pendingPush=true; setSaveState('saved'); if(!pushT) pushT=setTimeout(function(){ pushT=null; pushNow(); },600000); }
+  function flushPush(){ if(pendingPush) pushNow(); }   // บังคับเซฟตอนจะปิด/สลับหน้า กันข้อมูลตกหล่น
+  document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden') flushPush(); });
+  window.addEventListener('pagehide',flushPush);
+  window.addEventListener('beforeunload',flushPush);
 
   const _origSave=savePersonal;
   savePersonal=function(){ _origSave(); schedulePush(); };
 
   function applyCloud(d){
     if(!d||!d.profiles)return;
-    for(var i=0;i<PRESET_COUNT;i++){ var src=d.profiles[i]||{}, prof=blankProfile();
-      ALL_KEYS.forEach(function(k){ prof[k]=src[k]||{}; }); personal.profiles[i]=prof; }
-    for(var j=0;j<PRESET_COUNT;j++){ personal.presetNames[j]=(d.presetNames&&d.presetNames[j])||('Preset'+(j+1)); }
-    personal.activePreset=(d.activePreset>=0&&d.activePreset<PRESET_COUNT)?d.activePreset:0;
+    // รวมข้อมูล local ∪ cloud (ไม่ทับให้หาย) — ล็อกอินแล้วของเดิมในเครื่องต้องไม่หาย
+    for(var i=0;i<PRESET_COUNT;i++){ var src=d.profiles[i]||{};
+      if(!personal.profiles[i]) personal.profiles[i]=blankProfile();
+      ALL_KEYS.forEach(function(k){ personal.profiles[i][k]=Object.assign({}, personal.profiles[i][k]||{}, src[k]||{}); }); }
+    for(var j=0;j<PRESET_COUNT;j++){ if(d.presetNames&&d.presetNames[j]&&d.presetNames[j]!==('Preset'+(j+1))) personal.presetNames[j]=d.presetNames[j]; }
+    personal.activePreset=(d.activePreset>=0&&d.activePreset<PRESET_COUNT)?d.activePreset:personal.activePreset;
     personal.collected=personal.profiles[personal.activePreset];
     _origSave();
     renderMarkers(); updateProgress(); if(typeof updatePresetLabel==='function') updatePresetLabel();
     if(typeof cityMenu!=='undefined'&&cityMenu.classList.contains('open')&&typeof buildCityMenu==='function') buildCityMenu();
+    schedulePush();   // อัปข้อมูลที่รวมแล้วกลับขึ้นคลาวด์
   }
 
   async function onLogin(u){
     loginBtn.style.display='none'; userChip.style.display='flex';
     userChip.innerHTML=avatarHTML(u)+'<span class="un">'+(u.displayName||'บัญชี')+'</span><span class="cv">▾</span>';
     dd.querySelector('#umAcct').innerHTML=avatarHTML(u)+'<span><div class="an">'+(u.displayName||'')+'</div><div class="ae">'+(u.email||'')+'</div></span>';
+    refreshPresetLock(true);   // ปลดล็อก Preset ทันทีที่ล็อกอิน ไม่ต้องรอโหลดคลาวด์ (กันปุ่มค้างล็อกตอนเน็ตช้า)
     try{
       var ref=db.collection('users').doc(u.uid), snap=await ref.get();
       if(snap.exists){ applyCloud(snap.data()); ss('ดึงเซฟจากคลาวด์แล้ว'); }
       else{ await ref.set(cloudData()); db.collection('stats').doc('global').set({members:firebase.firestore.FieldValue.increment(1)},{merge:true}).catch(function(){}); ss('สร้างเซฟใหม่จากข้อมูลในเครื่อง'); }
     }catch(e){ ss('เชื่อมต่อคลาวด์ไม่ได้'); }
-    refreshPresetLock(true);
     loadMembers();
   }
   function onLogout(){ loginBtn.style.display=''; userChip.style.display='none'; userMenu.classList.remove('open'); refreshPresetLock(false); }
