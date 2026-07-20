@@ -1583,19 +1583,24 @@ init();
   function avatarHTML(u){ const ini=((u.displayName||u.email||'?').trim().charAt(0)||'?').toUpperCase();
     return u.photoURL ? '<img src="'+u.photoURL+'" referrerpolicy="no-referrer" alt="">' : '<span class="av">'+ini+'</span>'; }
 
-  let pushT=null, pendingPush=false, savedTimer=null;
+  let pushT=null, pendingPush=false, savedTimer=null, lastPushMs=0, lastPushedSig=null;
+  const HIDE_MIN_GAP=180000;   // สลับแท็บถี่ ๆ (สลับไปเล่นเกม) เขียนคลาวด์ไม่เกินทุก 3 นาที
   function setSaveState(s){ const d=document.getElementById('saveDot'); if(!d)return; d.className='save-dot'+(s?' '+s:''); if(s==='saved'){ clearTimeout(savedTimer); savedTimer=setTimeout(function(){ d.className='save-dot'; },1800); } }
   function cloudData(){ return {profiles:personal.profiles,presetNames:personal.presetNames,activePreset:personal.activePreset,updatedAt:firebase.firestore.FieldValue.serverTimestamp()}; }
-  function pushNow(){ const u=auth.currentUser; if(!u||!pendingPush)return; pendingPush=false; if(pushT){clearTimeout(pushT);pushT=null;}
-    db.collection('users').doc(u.uid).set(cloudData()).then(function(){ setSaveState('saved'); ss('บันทึกขึ้นคลาวด์แล้ว'); })
+  function dataSig(){ return JSON.stringify({p:personal.profiles,n:personal.presetNames,a:personal.activePreset}); }
+  function pushNow(){ const u=auth.currentUser; if(!u||!pendingPush)return;
+    const sig=dataSig();
+    if(sig===lastPushedSig){ pendingPush=false; if(pushT){clearTimeout(pushT);pushT=null;} setSaveState('saved'); return; }   // ข้อมูลไม่เปลี่ยนจากที่ดันไปล่าสุด → ไม่ต้องเขียนซ้ำ
+    pendingPush=false; if(pushT){clearTimeout(pushT);pushT=null;}
+    db.collection('users').doc(u.uid).set(cloudData()).then(function(){ lastPushedSig=sig; lastPushMs=Date.now(); setSaveState('saved'); ss('บันทึกขึ้นคลาวด์แล้ว'); })
       .catch(function(){ pendingPush=true; setSaveState('pending'); ss('ยังไม่ได้ซิงค์ — จะลองใหม่'); if(!pushT) pushT=setTimeout(function(){pushT=null;pushNow();},60000); }); }
   /* เซฟลงเครื่องทันทีเสมอ (จุดเขียว) แล้วรวบส่งขึ้นคลาวด์ทุก ~10 นาที ลดจำนวนการเขียนมหาศาล กันชนโควตา */
   function schedulePush(){ if(!auth.currentUser)return; pendingPush=true; setSaveState('saved'); if(!pushT) pushT=setTimeout(function(){ pushT=null; pushNow(); },600000); }
-  function flushPush(){ if(pendingPush) pushNow(); }   // บังคับเซฟตอนจะปิด/สลับหน้า กันข้อมูลตกหล่น
-  window.__cloudFlush=flushPush;   // ให้ส่วนอื่น (เช่น รีเซ็ตกล่อง) สั่งดันขึ้นคลาวด์ทันทีได้
-  document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden') flushPush(); });
-  window.addEventListener('pagehide',flushPush);
-  window.addEventListener('beforeunload',flushPush);
+  function flushPush(force){ if(!pendingPush)return; if(force||Date.now()-lastPushMs>=HIDE_MIN_GAP) pushNow(); }   // ปิดจริง=บังคับ, สลับแท็บ=เขียนเฉพาะเมื่อเว้นระยะพอ
+  window.__cloudFlush=function(){ flushPush(true); };   // ให้ส่วนอื่น (เช่น รีเซ็ตกล่อง) สั่งดันขึ้นคลาวด์ทันที
+  document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden') flushPush(false); });   // สลับแท็บ: หน่วง ไม่เขียนทุกครั้ง
+  window.addEventListener('pagehide',function(){ flushPush(true); });      // ปิดจริง: บังคับเซฟ กันข้อมูลตกหล่น
+  window.addEventListener('beforeunload',function(){ flushPush(true); });
 
   const _origSave=savePersonal;
   savePersonal=function(){ _origSave(); schedulePush(); };
@@ -1645,7 +1650,8 @@ init();
   dd.querySelector('#umClose').addEventListener('click',function(){ userMenu.classList.remove('open'); });
   dd.querySelector('#logoutBtn').addEventListener('click',function(){ auth.signOut(); if(typeof toast==='function') toast('ออกจากระบบแล้ว'); });
 
-  function loadMembers(){ db.collection('stats').doc('global').get().then(function(s){ var n=(s.exists&&s.data().members)||0; if(pill) pill.innerHTML='· <b>สมาชิก '+n+'</b> คน'; }).catch(function(){}); }
+  let membersReq=false;
+  function loadMembers(){ if(membersReq)return; membersReq=true; db.collection('stats').doc('global').get().then(function(s){ var n=(s.exists&&s.data().members)||0; if(pill) pill.innerHTML='· <b>สมาชิก '+n+'</b> คน'; }).catch(function(){ membersReq=false; }); }
   loadMembers();
 })();
 </script>
