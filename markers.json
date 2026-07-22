@@ -6894,8 +6894,24 @@
         "card": "vadon_45"
       }
     ],
-    "mjolnir2": [],
-    "mjolnir3": [],
+    "mjolnir2": [
+      {
+        "id": 1166,
+        "type": "card",
+        "x": 182,
+        "y": 532,
+        "card": "tarou_0"
+      }
+    ],
+    "mjolnir3": [
+      {
+        "id": 1167,
+        "type": "card",
+        "x": 485,
+        "y": 409,
+        "card": "cramp_45"
+      }
+    ],
     "alberta2": [
       {
         "id": 1165,
@@ -6919,6 +6935,42 @@
         "x": 513,
         "y": 369,
         "card": "zenorc_0"
+      }
+    ],
+    "prontera2": [
+      {
+        "id": 1168,
+        "type": "card",
+        "x": 198,
+        "y": 583,
+        "card": "giant_honet_70"
+      }
+    ],
+    "prontera3": [
+      {
+        "id": 1169,
+        "type": "card",
+        "x": 310,
+        "y": 529,
+        "card": "sasquatch_70"
+      }
+    ],
+    "prontera4": [
+      {
+        "id": 1170,
+        "type": "card",
+        "x": 230,
+        "y": 189,
+        "card": "female_thief_bug_30"
+      }
+    ],
+    "prontera5": [
+      {
+        "id": 1171,
+        "type": "card",
+        "x": 312,
+        "y": 283,
+        "card": "spore_20"
       }
     ]
   }
