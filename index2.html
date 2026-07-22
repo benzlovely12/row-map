@@ -900,7 +900,12 @@ const CITY_LIST = [
   {key:"goblin",     name:"Goblin Forest", map:"Goblin%20Forest/Goblin_full_map.png"},
   {key:"geffen",     name:"Geffen",        map:"Geffen/Geffen_full_map.png"},
   {key:"geffenriver",name:"Geffen River",  map:"Geffen%20River/GeffenRiver_full_map.png"},
-  {key:"mjolnir",    name:"Mt. Mjolnir",   map:"Mt.%20Mjolnir/Mjolnir_full_map.png"},
+  {key:"mjolnir",    name:"Mt. Mjolnir",   map:"Mt.%20Mjolnir/Mjolnir_full_map.png",
+     floors:[
+       {key:"mjolnir",  label:"ด้านนอก",           map:"Mt.%20Mjolnir/Mjolnir_full_map.png"},
+       {key:"mjolnir2", label:"Abandoned Mine 1F", map:"Mt.%20Mjolnir/Mjolnir_full_map_2.png"},
+       {key:"mjolnir3", label:"Abandoned Mine 2F", map:"Mt.%20Mjolnir/Mjolnir_full_map_3.png"},
+     ]},
   {key:"poring",     name:"Poring Island", map:"Poring%20Island/Poring_full_map.png"},
   {key:"izlude",     name:"Izlude",        map:"Izlude/Izlude_full_map.png"},
   {key:"glastheim",  name:"Glast Heim",    map:"Glast%20Heim/Glast_full_map.png",
@@ -917,6 +922,8 @@ const SUBFLOORS = [
   {key:"glastheim3", name:"Glast Heim (คุกใต้ดิน)", map:"Glast%20Heim/Glast_full_map_3.png", parent:"glastheim"},
   {key:"byalan2",    name:"Byalan (Undersea Tunnel 1F)", map:"Byalan%20Island/Byalan_full_map_2.png", parent:"byalan"},
   {key:"byalan3",    name:"Byalan (Undersea Tunnel 2F)", map:"Byalan%20Island/Byalan_full_map_3.png", parent:"byalan"},
+  {key:"mjolnir2",   name:"Mt. Mjolnir (Abandoned Mine 1F)", map:"Mt.%20Mjolnir/Mjolnir_full_map_2.png", parent:"mjolnir"},
+  {key:"mjolnir3",   name:"Mt. Mjolnir (Abandoned Mine 2F)", map:"Mt.%20Mjolnir/Mjolnir_full_map_3.png", parent:"mjolnir"},
 ];
 const CITIES = {}; CITY_LIST.forEach(c=>CITIES[c.key]=c);
 SUBFLOORS.forEach(c=>CITIES[c.key]=c);   // ให้ switchCity/markers รู้จัก key ชั้นย่อยด้วย

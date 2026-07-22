@@ -99,10 +99,22 @@
   ],
   "Mt. Mjolnir": [
     {
+      "key": "tarou_0",
+      "name": "Tarou",
+      "lv": 0,
+      "file": "Mt. Mjolnir/cards/tarou_0.png"
+    },
+    {
       "key": "martin_40",
       "name": "Martin",
       "lv": 40,
       "file": "Mt. Mjolnir/cards/martin_40.png"
+    },
+    {
+      "key": "cramp_45",
+      "name": "Cramp",
+      "lv": 45,
+      "file": "Mt. Mjolnir/cards/cramp_45.png"
     },
     {
       "key": "driller_65",
