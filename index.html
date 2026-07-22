@@ -2255,8 +2255,12 @@ init();
       .catch(function(){ pushing=false; pendingPush=true; setSaveState('pending'); ss('ยังไม่ได้ซิงค์ — จะลองใหม่');
         if(!pushT) pushT=setTimeout(function(){pushT=null;pushNow();},60000); }); }
   /* เซฟลงเครื่องทันทีเสมอ (จุดเขียว) แล้วรวบส่งขึ้นคลาวด์ทุก ~10 นาที ลดจำนวนการเขียนมหาศาล กันชนโควตา */
-  function schedulePush(){ if(!auth.currentUser)return; pendingPush=true; setSaveState('saved'); if(!pushT) pushT=setTimeout(function(){ pushT=null; pushNow(); },3600000); }   // ดันขึ้นคลาวด์ทุก 1 ชม.
-  function flushPush(){ if(pendingPush) pushNow(true); }   // ปิดเว็บ: ไม่มีเวลาไปอ่านคลาวด์ก่อน เขียนตรงๆ
+  function schedulePush(){ if(!auth.currentUser)return; pendingPush=true; setSaveState('saved'); if(!pushT) pushT=setTimeout(function(){ pushT=null; pushNow(); },7200000); }   // ดันขึ้นคลาวด์ทุก 2 ชม.
+  /* กันโควตา: ตอนปิด/สลับแอป (pagehide บนมือถือยิงทุกครั้งที่สลับไปเกม) จะเขียนคลาวด์เฉพาะเมื่อ
+     ผ่านไปเกิน MIN_FLUSH_MS นับจากเปิดหน้า/เขียนล่าสุด — ถ้ายังไม่ถึง ไม่ต้องเขียน เพราะข้อมูลอยู่ใน
+     localStorage อยู่แล้ว รอบหน้าเปิดเว็บจะ sync ให้เอง (local ∪ cloud) ไม่หาย */
+  var MIN_FLUSH_MS=1800000, loadedAtMs=Date.now();   // 30 นาที
+  function flushPush(){ if(!pendingPush)return; if(Date.now()-Math.max(lastPushMs,loadedAtMs)<MIN_FLUSH_MS)return; pushNow(true); }   // ปิดเว็บ/สลับแอป: เขียนตรงๆ เฉพาะเมื่อห่างจากครั้งก่อนพอ
   window.__cloudFlush=function(){ if(pendingPush) pushNow(true); };   // การลบ: ต้องเขียนทับ ไม่ใช่รวม
   window.addEventListener('pagehide',function(){ flushPush(); });
   window.addEventListener('beforeunload',function(){ flushPush(); });
