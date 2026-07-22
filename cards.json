@@ -1,0 +1,40 @@
+{
+  "Prontera": [
+    {
+      "key": "fabre_0",
+      "name": "Fabre",
+      "lv": 0,
+      "file": "Prontera/cards/fabre_0.png"
+    },
+    {
+      "key": "poring_5",
+      "name": "Poring",
+      "lv": 5,
+      "file": "Prontera/cards/poring_5.png"
+    },
+    {
+      "key": "hornet_10",
+      "name": "Hornet",
+      "lv": 10,
+      "file": "Prontera/cards/hornet_10.png"
+    },
+    {
+      "key": "lunatic_10",
+      "name": "Lunatic",
+      "lv": 10,
+      "file": "Prontera/cards/lunatic_10.png"
+    },
+    {
+      "key": "thief_bug_20",
+      "name": "Thief Bug",
+      "lv": 20,
+      "file": "Prontera/cards/thief_bug_20.png"
+    },
+    {
+      "key": "yoyo_40",
+      "name": "Yoyo",
+      "lv": 40,
+      "file": "Prontera/cards/yoyo_40.png"
+    }
+  ]
+}
