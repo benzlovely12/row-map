@@ -236,6 +236,19 @@
   .cl-row.missing{opacity:.5;cursor:default;}
   .cl-row.missing:hover{border-color:transparent;}
   .cl-row .cl-warn{font-size:10.5px;color:var(--warn);}
+  .cl-row .cl-where{font-size:10.5px;color:#7f8aa3;}
+  .cl-tools{display:flex;align-items:center;gap:6px;margin:0 2px 10px;flex-wrap:wrap;}
+  .cl-sort{display:flex;background:var(--panel2);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  .cl-sort button{background:transparent;border:none;color:var(--muted);cursor:pointer;
+    font-size:11.5px;padding:6px 11px;font-family:inherit;}
+  .cl-sort button.on{background:#233052;color:#cfe0ff;}
+  .cl-hide{background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:var(--muted);
+    cursor:pointer;font-size:11.5px;padding:6px 11px;font-family:inherit;margin-left:auto;}
+  .cl-hide.on{background:#1f3a2a;border-color:#2f6b46;color:#b7f2cf;}
+  .cl-group{font-size:11.5px;color:#8fb2ff;font-weight:700;margin:12px 2px 5px;
+    display:flex;justify-content:space-between;gap:8px;}
+  .cl-group:first-child{margin-top:2px;}
+  .cl-group span{color:var(--muted);font-weight:500;}
 
   .card-info{position:absolute;top:12px;right:12px;z-index:70;width:210px;
     background:var(--panel);border:1px solid var(--border);border-radius:12px;
@@ -514,6 +527,13 @@
         <div class="cardlist-head">
           <span class="cl-city" id="clCity"></span>
           <span class="cl-cnt" id="clCnt"></span>
+        </div>
+        <div class="cl-tools" id="clTools">
+          <div class="cl-sort" id="clSort">
+            <button data-sort="lv" class="on">เลเวล</button>
+            <button data-sort="city">เมือง</button>
+          </div>
+          <button class="cl-hide" id="clHide">ซ่อนที่เก็บแล้ว</button>
         </div>
         <div class="cardlist" id="cardList"></div>
         <div class="card-empty" id="cardListEmpty"></div>
@@ -1019,9 +1039,9 @@ function savePersonal(){ try{localStorage.setItem(PERSONAL_KEY,
 function saveDraft(){ try{localStorage.setItem(DRAFT_KEY, JSON.stringify({markers:state.markers}));}catch(e){} }
 function save(){ savePersonal(); }   // โค้ดเดิมเรียก save() ตอนแก้ hidden/locked
 
-function isCollected(m){ const c=personal.collected[CITY]; return !!(c&&c[m.id]); }
-function setCollected(m,v){ if(!personal.collected[CITY])personal.collected[CITY]={};
-  if(v)personal.collected[CITY][m.id]=true; else delete personal.collected[CITY][m.id]; savePersonal(); }
+function isCollected(m,key){ const c=personal.collected[key||CITY]; return !!(c&&c[m.id]); }
+function setCollected(m,v,key){ const k=key||CITY; if(!personal.collected[k])personal.collected[k]={};
+  if(v)personal.collected[k][m.id]=true; else delete personal.collected[k][m.id]; savePersonal(); }
 
 function allMarkers(){return Object.values(state.markers).flat();}
 loadPersonal();
@@ -1086,49 +1106,138 @@ function buildCardPalette(){
 }
 
 /* ============ แท็บ "การ์ด" ฝั่งซ้าย — ทุกคนเห็น ============
-   แสดงการ์ดที่ "วางไว้บนแผนที่" ของเมืองที่เปิดอยู่ คลิกเพื่อติ๊กว่าเก็บแล้ว */
+   - อยู่ในเมืองปกติ: แสดงการ์ดที่วางไว้บนแผนที่ของเมืองนั้น
+   - อยู่หน้า Home: รวมการ์ดทุกเมืองไว้ที่เดียว + เรียงตามเลเวล/เมืองได้ */
 const cardListEl=document.getElementById('cardList');
 const cardListEmpty=document.getElementById('cardListEmpty');
+let cardSort='lv';        // 'lv' | 'city'
+let cardHideGot=false;    // ซ่อนใบที่เก็บแล้ว
+
+function cityLabel(key){
+  const c=CITIES[key]; if(!c)return key;
+  const par=parentCity(key);
+  if(par && par.key!==key){
+    const f=(par.floors||[]).find(x=>x.key===key);
+    return par.name + (f?(' — '+f.label):'');
+  }
+  return c.name;
+}
+/* รวมการ์ดที่วางไว้ทุกเมือง (ใช้ตอนอยู่หน้า Home) */
+function allPlacedCards(){
+  const out=[];
+  ALL_KEYS.forEach(k=>{
+    (state.markers[k]||[]).forEach(m=>{
+      if(m.type!=='card')return;
+      out.push({m, ci:cardInfo(k,m.card), key:k});
+    });
+  });
+  return out;
+}
+function sortRows(rows){
+  const nm=r=>r.ci?r.ci.name:'';
+  const lv=r=>r.ci?r.ci.lv:9999;
+  if(cardSort==='city'){
+    const ord={}; ALL_KEYS.forEach((k,i)=>ord[k]=i);
+    rows.sort((a,b)=>(ord[a.key]-ord[b.key])||(lv(a)-lv(b))||nm(a).localeCompare(nm(b)));
+  }else{
+    rows.sort((a,b)=>(lv(a)-lv(b))||nm(a).localeCompare(nm(b)));
+  }
+  return rows;
+}
+function cardRowEl({m,ci,key},showWhere){
+  const row=document.createElement('div');
+  row.className='cl-row'+(isCollected(m,key)?' got':'')+(ci?'':' missing');
+  row.dataset.id=m.id;
+  const img = ci ? `<img src="${encodeURI(ci.file)}" alt="" loading="lazy">`
+                 : `<span style="width:34px;height:34px;flex:none;"></span>`;
+  const sub = ci ? (ci.lv?`Base Lv. ${ci.lv}`:'ไม่มีเงื่อนไข') : '';
+  row.innerHTML = img+
+    `<span class="cl-txt"><span class="cl-nm">${ci?escHtml(ci.name):'ไม่พบรูปการ์ด'}</span>`+
+    (ci?`<br><span class="cl-lv">${sub}</span>`:`<br><span class="cl-warn">${escHtml(m.card||'')}</span>`)+
+    (showWhere?`<br><span class="cl-where">${escHtml(cityLabel(key))}</span>`:'')+
+    `</span><span class="cl-tick"></span>`;
+  if(ci){
+    // คลิกในลิสต์ = "พาไปดู" เท่านั้น ไม่ติ๊กเก็บ (ติ๊กได้จากไอคอนบนแผนที่)
+    row.addEventListener('click',()=>{ gotoMarker(key,m); });
+  }
+  return row;
+}
+
 function buildCardList(){
-  const par=parentCity(CITY);
-  document.getElementById('clCity').textContent=(par&&par.name)||(CITIES[CITY]&&CITIES[CITY].name)||CITY;
-  const placed=(state.markers[CITY]||[]).filter(m=>m.type==='card');
-  cardListEl.innerHTML='';
-  if(!placed.length){
-    document.getElementById('clCnt').textContent='';
-    const n=cardsOf(CITY).length;
-    cardListEmpty.textContent = CARDS_ERR ? ('⚠ '+CARDS_ERR)
-      : n ? `เมืองนี้มีรูปการ์ด ${n} ใบ แต่ยังไม่ได้วางลงบนแผนที่ — ไปแท็บ Admin แล้วลากรูปการ์ดไปวาง`
-          : 'เมืองนี้ยังไม่มีรูปการ์ด';
+  const isHome = !!(CITIES[CITY] && CITIES[CITY].welcome);
+  const tools=document.getElementById('clTools');
+  const sortBox=document.getElementById('clSort');
+  if(sortBox) sortBox.style.display = isHome ? '' : 'none';
+
+  cardListEl.innerHTML=''; cardListEmpty.textContent='';
+
+  let rows = isHome ? allPlacedCards()
+                    : (state.markers[CITY]||[]).filter(m=>m.type==='card')
+                        .map(m=>({m, ci:cardInfo(CITY,m.card), key:CITY}));
+
+  document.getElementById('clCity').textContent = isHome ? 'การ์ดทั้งหมด' : cityLabel(CITY);
+
+  const total=rows.length;
+  const got=rows.filter(r=>isCollected(r.m,r.key)).length;
+  document.getElementById('clCnt').textContent = total ? `${got}/${total}` : '';
+  if(tools) tools.style.display = total ? '' : 'none';
+
+  if(!total){
+    if(isHome){
+      cardListEmpty.textContent = CARDS_ERR ? ('⚠ '+CARDS_ERR)
+        : 'ยังไม่มีการ์ดที่วางบนแผนที่เลย — เลือกเมืองแล้วไปแท็บ Admin เพื่อวาง';
+    }else{
+      const n=cardsOf(CITY).length;
+      cardListEmpty.textContent = CARDS_ERR ? ('⚠ '+CARDS_ERR)
+        : n ? `เมืองนี้มีรูปการ์ด ${n} ใบ แต่ยังไม่ได้วางลงบนแผนที่ — ไปแท็บ Admin แล้วลากรูปการ์ดไปวาง`
+            : 'เมืองนี้ยังไม่มีรูปการ์ด';
+    }
     return;
   }
-  cardListEmpty.textContent='';
-  const rows=placed.map(m=>({m, ci:cardInfo(CITY,m.card)}));
-  rows.sort((a,b)=>{
-    const la=a.ci?a.ci.lv:9999, lb=b.ci?b.ci.lv:9999;
-    return (la-lb) || ((a.ci?a.ci.name:'').localeCompare(b.ci?b.ci.name:''));
-  });
-  const got=rows.filter(r=>isCollected(r.m)).length;
-  document.getElementById('clCnt').textContent=`${got}/${rows.length}`;
 
-  rows.forEach(({m,ci})=>{
-    const row=document.createElement('div');
-    row.className='cl-row'+(isCollected(m)?' got':'')+(ci?'':' missing');
-    row.dataset.id=m.id;
-    const img = ci ? `<img src="${encodeURI(ci.file)}" alt="" loading="lazy">`
-                   : `<span style="width:34px;height:34px;flex:none;"></span>`;
-    const sub = ci ? (ci.lv?`Base Lv. ${ci.lv}`:'ไม่มีเงื่อนไข') : '';
-    row.innerHTML = img+
-      `<span class="cl-txt"><span class="cl-nm">${ci?escHtml(ci.name):'ไม่พบรูปการ์ด'}</span>`+
-      (ci?`<br><span class="cl-lv">${sub}</span>`:`<br><span class="cl-warn">${escHtml(m.card||'')}</span>`)+
-      `</span><span class="cl-tick"></span>`;
-    if(ci){
-      // คลิกในลิสต์ = "พาไปดู" เท่านั้น ไม่ติ๊กเก็บ (ติ๊กได้จากไอคอนบนแผนที่เท่านั้น)
-      row.addEventListener('click',()=>{ focusMarker(m); });
-    }
-    cardListEl.appendChild(row);
-  });
+  if(cardHideGot) rows=rows.filter(r=>!isCollected(r.m,r.key));
+  if(!rows.length){
+    cardListEmpty.textContent='เก็บครบทุกใบแล้ว 🎉 (ปิดตัวกรอง "ซ่อนที่เก็บแล้ว" เพื่อดูทั้งหมด)';
+    return;
+  }
+  sortRows(rows);
+
+  if(isHome && cardSort==='city'){
+    let cur=null, box=null;
+    rows.forEach(r=>{
+      if(r.key!==cur){
+        cur=r.key;
+        const grp=rows.filter(x=>x.key===cur);
+        const g=document.createElement('div'); g.className='cl-group';
+        g.innerHTML=`${escHtml(cityLabel(cur))}<span>${grp.filter(x=>isCollected(x.m,x.key)).length}/${grp.length}</span>`;
+        cardListEl.appendChild(g);
+        box=document.createElement('div'); box.className='cardlist';
+        cardListEl.appendChild(box);
+      }
+      box.appendChild(cardRowEl(r,false));
+    });
+  }else{
+    rows.forEach(r=>cardListEl.appendChild(cardRowEl(r,isHome)));
+  }
 }
+
+/* ปุ่มเรียง / ซ่อนที่เก็บแล้ว */
+(function(){
+  const sb=document.getElementById('clSort');
+  if(sb) sb.addEventListener('click',e=>{
+    const b=e.target.closest('button[data-sort]'); if(!b)return;
+    cardSort=b.dataset.sort;
+    sb.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+    buildCardList();
+  });
+  const hb=document.getElementById('clHide');
+  if(hb) hb.addEventListener('click',()=>{
+    cardHideGot=!cardHideGot;
+    hb.classList.toggle('on',cardHideGot);
+    hb.textContent = cardHideGot ? 'แสดงที่เก็บแล้ว' : 'ซ่อนที่เก็บแล้ว';
+    buildCardList();
+  });
+})();
 
 /* ============ Build legend (คำอธิบายกล่อง + toggle ซ่อน/แสดงบนแผนที่) ============ */
 const legendBody=document.getElementById('legendBody');
@@ -1393,7 +1502,8 @@ function switchCity(city){
     mapImg.style.display='';
     mapImg.src=def.map;
     renderMarkers();
-    if(mapImg.complete && mapImg.naturalWidth) fitView(); else mapImg.addEventListener('load',fitView,{once:true});
+    const afterFit=()=>{ fitView(); applyPendingFocus(); };
+    if(mapImg.complete && mapImg.naturalWidth) afterFit(); else mapImg.addEventListener('load',afterFit,{once:true});
   }else{
     welcomeEl.style.display='none';
     mapImg.removeAttribute('src'); mapImg.style.display='none';
@@ -1577,6 +1687,20 @@ stage.addEventListener('click',e=>{
   updateProgress();
   if(m.type==='card'){ showCardInfo(m,v); buildCardList(); }
 });
+
+/* ข้ามไปเมืองอื่นแล้วค่อยพาไปที่ marker (รอแมพใหม่โหลด+จัดมุมมองเสร็จก่อน) */
+let __pendingFocus=null;
+function gotoMarker(key,m){
+  if(key===CITY){ focusMarker(m); return; }
+  __pendingFocus={key,id:m.id};
+  switchCity(key);
+}
+function applyPendingFocus(){
+  if(!__pendingFocus || __pendingFocus.key!==CITY) return;
+  const m=(state.markers[CITY]||[]).find(x=>x.id===__pendingFocus.id);
+  __pendingFocus=null;
+  if(m) focusMarker(m);
+}
 
 /* ============ พาไปดู marker: เลื่อนแผนที่ไปหา + วงแดงกระพริบ 3 วิ ============ */
 let __flashT=null;
