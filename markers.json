@@ -6864,6 +6864,13 @@
         "type": "landmark",
         "x": 404,
         "y": 433
+      },
+      {
+        "id": 1161,
+        "type": "card",
+        "x": 388,
+        "y": 488,
+        "card": "marina_40"
       }
     ],
     "byalan3": [
@@ -6878,6 +6885,13 @@
         "type": "landmark",
         "x": 313,
         "y": 349
+      },
+      {
+        "id": 1162,
+        "type": "card",
+        "x": 469,
+        "y": 94,
+        "card": "vadon_45"
       }
     ]
   }
