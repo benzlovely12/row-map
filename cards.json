@@ -1,4 +1,156 @@
 {
+  "Byalan Island": [
+    {
+      "key": "marina_40",
+      "name": "Marina",
+      "lv": 40,
+      "file": "Byalan Island/cards/marina_40.png"
+    },
+    {
+      "key": "vadon_45",
+      "name": "Vadon",
+      "lv": 45,
+      "file": "Byalan Island/cards/vadon_45.png"
+    }
+  ],
+  "Geffen": [
+    {
+      "key": "roda_frog_15",
+      "name": "Roda Frog",
+      "lv": 15,
+      "file": "Geffen/cards/roda_frog_15.png"
+    },
+    {
+      "key": "squirrel_40",
+      "name": "Squirrel",
+      "lv": 40,
+      "file": "Geffen/cards/squirrel_40.png"
+    },
+    {
+      "key": "flying_petite_80",
+      "name": "Flying Petite",
+      "lv": 80,
+      "file": "Geffen/cards/flying_petite_80.png"
+    },
+    {
+      "key": "ground_petite_85",
+      "name": "Ground Petite",
+      "lv": 85,
+      "file": "Geffen/cards/ground_petite_85.png"
+    }
+  ],
+  "Geffen River": [
+    {
+      "key": "savage_babe_15",
+      "name": "Savage Babe",
+      "lv": 15,
+      "file": "Geffen River/cards/savage_babe_15.png"
+    },
+    {
+      "key": "ambernite_20",
+      "name": "Ambernite",
+      "lv": 20,
+      "file": "Geffen River/cards/ambernite_20.png"
+    }
+  ],
+  "Morroc": [
+    {
+      "key": "picky_0",
+      "name": "Picky",
+      "lv": 0,
+      "file": "Morroc/cards/picky_0.png"
+    },
+    {
+      "key": "drops_5",
+      "name": "Drops",
+      "lv": 5,
+      "file": "Morroc/cards/drops_5.png"
+    },
+    {
+      "key": "condor_10",
+      "name": "Condor",
+      "lv": 10,
+      "file": "Morroc/cards/condor_10.png"
+    },
+    {
+      "key": "picky_10",
+      "name": "Picky",
+      "lv": 10,
+      "file": "Morroc/cards/picky_10.png"
+    },
+    {
+      "key": "baby_desert_wolf_30",
+      "name": "Baby Desert Wolf",
+      "lv": 30,
+      "file": "Morroc/cards/baby_desert_wolf_30.png"
+    },
+    {
+      "key": "magnolia_55",
+      "name": "Magnolia",
+      "lv": 55,
+      "file": "Morroc/cards/magnolia_55.png"
+    },
+    {
+      "key": "giant_whisper_95",
+      "name": "Giant Whisper",
+      "lv": 95,
+      "file": "Morroc/cards/giant_whisper_95.png"
+    }
+  ],
+  "Mt. Mjolnir": [
+    {
+      "key": "martin_40",
+      "name": "Martin",
+      "lv": 40,
+      "file": "Mt. Mjolnir/cards/martin_40.png"
+    },
+    {
+      "key": "driller_65",
+      "name": "Driller",
+      "lv": 65,
+      "file": "Mt. Mjolnir/cards/driller_65.png"
+    }
+  ],
+  "Payon": [
+    {
+      "key": "worm_tail_20",
+      "name": "Worm Tail",
+      "lv": 20,
+      "file": "Payon/cards/worm_tail_20.png"
+    },
+    {
+      "key": "bigfoot_30",
+      "name": "Bigfoot",
+      "lv": 30,
+      "file": "Payon/cards/bigfoot_30.png"
+    },
+    {
+      "key": "beetle_king_55",
+      "name": "Beetle King",
+      "lv": 55,
+      "file": "Payon/cards/beetle_king_55.png"
+    },
+    {
+      "key": "greatest_general_55",
+      "name": "Greatest General",
+      "lv": 55,
+      "file": "Payon/cards/greatest_general_55.png"
+    }
+  ],
+  "Poring Island": [
+    {
+      "key": "muka_0",
+      "name": "Muka",
+      "lv": 0,
+      "file": "Poring Island/cards/muka_0.png"
+    },
+    {
+      "key": "steel_chonchon_50",
+      "name": "Steel Chonchon",
+      "lv": 50,
+      "file": "Poring Island/cards/steel_chonchon_50.png"
+    }
+  ],
   "Prontera": [
     {
       "key": "fabre_0",
