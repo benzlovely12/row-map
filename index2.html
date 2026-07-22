@@ -76,7 +76,7 @@
   .city-dd{position:relative;}
   .city-btn{background-image:none;display:flex;align-items:center;gap:10px;min-width:210px;justify-content:space-between;}
   .city-btn .dd-caret{color:var(--muted);font-size:11px;}
-  .city-menu{position:absolute;top:calc(100% + 4px);left:0;min-width:250px;max-width:86vw;max-height:72vh;overflow-y:auto;
+  .city-menu{position:absolute;top:calc(100% + 4px);left:0;min-width:390px;max-width:92vw;max-height:72vh;overflow-y:auto;
     background:var(--panel);border:1px solid var(--border);border-radius:9px;box-shadow:var(--shadow);z-index:120;padding:4px;display:none;}
   .city-menu.open{display:block;}
   .city-item{display:flex;align-items:center;justify-content:space-between;gap:9px;
@@ -84,8 +84,15 @@
   .city-item:hover{background:var(--panel2);}
   .city-item.active{background:#222a3d;}
   .city-item.soon{color:var(--muted);cursor:not-allowed;}
-  .city-item .city-name{flex:1;min-width:0;}
-  .city-item .city-pct{color:#9be29b;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .city-item .city-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  @media(max-width:760px){
+    .city-menu{min-width:0;width:calc(100vw - 24px);max-width:none;}
+    .city-item{gap:6px;}
+    .city-item .city-pct{font-size:11.5px;}
+  }
+  .city-item .city-pct{color:#9be29b;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;
+    white-space:nowrap;}
+  .city-item .city-pct.card{color:#b9a7ff;}   /* การ์ด = ม่วง แยกจากกล่องที่เป็นเขียว */
   .city-item .soon-tag{color:var(--muted);font-size:11px;font-weight:500;}
   .city-erase{flex:none;width:28px;height:28px;border-radius:7px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);
     cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:0;transition:border-color .12s,background .12s,color .12s;}
@@ -691,6 +698,7 @@
             <div class="cl-row latest"><span class="cl-date">22/07/2569</span><span class="cl-ver">V 8.00</span><span class="cl-desc">[เพิ่มระบบเก็บการ์ดมอนสเตอร์ — ค้นหา ติ๊กเก็บ และดูเลเวลที่ต้องมี] <span class="cl-tag">ล่าสุด</span></span></div>
             <div class="cl-row latest"><span class="cl-date">22/07/2569</span><span class="cl-ver">V 8.00</span><span class="cl-desc">[เพิ่มระบบแผนที่ย่อย — เหมืองร้าง เรือจม ถ้ำออร์ค ป่าเขาวงกต และท่อระบายน้ำ] <span class="cl-tag">ล่าสุด</span></span></div>
             <div class="cl-row latest"><span class="cl-date">22/07/2569</span><span class="cl-ver">V 8.00</span><span class="cl-desc">[แก้ไขปัญหาการเชื่อมต่อข้ามอุปกรณ์] <span class="cl-tag">ล่าสุด</span></span></div>
+            <div class="cl-row latest"><span class="cl-date">22/07/2569</span><span class="cl-ver">V 8.00</span><span class="cl-desc">[แก้ไขปัญหาซูมด้วยสองนิ้วบางกรณีแล้ว UI ซูมตามไปด้วย] <span class="cl-tag">ล่าสุด</span></span></div>
           </div>
         </div>
       </div>
@@ -1405,6 +1413,17 @@ function cityPercentOne(key){
   });
   return {total,got};
 }
+/* เปอร์เซ็นต์การ์ดของเมือง (รวมทุกชั้นย่อย) — นับแยกจากกล่อง ไม่ปนกัน */
+function cityCardPercent(key){
+  const c=CITIES[key];
+  const keys=(c&&c.floors)?c.floors.map(f=>f.key):[key];
+  let total=0,got=0;
+  keys.forEach(k=>(state.markers[k]||[]).forEach(m=>{
+    if(m.type!=='card')return;
+    total++; if(personal.collected[k]&&personal.collected[k][m.id])got++;
+  }));
+  return {total,got,pct: total?Math.round(got/total*100):0};
+}
 function cityPercent(key){
   // ถ้าเมืองมีหลายชั้น (floors) ให้รวมทุกชั้น
   const c=CITIES[key];
@@ -1433,7 +1452,10 @@ function buildCityMenu(){
       right='';
     }else if(c.map){
       front=`<button class="city-erase" data-erase="${c.key}" title="รีเซ็ตเมืองนี้">${ERASE_SVG}</button>`;
-      const p=cityPercent(c.key); right=`<span class="city-pct">${p.pct}% (${p.got}/${p.total})</span>`;
+      const p=cityPercent(c.key);
+      const cd=cityCardPercent(c.key);
+      right=`<span class="city-pct">${p.pct}% (${p.got}/${p.total})</span>`
+           + (cd.total?`<span class="city-pct card">${cd.pct}% (${cd.got}/${cd.total})</span>`:'');
     }else{
       front=`<span class="erase-cap"></span>`;
       right='<span class="soon-tag">เร็วๆ นี้</span>';
