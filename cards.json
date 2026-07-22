@@ -211,16 +211,40 @@
       "file": "Prontera/cards/lunatic_10.png"
     },
     {
+      "key": "spore_20",
+      "name": "Spore",
+      "lv": 20,
+      "file": "Prontera/cards/spore_20.png"
+    },
+    {
       "key": "thief_bug_20",
       "name": "Thief Bug",
       "lv": 20,
       "file": "Prontera/cards/thief_bug_20.png"
     },
     {
+      "key": "female_thief_bug_30",
+      "name": "Female Thief Bug",
+      "lv": 30,
+      "file": "Prontera/cards/female_thief_bug_30.png"
+    },
+    {
       "key": "yoyo_40",
       "name": "Yoyo",
       "lv": 40,
       "file": "Prontera/cards/yoyo_40.png"
+    },
+    {
+      "key": "giant_honet_70",
+      "name": "Giant Honet",
+      "lv": 70,
+      "file": "Prontera/cards/giant_honet_70.png"
+    },
+    {
+      "key": "sasquatch_70",
+      "name": "Sasquatch",
+      "lv": 70,
+      "file": "Prontera/cards/sasquatch_70.png"
     }
   ]
 }

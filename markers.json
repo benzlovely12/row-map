@@ -6893,6 +6893,33 @@
         "y": 94,
         "card": "vadon_45"
       }
+    ],
+    "mjolnir2": [],
+    "mjolnir3": [],
+    "alberta2": [
+      {
+        "id": 1165,
+        "type": "card",
+        "x": 233,
+        "y": 518,
+        "card": "pirate_skeleton_50"
+      }
+    ],
+    "goblin2": [
+      {
+        "id": 1163,
+        "type": "card",
+        "x": 261,
+        "y": 142,
+        "card": "golem_60"
+      },
+      {
+        "id": 1164,
+        "type": "card",
+        "x": 513,
+        "y": 369,
+        "card": "zenorc_0"
+      }
     ]
   }
 }
