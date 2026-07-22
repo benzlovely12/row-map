@@ -180,9 +180,20 @@
     border:3px solid var(--ring,#888);box-sizing:border-box;
     filter:drop-shadow(0 2px 4px rgba(0,0,0,.7));}
   .marker svg{width:38px;height:38px;display:block;pointer-events:none;}
-  .marker img.cardimg{width:38px;height:38px;display:block;object-fit:contain;pointer-events:none;
-    -webkit-user-drag:none;}
+  .marker img.cardimg{width:46px;height:46px;display:block;object-fit:contain;pointer-events:none;
+    -webkit-user-drag:none;border-radius:4px;}
   .marker.collected img.cardimg{opacity:.4;}
+  /* การ์ด = กรอบสี่เหลี่ยมสีดำ (ไม่ใช่วงกลมเหมือนกล่อง) */
+  .marker.mk-card{border-radius:9px;border-color:#0b0d12;background:#0b0d12;
+    width:54px;height:54px;padding:2px;}
+  .marker.mk-card.collected{border-style:solid;}
+  /* ไฮไลต์ตอนกดจากลิสต์ด้านซ้าย — วงแดงกระพริบ 3 วิ */
+  @keyframes mkflash{
+    0%,100%{box-shadow:0 0 0 0 rgba(255,60,60,0); outline-color:rgba(255,60,60,0);}
+    50%    {box-shadow:0 0 0 10px rgba(255,60,60,.18); outline-color:rgba(255,70,70,1);}
+  }
+  .marker.flash{outline:4px solid rgba(255,70,70,1);outline-offset:5px;
+    animation:mkflash .6s ease-in-out infinite;z-index:60;}
 
   /* ---------- การ์ด: พาเลตต์ + แผงรายละเอียด ---------- */
   .card-sec{margin-top:14px;border-top:1px solid var(--border);padding-top:12px;}
@@ -650,6 +661,21 @@
   </div>
 </div>
 
+<!-- ===== โหลดไฟล์ markers.json: ถามก่อนว่าจะทับหรือรวม ===== -->
+<div class="reset-ov" id="importOverlay">
+  <div class="reset-dlg">
+    <div class="r-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></div>
+    <div class="r-title">โหลดไฟล์ข้อมูล</div>
+    <div class="r-msg" id="importMsg"></div>
+    <div class="r-sub">เก็บเป็นฉบับร่างในเครื่องก่อน ยังไม่เผยแพร่จนกว่าจะกด "บันทึกข้อมูลใหม่"</div>
+    <div class="r-btns" style="flex-wrap:wrap;">
+      <button class="r-cancel" id="importMerge" style="flex:1 1 100%;background:#1f3a2a;border-color:#2f6b46;color:#b7f2cf;">➕ รวมกับของเดิม (แนะนำ)</button>
+      <button class="r-cancel" id="importCancel">ยกเลิก</button>
+      <button class="r-ok" id="importReplace">ทับทั้งหมด</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== Popup รวมมือกัน / ฝากกดติดตามช่อง ===== -->
 <div class="collab-ov" id="collabPopup">
   <div class="collab-card">
@@ -1097,10 +1123,8 @@ function buildCardList(){
       (ci?`<br><span class="cl-lv">${sub}</span>`:`<br><span class="cl-warn">${escHtml(m.card||'')}</span>`)+
       `</span><span class="cl-tick"></span>`;
     if(ci){
-      row.addEventListener('click',()=>{
-        const v=!isCollected(m); setCollected(m,v);
-        updateProgress(); renderMarkers(); buildCardList(); showCardInfo(m,v);
-      });
+      // คลิกในลิสต์ = "พาไปดู" เท่านั้น ไม่ติ๊กเก็บ (ติ๊กได้จากไอคอนบนแผนที่เท่านั้น)
+      row.addEventListener('click',()=>{ focusMarker(m); });
     }
     cardListEl.appendChild(row);
   });
@@ -1501,6 +1525,7 @@ function renderMarkers(){
     el.style.setProperty('--ring',def.color);
     let face=def.svg;
     if(m.type==='card'){
+      el.classList.add('mk-card');
       const ci=cardInfo(CITY,m.card);
       if(ci) face=`<img class="cardimg" src="${encodeURI(ci.file)}" alt="${escHtml(ci.name)}" loading="lazy">`;
       el.title=ci?(ci.name+(ci.lv?` — Lv. ${ci.lv}`:'')):'การ์ด (ไม่พบรูป)';
@@ -1552,6 +1577,31 @@ stage.addEventListener('click',e=>{
   updateProgress();
   if(m.type==='card'){ showCardInfo(m,v); buildCardList(); }
 });
+
+/* ============ พาไปดู marker: เลื่อนแผนที่ไปหา + วงแดงกระพริบ 3 วิ ============ */
+let __flashT=null;
+function focusMarker(m){
+  // เลื่อนแผนที่ให้ marker อยู่กลางจอ (คงระดับซูมเดิม)
+  const rect=stageWrap.getBoundingClientRect();
+  view.x = rect.width/2  - m.x*view.scale;
+  view.y = rect.height/2 - m.y*view.scale;
+  applyView();
+
+  clearTimeout(__flashT);
+  stage.querySelectorAll('.marker.flash').forEach(n=>n.classList.remove('flash'));
+  const el=stage.querySelector(`.marker[data-id="${m.id}"]`);
+  if(el){
+    el.classList.add('flash');
+    __flashT=setTimeout(()=>el.classList.remove('flash'),3000);
+  }
+  showCardInfo(m,isCollected(m));
+  // มือถือ: ปิดลิ้นชักเมนูให้เห็นแผนที่
+  const sb=document.querySelector('.sidebar');
+  if(sb&&sb.classList.contains('open')){
+    sb.classList.remove('open');
+    const sc=document.getElementById('scrim'); if(sc)sc.classList.remove('show');
+  }
+}
 
 /* ============ แผงรายละเอียดการ์ด (มุมขวาบนของแผนที่) ============ */
 const cardInfoEl=document.getElementById('cardInfo');
@@ -1676,17 +1726,71 @@ document.getElementById('clearBtn').onclick=()=>{
   saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList();
   toast(`ลบไอคอนทั้งหมดใน ${cityName} แล้ว`);
 };
-fileInput.onchange=e=>{
-  const f=e.target.files[0]; if(!f)return;
-  const r=new FileReader();
-  r.onload=()=>{try{const j=JSON.parse(r.result); const src=j.markers||j;
+/* ---- โหลดไฟล์: ถามก่อนว่าจะ "ทับ" หรือ "รวมกับของเดิม" ---- */
+const SAME_SPOT = 14;   // ห่างกันไม่เกินนี้ + ชนิดเดียวกัน = ถือว่าเป็นตัวเดียวกัน
+function sameMarker(a,b){
+  if(a.type!==b.type)return false;
+  if((a.card||'')!==(b.card||''))return false;
+  return Math.abs(a.x-b.x)<=SAME_SPOT && Math.abs(a.y-b.y)<=SAME_SPOT;
+}
+function mergeMarkers(incoming){
+  let added=0, skipped=0;
+  const used=new Set(allMarkers().map(m=>m.id));
+  let nid=Math.max(0,...used)+1;
+  const freshId=()=>{ while(used.has(nid)) nid++; return nid++; };   // ข้าม id ที่ถูกจองไปแล้ว
+  ALL_KEYS.forEach(k=>{
+    const cur=state.markers[k]||(state.markers[k]=[]);
+    (incoming[k]||[]).forEach(m=>{
+      if(cur.some(x=>sameMarker(x,m))){ skipped++; return; }
+      const o={...m};
+      if(o.id==null||used.has(o.id)) o.id=freshId();   // กัน id ชนกัน
+      used.add(o.id);
+      cur.push(o); added++;
+    });
+  });
+  nextId=Math.max(nextId,...used)+1;
+  return {added,skipped};
+}
+function applyImport(src,mode){
+  if(mode==='replace'){
     ALL_KEYS.forEach(k=>state.markers[k]=cleanMarkers(src[k]));
     nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
-    hideCardInfo();
-    saveDraft();renderMarkers();updateProgress();buildCardPalette(); buildCardList();toast('โหลดไฟล์แล้ว (เป็นฉบับร่างในเครื่อง)');
-  }catch(err){toast('ไฟล์ไม่ถูกต้อง');}};
-  r.readAsText(f); fileInput.value='';
-};
+    toast('ทับข้อมูลเดิมแล้ว (เป็นฉบับร่างในเครื่อง)');
+  }else{
+    const clean={}; ALL_KEYS.forEach(k=>clean[k]=cleanMarkers(src[k]));
+    const {added,skipped}=mergeMarkers(clean);
+    toast(`รวมข้อมูลแล้ว — เพิ่มใหม่ ${added} ตัว, ข้ามที่ซ้ำ ${skipped} ตัว`);
+  }
+  hideCardInfo();
+  saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList();
+}
+(function(){
+  const ov=document.getElementById('importOverlay');
+  let pending=null;
+  function close(){ ov.classList.remove('show'); pending=null; }
+  document.getElementById('importCancel').onclick=close;
+  document.getElementById('importMerge').onclick=()=>{ if(pending)applyImport(pending,'merge'); close(); };
+  document.getElementById('importReplace').onclick=()=>{ if(pending)applyImport(pending,'replace'); close(); };
+  ov.addEventListener('click',e=>{ if(e.target===ov)close(); });
+
+  fileInput.onchange=e=>{
+    const f=e.target.files[0]; if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{
+      try{
+        const j=JSON.parse(r.result); const src=j.markers||j;
+        let n=0; ALL_KEYS.forEach(k=>n+=cleanMarkers(src[k]).length);
+        if(!n){ toast('ไฟล์นี้ไม่มีไอคอนที่ใช้ได้'); return; }
+        const cur=allMarkers().length;
+        pending=src;
+        document.getElementById('importMsg').innerHTML =
+          `ไฟล์ที่เลือกมี <b>${n}</b> ตัว — ตอนนี้ในเครื่องคุณมีอยู่ <b>${cur}</b> ตัว<br>จะรวมเข้าด้วยกัน หรือทับของเดิมทิ้งทั้งหมด?`;
+        ov.classList.add('show');
+      }catch(err){ toast('ไฟล์ไม่ถูกต้อง'); }
+    };
+    r.readAsText(f); fileInput.value='';
+  };
+})();
 document.getElementById('pubBtn').onclick=async()=>{
   if(!confirm('หากมีการอัปเดตแล้วหลังวันที่ที่ระบุ ไม่จำเป็นต้องกดอีก\nกด OK เพื่อโหลดข้อมูลล่าสุด'))return;
   localStorage.removeItem(DRAFT_KEY);
