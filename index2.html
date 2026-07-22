@@ -886,7 +886,14 @@ const XMARK = `<svg viewBox="0 0 40 40"><path d="M9 9 L31 31 M31 9 L9 31" stroke
 /* ============ Cities (เรียงตามลำดับ; map=null คือยังไม่มีแผนที่) ============ */
 const CITY_LIST = [
   {key:"main",       name:"Home (Donate)", map:null, welcome:true},
-  {key:"prontera",   name:"Prontera",      map:"Prontera/Prontera_full_map.png"},
+  {key:"prontera",   name:"Prontera",      map:"Prontera/Prontera_full_map.png",
+     floors:[
+       {key:"prontera",  label:"ด้านนอก",             map:"Prontera/Prontera_full_map.png"},
+       {key:"prontera2", label:"Labyrinth Forest 1F", map:"Prontera/Prontera_full_map_2.png"},
+       {key:"prontera3", label:"Labyrinth Forest 2F", map:"Prontera/Prontera_full_map_3.png"},
+       {key:"prontera4", label:"Sewer 1F",            map:"Prontera/Prontera_full_map_4.png"},
+       {key:"prontera5", label:"Sewer 2F",            map:"Prontera/Prontera_full_map_5.png"},
+     ]},
   {key:"morroc",     name:"Morroc",        map:"Morroc/Morroc_full_map.png"},
   {key:"novice",     name:"Novice Village",map:"Novice%20village/Novice_village_full_map.png"},
   {key:"alberta",    name:"Alberta",       map:"Alberta/Alberta_full_map.png",
@@ -934,6 +941,10 @@ const SUBFLOORS = [
   {key:"mjolnir3",   name:"Mt. Mjolnir (Abandoned Mine 2F)", map:"Mt.%20Mjolnir/Mjolnir_full_map_3.png", parent:"mjolnir"},
   {key:"alberta2",   name:"Alberta (Sunken Ship 1F)", map:"Alberta/Alberta_full_map_2.png", parent:"alberta"},
   {key:"goblin2",    name:"Goblin Forest (Orc Cave 1F & 2F)", map:"Goblin%20Forest/Goblin_full_map_2.png", parent:"goblin"},
+  {key:"prontera2",  name:"Prontera (Labyrinth Forest 1F)", map:"Prontera/Prontera_full_map_2.png", parent:"prontera"},
+  {key:"prontera3",  name:"Prontera (Labyrinth Forest 2F)", map:"Prontera/Prontera_full_map_3.png", parent:"prontera"},
+  {key:"prontera4",  name:"Prontera (Sewer 1F)",            map:"Prontera/Prontera_full_map_4.png", parent:"prontera"},
+  {key:"prontera5",  name:"Prontera (Sewer 2F)",            map:"Prontera/Prontera_full_map_5.png", parent:"prontera"},
 ];
 const CITIES = {}; CITY_LIST.forEach(c=>CITIES[c.key]=c);
 SUBFLOORS.forEach(c=>CITIES[c.key]=c);   // ให้ switchCity/markers รู้จัก key ชั้นย่อยด้วย
@@ -1139,6 +1150,18 @@ function cityLabel(key){
   }
   return c.name;
 }
+/* ป้ายชั้นย่อย เช่น "Sunken Ship 1F" (คืนค่าว่างถ้าเมืองนั้นไม่มีชั้นย่อย) */
+function floorLabel(key){
+  const par=parentCity(key);
+  if(!par||!par.floors)return '';
+  const f=par.floors.find(x=>x.key===key);
+  return f?f.label:'';
+}
+/* ทุก key ของเมืองที่เปิดอยู่ (ถ้ามีชั้นย่อย = ทุกชั้น) */
+function floorKeys(key){
+  const par=parentCity(key);
+  return (par&&par.floors)?par.floors.map(f=>f.key):[key];
+}
 /* รวมการ์ดที่วางไว้ทุกเมือง (ใช้ตอนอยู่หน้า Home) */
 function allPlacedCards(){
   const out=[];
@@ -1161,7 +1184,7 @@ function sortRows(rows){
   }
   return rows;
 }
-function cardRowEl({m,ci,key},showWhere){
+function cardRowEl({m,ci,key},whereText){
   const row=document.createElement('div');
   row.className='cl-row'+(isCollected(m,key)?' got':'')+(ci?'':' missing');
   row.dataset.id=m.id;
@@ -1171,7 +1194,7 @@ function cardRowEl({m,ci,key},showWhere){
   row.innerHTML = img+
     `<span class="cl-txt"><span class="cl-nm">${ci?escHtml(ci.name):'ไม่พบรูปการ์ด'}</span>`+
     (ci?`<br><span class="cl-lv">${sub}</span>`:`<br><span class="cl-warn">${escHtml(m.card||'')}</span>`)+
-    (showWhere?`<br><span class="cl-where">${escHtml(cityLabel(key))}</span>`:'')+
+    (whereText?`<br><span class="cl-where">${escHtml(whereText)}</span>`:'')+
     `</span><span class="cl-tick"></span>`;
   if(ci){
     // คลิกในลิสต์ = "พาไปดู" เท่านั้น ไม่ติ๊กเก็บ (ติ๊กได้จากไอคอนบนแผนที่)
@@ -1188,9 +1211,12 @@ function buildCardList(){
 
   cardListEl.innerHTML=''; cardListEmpty.textContent='';
 
+  const keys = isHome ? [] : floorKeys(CITY);
+  const multiFloor = keys.length>1;
   let rows = isHome ? allPlacedCards()
-                    : (state.markers[CITY]||[]).filter(m=>m.type==='card')
-                        .map(m=>({m, ci:cardInfo(CITY,m.card), key:CITY}));
+                    : keys.flatMap(k=>(state.markers[k]||[])
+                        .filter(m=>m.type==='card')
+                        .map(m=>({m, ci:cardInfo(k,m.card), key:k})));
 
   document.getElementById('clCity').textContent = isHome ? 'การ์ดทั้งหมด' : cityLabel(CITY);
 
@@ -1200,14 +1226,17 @@ function buildCardList(){
   if(tools) tools.style.display = total ? '' : 'none';
 
   if(!total){
+    // ข้อความสำหรับแอดมินเท่านั้น — คนทั่วไปเห็นข้อความกลางๆ
+    if(IS_ADMIN && CARDS_ERR){ cardListEmpty.textContent='⚠ '+CARDS_ERR; return; }
     if(isHome){
-      cardListEmpty.textContent = CARDS_ERR ? ('⚠ '+CARDS_ERR)
-        : 'ยังไม่มีการ์ดที่วางบนแผนที่เลย — เลือกเมืองแล้วไปแท็บ Admin เพื่อวาง';
+      cardListEmpty.textContent = IS_ADMIN
+        ? 'ยังไม่มีการ์ดที่วางบนแผนที่เลย — เลือกเมืองแล้วไปแท็บ Admin เพื่อวาง'
+        : 'ยังไม่มีข้อมูลการ์ด';
     }else{
       const n=cardsOf(CITY).length;
-      cardListEmpty.textContent = CARDS_ERR ? ('⚠ '+CARDS_ERR)
-        : n ? `เมืองนี้มีรูปการ์ด ${n} ใบ แต่ยังไม่ได้วางลงบนแผนที่ — ไปแท็บ Admin แล้วลากรูปการ์ดไปวาง`
-            : 'เมืองนี้ยังไม่มีรูปการ์ด';
+      cardListEmpty.textContent = (IS_ADMIN && n)
+        ? `เมืองนี้มีรูปการ์ด ${n} ใบ แต่ยังไม่ได้วางลงบนแผนที่ — ไปแท็บ Admin แล้วลากรูปการ์ดไปวาง`
+        : 'เมืองนี้ยังไม่มีการ์ด';
     }
     return;
   }
@@ -1231,10 +1260,12 @@ function buildCardList(){
         box=document.createElement('div'); box.className='cardlist';
         cardListEl.appendChild(box);
       }
-      box.appendChild(cardRowEl(r,false));
+      box.appendChild(cardRowEl(r, floorLabel(r.key)));
     });
   }else{
-    rows.forEach(r=>cardListEl.appendChild(cardRowEl(r,isHome)));
+    rows.forEach(r=>cardListEl.appendChild(
+      cardRowEl(r, isHome ? cityLabel(r.key) : (multiFloor ? floorLabel(r.key) : ''))
+    ));
   }
 }
 
