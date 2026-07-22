@@ -1,4 +1,12 @@
 {
+  "Alberta": [
+    {
+      "key": "pirate_skeleton_50",
+      "name": "Pirate Skeleton",
+      "lv": 50,
+      "file": "Alberta/cards/pirate_skeleton_50.png"
+    }
+  ],
   "Byalan Island": [
     {
       "key": "marina_40",
@@ -51,6 +59,20 @@
       "name": "Ambernite",
       "lv": 20,
       "file": "Geffen River/cards/ambernite_20.png"
+    }
+  ],
+  "Goblin Forest": [
+    {
+      "key": "zenorc_0",
+      "name": "Zenorc",
+      "lv": 0,
+      "file": "Goblin Forest/cards/zenorc_0.png"
+    },
+    {
+      "key": "golem_60",
+      "name": "Golem",
+      "lv": 60,
+      "file": "Goblin Forest/cards/golem_60.png"
     }
   ],
   "Morroc": [
