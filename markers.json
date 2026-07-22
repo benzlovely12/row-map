@@ -973,6 +973,48 @@
         "type": "landmark",
         "x": 1145,
         "y": 1439
+      },
+      {
+        "id": 1134,
+        "type": "card",
+        "x": 1716,
+        "y": 228,
+        "card": "yoyo_40"
+      },
+      {
+        "id": 1135,
+        "type": "card",
+        "x": 1012,
+        "y": 539,
+        "card": "lunatic_10"
+      },
+      {
+        "id": 1136,
+        "type": "card",
+        "x": 376,
+        "y": 835,
+        "card": "fabre_0"
+      },
+      {
+        "id": 1137,
+        "type": "card",
+        "x": 569,
+        "y": 1248,
+        "card": "hornet_10"
+      },
+      {
+        "id": 1138,
+        "type": "card",
+        "x": 736,
+        "y": 1032,
+        "card": "thief_bug_20"
+      },
+      {
+        "id": 1139,
+        "type": "card",
+        "x": 1304,
+        "y": 1672,
+        "card": "poring_5"
       }
     ],
     "morroc": [
