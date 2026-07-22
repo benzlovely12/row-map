@@ -16,7 +16,7 @@
     --shadow:0 4px 18px rgba(0,0,0,.45);
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
+  html,body{margin:0;height:100%;overscroll-behavior:none;background:var(--bg);color:var(--text);
     font-family:"Segoe UI",system-ui,"Noto Sans Thai",sans-serif;overflow:hidden;}
   .app{display:flex;height:100vh;}
 
@@ -31,7 +31,7 @@
     font-weight:600;font-size:14px;border-bottom:2px solid transparent;user-select:none;}
   .maintab.active{color:var(--text);border-bottom-color:var(--accent);background:var(--panel2);}
   .maintab:hover{color:var(--text);}
-  .side-body{flex:1;overflow-y:auto;padding:10px;}
+  .side-body{flex:1;overflow-y:auto;padding:10px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
 
   .subtab{padding:11px 14px;margin:5px 0;border-radius:9px;cursor:pointer;
     background:var(--panel2);border:1px solid transparent;display:flex;align-items:center;
@@ -173,6 +173,11 @@
   .stage-wrap{flex:1;position:relative;overflow:hidden;background:
     radial-gradient(circle at 30% 20%,#1b2330,#101218);}
   .stage{position:absolute;left:0;top:0;transform-origin:0 0;}
+  /* โหมดแผนที่: ปิด gesture ของเบราว์เซอร์ (ซูมทั้งหน้า/ดับเบิลแท็ปซูม/สกอลล์) ให้เหลือแต่ของเรา */
+  .stage-wrap.mapmode{touch-action:none;-webkit-user-select:none;user-select:none;}
+  .stage-wrap.mapmode .stage,.stage-wrap.mapmode .marker{touch-action:none;}
+  .stage-wrap.mapmode .floorbar,.stage-wrap.mapmode .zoomctl,
+  .stage-wrap.mapmode .card-info{touch-action:manipulation;}
   .map-img{display:block;pointer-events:none;-webkit-user-drag:none;}
   .marker{position:absolute;transform:translate(-50%,-50%);cursor:pointer;
     width:50px;height:50px;display:flex;align-items:center;justify-content:center;
@@ -298,7 +303,8 @@
   /* มือถือ: แถบชั้นยาวเกินจอ -> เรียงลงมาแนวตั้ง ชิดมุมซ้ายบน (กันไปทับแผงการ์ดที่มุมขวา) */
   @media(max-width:760px){
     .floorbar{top:8px;left:8px;transform:none;flex-direction:column;align-items:stretch;
-      gap:3px;max-width:min(52vw,190px);max-height:calc(100% - 16px);overflow-y:auto;}
+      gap:3px;max-width:min(52vw,190px);max-height:calc(100% - 16px);overflow-y:auto;
+      overscroll-behavior:contain;}
     .floorbar button{text-align:left;font-size:12px;padding:7px 10px;
       white-space:normal;line-height:1.3;}
   }
@@ -1612,6 +1618,7 @@ function switchCity(city){
     emptyMsg.style.display='flex';
   }
   updateProgress();
+  stageWrap.classList.toggle('mapmode', !def.welcome);   // หน้า Home ปล่อยให้ซูม/เลื่อนได้ตามปกติ
   hideCardInfo(); buildCardPalette(); buildCardList();
   document.querySelector('.sidebar') && document.querySelector('.sidebar').classList.remove('open');
   document.getElementById('scrim') && document.getElementById('scrim').classList.remove('show');
@@ -1692,6 +1699,11 @@ stageWrap.addEventListener('touchmove',e=>{
     applyView();
   }
 },{passive:false});
+
+/* iOS Safari ซูมทั้งหน้าผ่าน gesture events แม้ตั้ง touch-action แล้ว — ปิดเฉพาะในแผนที่ */
+['gesturestart','gesturechange','gestureend'].forEach(function(ev){
+  stageWrap.addEventListener(ev,function(e){ if(!_welcomeOpen()) e.preventDefault(); },{passive:false});
+});
 
 stageWrap.addEventListener('touchend',e=>{
   if(e.touches.length===0){touchPan=null; pinch=null;}
