@@ -1731,6 +1731,55 @@
         "type": "rain",
         "x": 1172,
         "y": 1114
+      },
+      {
+        "id": 1140,
+        "type": "card",
+        "x": 1220,
+        "y": 369,
+        "card": "drops_5"
+      },
+      {
+        "id": 1141,
+        "type": "card",
+        "x": 1114,
+        "y": 1703,
+        "card": "picky_0"
+      },
+      {
+        "id": 1142,
+        "type": "card",
+        "x": 1058,
+        "y": 1797,
+        "card": "picky_10"
+      },
+      {
+        "id": 1143,
+        "type": "card",
+        "x": 1448,
+        "y": 1777,
+        "card": "condor_10"
+      },
+      {
+        "id": 1144,
+        "type": "card",
+        "x": 1762,
+        "y": 1817,
+        "card": "magnolia_55"
+      },
+      {
+        "id": 1145,
+        "type": "card",
+        "x": 1195,
+        "y": 1218,
+        "card": "giant_whisper_95"
+      },
+      {
+        "id": 1146,
+        "type": "card",
+        "x": 1810,
+        "y": 2021,
+        "card": "baby_desert_wolf_30"
       }
     ],
     "novice": [
@@ -3269,6 +3318,34 @@
         "type": "landmark",
         "x": 3234,
         "y": 4485
+      },
+      {
+        "id": 1147,
+        "type": "card",
+        "x": 3650,
+        "y": 344,
+        "card": "beetle_king_55"
+      },
+      {
+        "id": 1148,
+        "type": "card",
+        "x": 3358,
+        "y": 1170,
+        "card": "greatest_general_55"
+      },
+      {
+        "id": 1149,
+        "type": "card",
+        "x": 2908,
+        "y": 2874,
+        "card": "bigfoot_30"
+      },
+      {
+        "id": 1150,
+        "type": "card",
+        "x": 3411,
+        "y": 3587,
+        "card": "worm_tail_20"
       }
     ],
     "goblin": [
@@ -4977,6 +5054,34 @@
         "type": "landmark",
         "x": 2058,
         "y": 1625
+      },
+      {
+        "id": 1151,
+        "type": "card",
+        "x": 4471,
+        "y": 1942,
+        "card": "roda_frog_15"
+      },
+      {
+        "id": 1152,
+        "type": "card",
+        "x": 702,
+        "y": 814,
+        "card": "ground_petite_85"
+      },
+      {
+        "id": 1153,
+        "type": "card",
+        "x": 836,
+        "y": 1887,
+        "card": "flying_petite_80"
+      },
+      {
+        "id": 1154,
+        "type": "card",
+        "x": 3102,
+        "y": 3255,
+        "card": "squirrel_40"
       }
     ],
     "geffenriver": [
@@ -5261,6 +5366,20 @@
         "type": "landmark",
         "x": 581,
         "y": 1907
+      },
+      {
+        "id": 1157,
+        "type": "card",
+        "x": 390,
+        "y": 670,
+        "card": "ambernite_20"
+      },
+      {
+        "id": 1158,
+        "type": "card",
+        "x": 420,
+        "y": 1454,
+        "card": "savage_babe_15"
       }
     ],
     "mjolnir": [
@@ -5545,6 +5664,20 @@
         "type": "landmark",
         "x": 790,
         "y": 1426
+      },
+      {
+        "id": 1155,
+        "type": "card",
+        "x": 923,
+        "y": 440,
+        "card": "martin_40"
+      },
+      {
+        "id": 1156,
+        "type": "card",
+        "x": 1475,
+        "y": 460,
+        "card": "driller_65"
       }
     ],
     "poring": [
@@ -6045,6 +6178,20 @@
         "type": "landmark",
         "x": 1893,
         "y": 190
+      },
+      {
+        "id": 1159,
+        "type": "card",
+        "x": 533,
+        "y": 823,
+        "card": "muka_0"
+      },
+      {
+        "id": 1160,
+        "type": "card",
+        "x": 779,
+        "y": 2408,
+        "card": "steel_chonchon_50"
       }
     ],
     "izlude": [
