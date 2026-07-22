@@ -242,9 +242,14 @@
   .cl-sort button{background:transparent;border:none;color:var(--muted);cursor:pointer;
     font-size:11.5px;padding:6px 11px;font-family:inherit;}
   .cl-sort button.on{background:#233052;color:#cfe0ff;}
+  .cl-right{margin-left:auto;display:flex;align-items:center;gap:6px;}
   .cl-hide{background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:var(--muted);
-    cursor:pointer;font-size:11.5px;padding:6px 11px;font-family:inherit;margin-left:auto;}
+    cursor:pointer;font-size:11.5px;padding:6px 11px;font-family:inherit;}
   .cl-hide.on{background:#1f3a2a;border-color:#2f6b46;color:#b7f2cf;}
+  .cl-home{background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:var(--muted);
+    cursor:pointer;padding:0;width:29px;height:29px;display:flex;align-items:center;justify-content:center;}
+  .cl-home svg{width:16px;height:16px;display:block;}
+  .cl-home:hover{border-color:var(--accent);color:var(--accent);}
   .cl-group{font-size:11.5px;color:#8fb2ff;font-weight:700;margin:12px 2px 5px;
     display:flex;justify-content:space-between;gap:8px;}
   .cl-group:first-child{margin-top:2px;}
@@ -533,7 +538,12 @@
             <button data-sort="lv" class="on">เลเวล</button>
             <button data-sort="city">เมือง</button>
           </div>
-          <button class="cl-hide" id="clHide">ซ่อนที่เก็บแล้ว</button>
+          <div class="cl-right">
+            <button class="cl-home" id="clHome" title="กลับไปหน้า Home (Donate)" aria-label="กลับไปหน้า Home">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.8 20v-5.4h4.4V20"/></svg>
+            </button>
+            <button class="cl-hide" id="clHide">ซ่อนที่เก็บแล้ว</button>
+          </div>
         </div>
         <div class="cardlist" id="cardList"></div>
         <div class="card-empty" id="cardListEmpty"></div>
@@ -1208,6 +1218,8 @@ function buildCardList(){
   const tools=document.getElementById('clTools');
   const sortBox=document.getElementById('clSort');
   if(sortBox) sortBox.style.display = isHome ? '' : 'none';
+  const homeBtn=document.getElementById('clHome');
+  if(homeBtn) homeBtn.style.display = isHome ? 'none' : '';
 
   cardListEl.innerHTML=''; cardListEmpty.textContent='';
 
@@ -1277,6 +1289,11 @@ function buildCardList(){
     cardSort=b.dataset.sort;
     sb.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
     buildCardList();
+  });
+  const home=document.getElementById('clHome');
+  if(home) home.addEventListener('click',()=>{
+    const w=CITY_LIST.find(c=>c.welcome);
+    if(w) switchCity(w.key);
   });
   const hb=document.getElementById('clHide');
   if(hb) hb.addEventListener('click',()=>{
