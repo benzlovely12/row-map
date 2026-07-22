@@ -160,6 +160,8 @@
   .reset-dlg .r-title{font-size:18px;font-weight:800;margin-bottom:7px;}
   .reset-dlg .r-msg{font-size:14px;line-height:1.6;margin-bottom:5px;color:var(--text);}
   .reset-dlg .r-msg b{color:#9be29b;}
+  .reset-dlg .r-msg b.r-card{color:#b9a7ff;}
+  .reset-dlg .r-msg .r-none{color:var(--muted);}
   .reset-ov.is-all .reset-dlg .r-msg b{color:#ff9b9b;}
   .reset-dlg .r-msg .r-preset{color:#8fb2ff;font-weight:800;}
   .reset-dlg .r-sub{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
@@ -664,8 +666,8 @@
           <h2 class="howto-h">วิธีใช้งาน (ทั่วไป)</h2>
           <ol>
             <li>เลือกเมืองจากเมนูด้านบนซ้าย</li>
-            <li>คลิกที่กล่องเพื่อบันทึกว่า "เก็บกล่องนั้นแล้ว"</li>
-            <li>กดปุ่มยางลบ <span class="ic-erasebtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg></span> หน้าเมืองเพื่อรีเซ็ตกล่อง และยางลบสีแดง <span class="ic-erasebtn red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg></span> เพื่อลบทั้งหมด</li>
+            <li>คลิกที่กล่องหรือการ์ดเพื่อบันทึกว่า "เก็บกล่องหรือการ์ดนั้นแล้ว"</li>
+            <li>กดปุ่มยางลบ <span class="ic-erasebtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg></span> หน้าเมืองเพื่อรีเซ็ตกล่องและการ์ด และยางลบสีแดง <span class="ic-erasebtn red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg></span> เพื่อลบทั้งหมด</li>
           </ol>
           <h2 class="member-h">วิธีใช้งาน (สมาชิก)</h2>
           <ol>
@@ -1479,6 +1481,23 @@ function resetKeysForCity(key){
   const c=CITIES[key];
   return (c&&c.floors)?c.floors.map(f=>f.key):[key];
 }
+/* นับของที่เก็บไว้แล้ว แยกกล่อง/การ์ด — ใช้บอกในป็อปอัปก่อนลบ */
+function collectedCounts(keys){
+  let box=0,card=0;
+  keys.forEach(k=>{
+    const col=personal.collected[k]||{};
+    (state.markers[k]||[]).forEach(m=>{ if(!col[m.id])return; if(m.type==='card')card++; else box++; });
+  });
+  return {box,card};
+}
+function countsText(keys){
+  const c=collectedCounts(keys);
+  if(!c.box&&!c.card) return '<span class="r-none">ยังไม่มีอะไรให้ลบ</span>';
+  const parts=[];
+  if(c.box)  parts.push('กล่อง <b>'+c.box+'</b>');
+  if(c.card) parts.push('การ์ด <b class="r-card">'+c.card+'</b>');
+  return 'จะลบ '+parts.join(' และ ')+' รายการ';
+}
 let __resetPending=null;
 function openResetDialog(target){
   const ov=document.getElementById('resetOverlay'), msg=document.getElementById('resetMsg');
@@ -1486,12 +1505,12 @@ function openResetDialog(target){
   if(target==='all'){
     __resetPending={all:true};
     ov.classList.add('is-all');
-    msg.innerHTML='ลบความคืบหน้า <b>ทุกเมือง</b>'+preset+' ใช่ไหม?';
+    msg.innerHTML='ลบความคืบหน้า <b>ทุกเมือง</b>'+preset+' ใช่ไหม?<br>'+countsText(ALL_KEYS);
   }else{
     __resetPending={all:false,key:target};
     ov.classList.remove('is-all');
     const nm=escHtml((CITIES[target]&&CITIES[target].name)||target);
-    msg.innerHTML='ลบความคืบหน้าของเมือง <b>'+nm+'</b>'+preset+' ใช่ไหม?';
+    msg.innerHTML='ลบความคืบหน้าของเมือง <b>'+nm+'</b>'+preset+' ใช่ไหม?<br>'+countsText(resetKeysForCity(target));
   }
   ov.classList.add('show');
 }
@@ -2215,25 +2234,41 @@ init();
   function setSaveState(s){ const d=document.getElementById('saveDot'); if(!d)return; d.className='save-dot'+(s?' '+s:''); if(s==='saved'){ clearTimeout(savedTimer); savedTimer=setTimeout(function(){ d.className='save-dot'; },1800); } }
   function cloudData(){ return {profiles:personal.profiles,presetNames:personal.presetNames,activePreset:personal.activePreset,updatedAt:firebase.firestore.FieldValue.serverTimestamp()}; }
   function dataSig(){ return JSON.stringify({p:personal.profiles,n:personal.presetNames,a:personal.activePreset}); }
-  function pushNow(){ const u=auth.currentUser; if(!u||!pendingPush)return;
-    const sig=dataSig();
-    if(sig===lastPushedSig){ pendingPush=false; if(pushT){clearTimeout(pushT);pushT=null;} setSaveState('saved'); return; }   // ข้อมูลไม่เปลี่ยนจากที่ดันไปล่าสุด → ไม่ต้องเขียนซ้ำ
+  /* เขียนขึ้นคลาวด์ = อ่านของบนคลาวด์มารวมกับของในเครื่องก่อนเสมอ แล้วค่อยเขียนผลรวมกลับไป
+     กันเคส: คอมเปิดค้างแล้วเน็ตหลุด ระหว่างนั้นไปเก็บต่อบนมือถือ พอคอมกลับมาเขียนจะได้ไม่ทับของมือถือทิ้ง
+     authoritative=true = เขียนทับตรงๆ ไม่รวม (ใช้กับการ "ลบ" เท่านั้น ไม่งั้นของที่ลบจะถูกรวมกลับมา) */
+  var pushing=false;
+  function pushNow(authoritative){
+    const u=auth.currentUser; if(!u||!pendingPush||pushing)return;
+    if(dataSig()===lastPushedSig){ pendingPush=false; if(pushT){clearTimeout(pushT);pushT=null;} setSaveState('saved'); return; }
     pendingPush=false; if(pushT){clearTimeout(pushT);pushT=null;}
-    db.collection('users').doc(u.uid).set(cloudData()).then(function(){ lastPushedSig=sig; lastPushMs=Date.now(); setSaveState('saved'); ss('บันทึกขึ้นคลาวด์แล้ว'); })
-      .catch(function(){ pendingPush=true; setSaveState('pending'); ss('ยังไม่ได้ซิงค์ — จะลองใหม่'); if(!pushT) pushT=setTimeout(function(){pushT=null;pushNow();},60000); }); }
+    pushing=true;
+    var ref=db.collection('users').doc(u.uid);
+    var step = authoritative
+      ? Promise.resolve(null)
+      : ref.get().then(function(sn){ return sn.exists?sn.data():null; }).catch(function(){ return null; });
+    step.then(function(cloud){
+        if(cloud && mergeCloud(cloud)) ss('รวมข้อมูลจากอีกเครื่องแล้ว');
+        return ref.set(cloudData());
+      })
+      .then(function(){ pushing=false; lastPushedSig=dataSig(); lastPushMs=Date.now(); setSaveState('saved'); ss('บันทึกขึ้นคลาวด์แล้ว'); })
+      .catch(function(){ pushing=false; pendingPush=true; setSaveState('pending'); ss('ยังไม่ได้ซิงค์ — จะลองใหม่');
+        if(!pushT) pushT=setTimeout(function(){pushT=null;pushNow();},60000); }); }
   /* เซฟลงเครื่องทันทีเสมอ (จุดเขียว) แล้วรวบส่งขึ้นคลาวด์ทุก ~10 นาที ลดจำนวนการเขียนมหาศาล กันชนโควตา */
   function schedulePush(){ if(!auth.currentUser)return; pendingPush=true; setSaveState('saved'); if(!pushT) pushT=setTimeout(function(){ pushT=null; pushNow(); },3600000); }   // ดันขึ้นคลาวด์ทุก 1 ชม.
-  function flushPush(){ if(pendingPush) pushNow(); }
-  window.__cloudFlush=function(){ flushPush(); };   // ให้ส่วนอื่น (เช่น รีเซ็ตกล่อง) สั่งดันขึ้นคลาวด์ทันที
-  window.addEventListener('pagehide',function(){ flushPush(); });      // ปิดจริง: บังคับเซฟ กันข้อมูลตกหล่น
+  function flushPush(){ if(pendingPush) pushNow(true); }   // ปิดเว็บ: ไม่มีเวลาไปอ่านคลาวด์ก่อน เขียนตรงๆ
+  window.__cloudFlush=function(){ if(pendingPush) pushNow(true); };   // การลบ: ต้องเขียนทับ ไม่ใช่รวม
+  window.addEventListener('pagehide',function(){ flushPush(); });
   window.addEventListener('beforeunload',function(){ flushPush(); });
 
   const _origSave=savePersonal;
   savePersonal=function(){ _origSave(); schedulePush(); };
 
-  function applyCloud(d){
-    if(!d||!d.profiles)return;
-    // รวมข้อมูล local ∪ cloud (ไม่ทับให้หาย) — ล็อกอินแล้วของเดิมในเครื่องต้องไม่หาย
+  /* รวมข้อมูล local ∪ cloud (ไม่ทับให้หาย) — ใช้ทั้งตอนล็อกอินและก่อนเขียนขึ้นคลาวด์ทุกครั้ง
+     คืนค่า true ถ้ามีข้อมูลจากคลาวด์เพิ่มเข้ามาจริง */
+  function mergeCloud(d){
+    if(!d||!d.profiles)return false;
+    var before=dataSig();
     for(var i=0;i<PRESET_COUNT;i++){ var src=d.profiles[i]||{};
       if(!personal.profiles[i]) personal.profiles[i]=blankProfile();
       ALL_KEYS.forEach(function(k){ personal.profiles[i][k]=Object.assign({}, personal.profiles[i][k]||{}, src[k]||{}); }); }
@@ -2241,10 +2276,16 @@ init();
     personal.activePreset=(d.activePreset>=0&&d.activePreset<PRESET_COUNT)?d.activePreset:personal.activePreset;
     personal.collected=personal.profiles[personal.activePreset];
     _origSave();
-    renderMarkers(); updateProgress(); if(typeof updatePresetLabel==='function') updatePresetLabel();
-    if(typeof cityMenu!=='undefined'&&cityMenu.classList.contains('open')&&typeof buildCityMenu==='function') buildCityMenu();
-    schedulePush();   // อัปข้อมูลที่รวมแล้วกลับขึ้นคลาวด์
+    var changed = dataSig()!==before;
+    if(changed){
+      renderMarkers(); updateProgress();
+      if(typeof updatePresetLabel==='function') updatePresetLabel();
+      if(typeof buildCardList==='function') buildCardList();
+      if(typeof cityMenu!=='undefined'&&cityMenu.classList.contains('open')&&typeof buildCityMenu==='function') buildCityMenu();
+    }
+    return changed;
   }
+  function applyCloud(d){ mergeCloud(d); schedulePush(); }
 
   async function onLogin(u){
     loginBtn.style.display='none'; userChip.style.display='flex';
