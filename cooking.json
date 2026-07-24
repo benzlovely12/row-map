@@ -1,0 +1,22 @@
+{
+  "Prontera": [
+    {
+      "key": "blueback_soup_38",
+      "name": "Blueback Soup",
+      "lv": 38,
+      "file": "Prontera/cooking/blueback_soup_38.png"
+    },
+    {
+      "key": "cherry_jelly_38",
+      "name": "Cherry Jelly",
+      "lv": 38,
+      "file": "Prontera/cooking/cherry_jelly_38.png"
+    },
+    {
+      "key": "grape_wine_38",
+      "name": "Grape Wine",
+      "lv": 38,
+      "file": "Prontera/cooking/grape_wine_38.png"
+    }
+  ]
+}
