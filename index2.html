@@ -572,9 +572,6 @@
             <button data-sort="city">เมือง</button>
           </div>
           <div class="cl-right">
-            <button class="cl-home" id="clBoxes" title="ซ่อน/แสดงกล่องบนแผนที่ (ให้เหลือแต่การ์ด)" aria-label="ซ่อนกล่องบนแผนที่">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.2 12 4l9 4.2v7.6L12 20l-9-4.2z"/><path d="M3 8.2 12 12.4l9-4.2"/><path d="M12 12.4V20"/></svg>
-            </button>
             <button class="cl-home" id="clHome" title="กลับไปหน้า Home (Donate)" aria-label="กลับไปหน้า Home">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.8 20v-5.4h4.4V20"/></svg>
             </button>
@@ -596,9 +593,6 @@
             <button data-sort="city">เมือง</button>
           </div>
           <div class="cl-right">
-            <button class="cl-home" id="ckBoxes" title="ซ่อน/แสดงกล่องบนแผนที่ (ให้เหลือแต่เมนูอาหาร)" aria-label="ซ่อนกล่องบนแผนที่">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.2 12 4l9 4.2v7.6L12 20l-9-4.2z"/><path d="M3 8.2 12 12.4l9-4.2"/><path d="M12 12.4V20"/></svg>
-            </button>
             <button class="cl-home" id="ckHome" title="กลับไปหน้า Home (Donate)" aria-label="กลับไปหน้า Home">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.8 20v-5.4h4.4V20"/></svg>
             </button>
@@ -1642,16 +1636,19 @@ legendBody.addEventListener('click',e=>{
 });
 
 /* ============ Tabs ============ */
+let mainTab='cities';   // แท็บซ้ายที่เปิดอยู่ ใช้กรองมาร์กเกอร์บนแผนที่
 document.querySelectorAll('.maintab').forEach(t=>t.addEventListener('click',()=>{
   document.querySelectorAll('.maintab').forEach(x=>x.classList.remove('active'));
   t.classList.add('active');
   const m=t.dataset.main;
+  mainTab=m;
   document.getElementById('panel-cities').style.display = m==='cities'?'':'none';
   document.getElementById('panel-cards').style.display  = m==='cards'?'':'none';
   document.getElementById('panel-cook').style.display   = m==='cook'?'':'none';
   document.getElementById('panel-icons').style.display  = m==='icons'?'':'none';
   if(m==='cards') buildCardList();
   if(m==='cook') buildCookList();
+  renderMarkers();   // กรองมาร์กเกอร์ตามแท็บที่เพิ่งเลือก
 }));
 
 /* ============ Mobile drawer ============ */
@@ -2069,11 +2066,20 @@ stageWrap.addEventListener('drop',e=>{
 });
 
 /* ============ Markers ============ */
+/* กรองมาร์กเกอร์ตามแท็บที่เปิดอยู่: กล่อง→เฉพาะกล่อง, การ์ด→เฉพาะการ์ด, เมนูอาหาร→เฉพาะอาหาร
+   (แท็บ Admin โชว์ทุกอย่างเพื่อให้วาง/แก้ไขได้) */
+function passesTabFilter(type){
+  if(mainTab==='cards') return type==='card';
+  if(mainTab==='cook')  return type==='cooking';
+  if(mainTab==='cities')return type!=='card' && type!=='cooking';
+  return true;
+}
 function renderMarkers(){
   stage.querySelectorAll('.marker').forEach(n=>n.remove());
   (state.markers[CITY]||[]).forEach(m=>{
     const def=ICONS[m.type]; if(!def)return;
     if(state.hidden[m.type])return;          // ซ่อนชนิดที่ปิด toggle ไว้
+    if(!passesTabFilter(m.type))return;      // กรองตามแท็บซ้าย
     const el=document.createElement('div');
     el.className='marker'+(isCollected(m)?' collected':'');
     el.style.left=m.x+'px'; el.style.top=m.y+'px'; el.dataset.id=m.id;
@@ -2228,10 +2234,12 @@ function refreshLockUI(){
     if(state.locked && document.getElementById('panel-icons').style.display!=='none'){
       // ออกจากโหมดแก้ไขขณะอยู่แท็บ Admin -> เด้งกลับแท็บกล่อง
       document.querySelectorAll('.maintab').forEach(x=>x.classList.toggle('active', x.dataset.main==='cities'));
+      mainTab='cities';
       document.getElementById('panel-cities').style.display='';
       document.getElementById('panel-cards').style.display='none';
       document.getElementById('panel-cook').style.display='none';
       document.getElementById('panel-icons').style.display='none';
+      renderMarkers();
     }
   }
 }
