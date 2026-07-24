@@ -1,4 +1,92 @@
 {
+  "Alberta": [
+    {
+      "key": "mana_chowder_38",
+      "name": "Mana Chowder",
+      "lv": 38,
+      "file": "Alberta/cooking/mana_chowder_38.png"
+    },
+    {
+      "key": "squid_tentacle_soup_38",
+      "name": "Squid Tentacle Soup",
+      "lv": 38,
+      "file": "Alberta/cooking/squid_tentacle_soup_38.png"
+    }
+  ],
+  "Geffen": [
+    {
+      "key": "magic_broth_38",
+      "name": "Magic Broth",
+      "lv": 38,
+      "file": "Geffen/cooking/magic_broth_38.png"
+    },
+    {
+      "key": "VIT_dish_38",
+      "name": "VIT Dish",
+      "lv": 38,
+      "file": "Geffen/cooking/VIT_dish_38.png"
+    }
+  ],
+  "Izlude": [
+    {
+      "key": "green_salad_38",
+      "name": "Green Salad",
+      "lv": 38,
+      "file": "Izlude/cooking/green_salad_38.png"
+    },
+    {
+      "key": "steamed_scorpion_38",
+      "name": "Steamed Scorpion",
+      "lv": 38,
+      "file": "Izlude/cooking/steamed_scorpion_38.png"
+    },
+    {
+      "key": "STR_dish_38",
+      "name": "STR Dish",
+      "lv": 38,
+      "file": "Izlude/cooking/STR_dish_38.png"
+    }
+  ],
+  "Morroc": [
+    {
+      "key": "purple_vadon_congee_38",
+      "name": "Purple Vadon Congee",
+      "lv": 38,
+      "file": "Morroc/cooking/purple_vadon_congee_38.png"
+    },
+    {
+      "key": "supreme_STR_dish_38",
+      "name": "Supreme STR Dish",
+      "lv": 38,
+      "file": "Morroc/cooking/supreme_STR_dish_38.png"
+    }
+  ],
+  "Payon": [
+    {
+      "key": "apple_pudding_38",
+      "name": "Apple Pudding",
+      "lv": 38,
+      "file": "Payon/cooking/apple_pudding_38.png"
+    },
+    {
+      "key": "fried_sweet_potato_38",
+      "name": "Fried Sweet Potato",
+      "lv": 38,
+      "file": "Payon/cooking/fried_sweet_potato_38.png"
+    },
+    {
+      "key": "red_fish_hotpot_38",
+      "name": "Red Fish Hotpot",
+      "lv": 38,
+      "file": "Payon/cooking/red_fish_hotpot_38.png"
+    },
+    {
+      "key": "seafood_soup_38",
+      "name": "Seafood Soup",
+      "lv": 38,
+      "file": "Payon/cooking/seafood_soup_38.png"
+    }
+  ],
   "Prontera": [
     {
       "key": "blueback_soup_38",
