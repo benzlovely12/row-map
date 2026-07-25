@@ -374,6 +374,10 @@
   hr.sep{border:none;border-top:1px solid var(--border);margin:12px 0;}
   .side-actions{padding:8px 10px 12px;display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--border);}
   .side-actions .btn{width:100%;justify-content:center;}
+  #iconSizeSec .icon-size-row{display:flex;align-items:center;gap:8px;}
+  #iconSizeSec .is-map{font-size:11.5px;color:var(--muted);min-width:58px;line-height:1.15;}
+  #iconSizeSec input[type=range]{flex:1;accent-color:var(--accent);}
+  #iconSizeSec #iconSizeReset{padding:4px 10px;font-size:11.5px;}
 
   /* ---------- Welcome / Main ---------- */
   .welcome{position:absolute;inset:0;z-index:60;background:
@@ -542,12 +546,13 @@
     .collab-title{font-size:19px;}
   }
   /* ============ โหมดล่าบอส ============ */
-  #panel-boss .boss-side{padding:6px 2px;text-align:center;}
-  .boss-side-ic{width:52px;height:52px;margin:6px auto 10px;color:#e2553f;}
-  .boss-side-ic svg{width:52px;height:52px;}
-  .boss-side-tx{font-size:15px;font-weight:700;color:var(--text);}
-  .boss-side-sub{font-size:12px;color:var(--muted);line-height:1.55;margin:6px 0 14px;}
-  #openBossBtn{width:100%;}
+  #panel-boss{padding:4px 2px;}
+  .boss-side-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 12px;}
+  .bside-tab{padding:12px 8px;border:1px solid var(--border);border-radius:12px;background:var(--panel2);
+    color:var(--muted);font-size:15px;font-weight:700;cursor:pointer;transition:.12s;}
+  .bside-tab:hover{border-color:#e2553f;color:var(--text);}
+  .bside-tab.on{background:#3a1f1a;border-color:#e2553f;color:#ff9a86;}
+  .boss-side-hint{font-size:12px;color:var(--muted);line-height:1.6;padding:0 2px;}
   /* marker บอส = กรอบสี่เหลี่ยมแดงเลือด */
   .marker img.bossimg{width:48px;height:48px;display:block;object-fit:contain;pointer-events:none;-webkit-user-drag:none;border-radius:5px;}
   .marker.mk-boss{border-radius:10px;border-color:#e2553f;background:#1a0d0b;width:58px;height:58px;padding:2px;animation:bosspulse 1.4s ease-in-out infinite;}
@@ -562,9 +567,9 @@
   .bc-tabs{display:flex;gap:6px;background:var(--panel2);border:1px solid var(--border);border-radius:9px;padding:2px;}
   .bc-tab{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:13px;font-weight:600;padding:5px 16px;border-radius:7px;}
   .bc-tab.on{background:#3a1f1a;color:#ff9a86;}
-  .bc-close{margin-left:auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--panel2);color:var(--muted);cursor:pointer;font-size:15px;}
-  .bc-close:hover{color:var(--text);border-color:#e2553f;}
-  .bc-body{flex:1;overflow-y:auto;padding:6px 20px 28px;}
+  .bc-tabs-mobile{display:none;margin-left:auto;}   /* Mini/Elite ในหัวตาราง = โชว์เฉพาะมือถือ (จอใหญ่ใช้ปุ่มในแท็บซ้าย) */
+  .bc-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 20px 28px;}
+  @media(max-width:768px){ .bc-tabs-mobile{display:flex;} .bc-body{padding:6px 12px 28px;} }
   .bc-lvsep{display:flex;align-items:center;gap:14px;margin:20px 4px 14px;}
   .bc-lvsep .ln{flex:1;height:1px;background:var(--border);}
   .bc-lvsep .lb{font-size:14px;font-weight:700;color:var(--muted);letter-spacing:1px;}
@@ -660,14 +665,13 @@
         <div class="cardlist" id="cookList"></div>
         <div class="card-empty" id="cookListEmpty"></div>
       </div>
-      <!-- Boss panel (ทุกคนเห็น) — เป็นแค่ปุ่มเปิดตารางบอสเต็มจอ -->
+      <!-- Boss panel (ทุกคนเห็น) — สลับ Mini/Elite ของตารางบอส -->
       <div id="panel-boss" style="display:none;">
-        <div class="boss-side">
-          <div class="boss-side-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2 4 7v6c0 4 3.5 7 8 9 4.5-2 8-5 8-9V7l-5-5z"/><circle cx="9.5" cy="11" r="1.2"/><circle cx="14.5" cy="11" r="1.2"/><path d="M9 15h6"/></svg></div>
-          <div class="boss-side-tx">โหมดล่าบอส</div>
-          <div class="boss-side-sub">เปิดตารางบอสเต็มจอ เลือกบอสเพื่อไปดูจุดเกิด + จับเวลาแยกแชแนล</div>
-          <button class="btn primary" id="openBossBtn">เปิดตารางบอส</button>
+        <div class="boss-side-tabs">
+          <button class="bside-tab on" data-btype="mini">Mini</button>
+          <button class="bside-tab" data-btype="elite">Elite</button>
         </div>
+        <div class="boss-side-hint">เลือกบอสจากตารางด้านขวา → เด้งไปจุดเกิด แล้วจับเวลาตายแยกแชแนล</div>
       </div>
       <!-- Admin panel -->
       <div id="panel-icons" style="display:none;">
@@ -687,6 +691,15 @@
           <h4>บอส (จุดเกิด) <span class="cnt" id="bossCnt"></span></h4>
           <div class="card-grid" id="bossGrid"></div>
           <div class="card-empty" id="bossEmpty"></div>
+        </div>
+        <div class="card-sec" id="iconSizeSec">
+          <h4>ขนาด icon แมพนี้ <span class="cnt" id="iconSizeVal">100%</span></h4>
+          <div class="icon-size-row">
+            <span class="is-map" id="iconSizeMap"></span>
+            <input type="range" id="iconSizeSlider" min="40" max="180" step="5" value="100">
+            <button class="btn" id="iconSizeReset" title="กลับเป็นค่าเริ่มต้น">รีเซ็ต</button>
+          </div>
+          <div class="card-empty">ปรับเห็นผลทันที · ค่าถูกบันทึกลง markers.json ตอนกด “บันทึกข้อมูลใหม่”</div>
         </div>
         <div class="side-actions">
           <button class="btn" id="exportBtn" title="บันทึกเป็น markers.json เพื่อนำไป commit ขึ้น GitHub">⬇ บันทึกข้อมูลใหม่</button>
@@ -749,11 +762,10 @@
       <div class="boss-catalog" id="bossCatalog">
         <div class="bc-head">
           <span class="bc-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2 4 7v6c0 4 3.5 7 8 9 4.5-2 8-5 8-9V7l-5-5z"/></svg>ล่าบอส</span>
-          <div class="bc-tabs">
+          <div class="bc-tabs bc-tabs-mobile">
             <button class="bc-tab on" data-btype="mini">Mini</button>
             <button class="bc-tab" data-btype="elite">Elite</button>
           </div>
-          <button class="bc-close" id="bcClose" aria-label="ปิด">✕</button>
         </div>
         <div class="bc-body" id="bcBody"></div>
       </div>
@@ -1329,13 +1341,50 @@ function readDraftMarkers(){
   }
   return null;
 }
+let PUB_ICON_SCALES=null;   // iconScales ที่มากับ markers.json (ฉบับเผยแพร่)
 async function loadPublished(){
   try{const r=await fetch('markers.json?_='+Date.now(),{cache:'no-store'});
     if(r.ok){const j=await r.json(); const src=j.markers||j; const out={};
+      PUB_ICON_SCALES = (j.iconScales && typeof j.iconScales==='object') ? j.iconScales : {};
       ALL_KEYS.forEach(k=>out[k]=cleanMarkers(src[k])); return out;}
   }catch(e){}
   return null;
 }
+/* ===== ขนาด icon แยกรายแมพ (ปรับผ่านสไลเดอร์แอดมิน + เก็บใน markers.json) ===== */
+const ICON_SCALES_KEY="row_icon_scales_v1";
+let iconScales={};   // { floorKey: number } เช่น {payon2:0.7}
+function readIconScales(){ try{const d=JSON.parse(localStorage.getItem(ICON_SCALES_KEY)); return (d&&typeof d==='object')?d:null;}catch(e){return null;} }
+function saveIconScales(){ try{localStorage.setItem(ICON_SCALES_KEY, JSON.stringify(iconScales));}catch(e){} }
+/* ค่าจริงที่ใช้: สไลเดอร์ชั้น -> สไลเดอร์เมืองแม่ -> ค่า iconScale ในโค้ด(ชั้น) -> (เมืองแม่) -> 1 */
+function effectiveIconScale(key){
+  const cdef=CITIES[key]||{}, par=parentCity(key)||{}, pkey=(par&&par.key)||key;
+  if(iconScales[key]!=null) return iconScales[key];
+  if(iconScales[pkey]!=null) return iconScales[pkey];
+  return cdef.iconScale || par.iconScale || 1;
+}
+/* อัปเดตสไลเดอร์ขนาด icon ให้ตรงกับแมพที่เปิดอยู่ (เรียกตอนสลับเมือง) */
+function updateIconSizeUI(){
+  const sl=document.getElementById('iconSizeSlider'); if(!sl)return;
+  const val=Math.round(effectiveIconScale(CITY)*100);
+  sl.value=val;
+  const v=document.getElementById('iconSizeVal'); if(v) v.textContent=val+'%';
+  const mapEl=document.getElementById('iconSizeMap');
+  if(mapEl) mapEl.textContent=(typeof cityLabel==='function'?cityLabel(CITY):CITY);
+}
+(function(){
+  const sl=document.getElementById('iconSizeSlider'), rs=document.getElementById('iconSizeReset'), v=document.getElementById('iconSizeVal');
+  if(sl) sl.addEventListener('input',()=>{
+    iconScales[CITY]=(+sl.value)/100; saveIconScales();
+    if(v) v.textContent=sl.value+'%';
+    stage.style.setProperty('--mk-scale', effectiveIconScale(CITY));   // เห็นผลทันที
+  });
+  if(rs) rs.addEventListener('click',()=>{
+    delete iconScales[CITY]; saveIconScales();
+    updateIconSizeUI();
+    stage.style.setProperty('--mk-scale', effectiveIconScale(CITY));
+    toast('รีเซ็ตขนาด icon แมพนี้เป็นค่าเริ่มต้นแล้ว');
+  });
+})();
 function savePersonal(){ try{localStorage.setItem(PERSONAL_KEY,
   JSON.stringify({locked:state.locked,hidden:state.hidden,
     activePreset:personal.activePreset,presetNames:personal.presetNames,profiles:personal.profiles}));}catch(e){} }
@@ -1483,7 +1532,7 @@ function rangeLabel(lv){ const r=BOSS_LV_RANGES.find(x=>lv>=x[0]&&lv<=x[1]); ret
 function buildBossCatalog(){
   const list=(BOSS[bossCatType]||[]).slice().sort((a,b)=>a.lv-b.lv);
   bcBody.innerHTML='';
-  document.querySelectorAll('.bc-tab').forEach(t=>t.classList.toggle('on',t.dataset.btype===bossCatType));
+  document.querySelectorAll('.bc-tab,.bside-tab').forEach(t=>t.classList.toggle('on',t.dataset.btype===bossCatType));
   if(!list.length){ bcBody.innerHTML='<div class="bc-empty">'+(BOSS_ERR?('⚠ '+BOSS_ERR):'ยังไม่มีบอสประเภทนี้ — ใส่รูปใน boss/'+bossCatType+' แล้วรัน node tools/build-boss.js')+'</div>'; return; }
   let curRange=null, grid=null;
   list.forEach(b=>{
@@ -1924,16 +1973,23 @@ document.querySelectorAll('.maintab').forEach(t=>t.addEventListener('click',()=>
   document.getElementById('panel-icons').style.display  = m==='icons'?'':'none';
   if(m==='cards') buildCardList();
   if(m==='cook') buildCookList();
-  if(m==='boss'){ buildBossPalette(); openBossCatalog(); }
+  if(m==='boss'){
+    buildBossPalette(); openBossCatalog();
+    // มือถือ: ปิดลิ้นชักเมนูอัตโนมัติ ให้เห็นตารางบอสเต็มจอชัดๆ
+    const sb=document.querySelector('.sidebar'); if(sb) sb.classList.remove('open');
+    const sc=document.getElementById('scrim'); if(sc) sc.classList.remove('show');
+  }
   else { closeBossCatalog(); if(huntBoss) exitBossHunt(false); }
   renderMarkers();   // กรองมาร์กเกอร์ตามแท็บที่เพิ่งเลือก
 }));
 
-/* ปุ่ม/แท็บของโหมดล่าบอส */
+/* ปุ่มสลับ Mini/Elite (มีทั้งในแท็บซ้าย .bside-tab และหัวตารางมือถือ .bc-tab) — sync กัน */
+function setBossCatType(type){
+  bossCatType=type; buildBossCatalog();
+  document.querySelectorAll('.bc-tab,.bside-tab').forEach(b=>b.classList.toggle('on',b.dataset.btype===type));
+}
 (function(){
-  const ob=document.getElementById('openBossBtn'); if(ob) ob.onclick=openBossCatalog;
-  const bc=document.getElementById('bcClose'); if(bc) bc.onclick=()=>{ closeBossCatalog(); if(huntBoss) exitBossHunt(false); };
-  document.querySelectorAll('.bc-tab').forEach(t=>t.onclick=()=>{ bossCatType=t.dataset.btype; buildBossCatalog(); });
+  document.querySelectorAll('.bc-tab,.bside-tab').forEach(t=>t.onclick=()=>setBossCatType(t.dataset.btype));
 })();
 
 /* ============ Mobile drawer ============ */
@@ -2227,7 +2283,7 @@ function switchCity(city){
   }
   updateProgress();
   stageWrap.classList.toggle('mapmode', !def.welcome);   // หน้า Home ปล่อยให้ซูม/เลื่อนได้ตามปกติ
-  hideCardInfo(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList(); buildBossPalette();
+  hideCardInfo(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList(); buildBossPalette(); updateIconSizeUI();
   document.querySelector('.sidebar') && document.querySelector('.sidebar').classList.remove('open');
   document.getElementById('scrim') && document.getElementById('scrim').classList.remove('show');
 }
@@ -2238,6 +2294,7 @@ function clampScale(s){return Math.min(3,Math.max(0.12,s));}
 
 stageWrap.addEventListener('wheel',e=>{
   const wel=document.getElementById('welcome'); if(wel&&wel.style.display!=='none') return; // หน้า Main: ปล่อยให้เลื่อนปกติ
+  const bc=document.getElementById('bossCatalog'); if(bc&&bc.classList.contains('show')) return; // โหมดตารางบอส: ปล่อยให้ scroll รายการได้
   e.preventDefault();
   const rect=stageWrap.getBoundingClientRect();
   const mx=e.clientX-rect.left, my=e.clientY-rect.top;
@@ -2370,9 +2427,8 @@ function passesTabFilter(type){   // เรียกเฉพาะ type ที�
 }
 function renderMarkers(){
   stage.querySelectorAll('.marker').forEach(n=>n.remove());
-  // ปรับขนาด icon แยกรายแมพ: ใส่ iconScale ในนิยามชั้น/เมือง (เช่น 0.7 = เล็กลง 30%)
-  const cdef=CITIES[CITY]||{}, par=parentCity(CITY)||{};
-  stage.style.setProperty('--mk-scale', cdef.iconScale || par.iconScale || 1);
+  // ปรับขนาด icon แยกรายแมพ (สไลเดอร์แอดมิน > ค่าในโค้ด > 1)
+  stage.style.setProperty('--mk-scale', effectiveIconScale(CITY));
   const bossSeq={};   // นับลำดับจุดเกิดของแต่ละบอสในเมืองนี้
   (state.markers[CITY]||[]).forEach(m=>{
     const def=ICONS[m.type]; if(!def)return;
@@ -2654,6 +2710,9 @@ document.getElementById('exportBtn').onclick=()=>{
     if(m.boss) o.boss=m.boss;
     return o;
   }));
+  // เก็บขนาด icon รายแมพที่ตั้งไว้ (เฉพาะที่มีค่าจริง) ลงไฟล์ด้วย
+  const isc={}; Object.keys(iconScales).forEach(k=>{ if(iconScales[k]!=null) isc[k]=iconScales[k]; });
+  if(Object.keys(isc).length) out.iconScales=isc;
   const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download='markers.json'; a.click();
@@ -2796,6 +2855,9 @@ async function init(){
     ALL_KEYS.forEach(k=>state.markers[k]=(published[k]||[]).map(m=>({...m})));
   }
   nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
+  // ขนาด icon รายแมพ: ฐานจาก markers.json + (admin) ทับด้วยที่ปรับค้างไว้ในเครื่อง
+  iconScales = {...(PUB_ICON_SCALES||{})};
+  if(IS_ADMIN){ const loc=readIconScales(); if(loc) iconScales={...iconScales, ...loc}; }
   // admin: รวมจุดที่วางไว้ในเครื่อง (บอส/อาหารที่ยังไม่ export) ทับฐาน — ไม่ทำงานที่ค้างหาย
   if(IS_ADMIN && __draftMarkers){
     mergeMarkers(__draftMarkers);
