@@ -96,6 +96,7 @@
   .city-item .city-pct{color:#9be29b;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;
     white-space:nowrap;}
   .city-item .city-pct.card{color:#b9a7ff;}   /* การ์ด = ม่วง แยกจากกล่องที่เป็นเขียว */
+  .city-item .city-pct.cook{color:#f2c94c;}   /* เมนูอาหาร = ทอง แยกจากกล่อง/การ์ด */
   .city-item .soon-tag{color:var(--muted);font-size:11px;font-weight:500;}
   .city-erase{flex:none;width:28px;height:28px;border-radius:7px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);
     cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:0;transition:border-color .12s,background .12s,color .12s;}
@@ -161,6 +162,7 @@
   .reset-dlg .r-msg{font-size:14px;line-height:1.6;margin-bottom:5px;color:var(--text);}
   .reset-dlg .r-msg b{color:#9be29b;}
   .reset-dlg .r-msg b.r-card{color:#b9a7ff;}
+  .reset-dlg .r-msg b.r-cook{color:#f2c94c;}
   .reset-dlg .r-msg .r-none{color:var(--muted);}
   .reset-ov.is-all .reset-dlg .r-msg b{color:#ff9b9b;}
   .reset-dlg .r-msg .r-preset{color:#8fb2ff;font-weight:800;}
@@ -204,6 +206,10 @@
   .marker.mk-card{border-radius:9px;border-color:#0b0d12;background:#0b0d12;
     width:54px;height:54px;padding:2px;}
   .marker.mk-card.collected{border-style:solid;}
+  /* เมนูอาหาร = กรอบสี่เหลี่ยมสีทอง (รูปแบบเหมือนการ์ด แต่ขอบทอง) */
+  .marker.mk-cook{border-radius:9px;border-color:#e6b800;background:#1c1608;
+    width:54px;height:54px;padding:2px;box-shadow:0 0 0 1px #e6b80066;}
+  .marker.mk-cook.collected{border-style:solid;}
   /* ไฮไลต์ตอนกดจากลิสต์ด้านซ้าย — วงแดงกระพริบ 3 วิ */
   @keyframes mkflash{
     0%,100%{box-shadow:0 0 0 0 rgba(255,60,60,0); outline-color:rgba(255,60,60,0);}
@@ -543,6 +549,7 @@
     <div class="maintabs">
       <div class="maintab active" data-main="cities">กล่อง</div>
       <div class="maintab" id="tabCards" data-main="cards">การ์ด</div>
+      <div class="maintab" id="tabCook" data-main="cook">เมนูอาหาร</div>
       <div class="maintab" id="tabIcons" data-main="icons">Admin</div>
     </div>
     <div class="side-body">
@@ -565,9 +572,6 @@
             <button data-sort="city">เมือง</button>
           </div>
           <div class="cl-right">
-            <button class="cl-home" id="clBoxes" title="ซ่อน/แสดงกล่องบนแผนที่ (ให้เหลือแต่การ์ด)" aria-label="ซ่อนกล่องบนแผนที่">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.2 12 4l9 4.2v7.6L12 20l-9-4.2z"/><path d="M3 8.2 12 12.4l9-4.2"/><path d="M12 12.4V20"/></svg>
-            </button>
             <button class="cl-home" id="clHome" title="กลับไปหน้า Home (Donate)" aria-label="กลับไปหน้า Home">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.8 20v-5.4h4.4V20"/></svg>
             </button>
@@ -577,6 +581,27 @@
         <div class="cardlist" id="cardList"></div>
         <div class="card-empty" id="cardListEmpty"></div>
       </div>
+      <!-- Cooking panel (ทุกคนเห็น) -->
+      <div id="panel-cook" style="display:none;">
+        <div class="cardlist-head">
+          <span class="cl-city" id="ckCity"></span>
+          <span class="cl-cnt" id="ckCnt"></span>
+        </div>
+        <div class="cl-tools" id="ckTools">
+          <div class="cl-sort" id="ckSort">
+            <button data-sort="lv" class="on">เลเวล</button>
+            <button data-sort="city">เมือง</button>
+          </div>
+          <div class="cl-right">
+            <button class="cl-home" id="ckHome" title="กลับไปหน้า Home (Donate)" aria-label="กลับไปหน้า Home">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.8 20v-5.4h4.4V20"/></svg>
+            </button>
+            <button class="cl-hide" id="ckHide">ซ่อนที่เก็บแล้ว</button>
+          </div>
+        </div>
+        <div class="cardlist" id="cookList"></div>
+        <div class="card-empty" id="cookListEmpty"></div>
+      </div>
       <!-- Admin panel -->
       <div id="panel-icons" style="display:none;">
         <div class="palette-hint">ลากไอคอนไปวางบนแผนที่ (เฉพาะโหมดแก้ไข). คลิกไอคอนบนแผนที่เพื่อกากบาท = เก็บแล้ว.</div>
@@ -585,6 +610,11 @@
           <h4>การ์ด <span class="cnt" id="cardCnt"></span></h4>
           <div class="card-grid" id="cardGrid"></div>
           <div class="card-empty" id="cardEmpty"></div>
+        </div>
+        <div class="card-sec" id="cookSec">
+          <h4>เมนูอาหาร <span class="cnt" id="cookCnt"></span></h4>
+          <div class="card-grid" id="cookGrid"></div>
+          <div class="card-empty" id="cookEmpty"></div>
         </div>
         <div class="side-actions">
           <button class="btn" id="exportBtn" title="บันทึกเป็น markers.json เพื่อนำไป commit ขึ้น GitHub">⬇ บันทึกข้อมูลใหม่</button>
@@ -621,7 +651,7 @@
       </div>
       <button class="btn" id="pubBtn" style="display:none;" title="โหลดข้อมูลหลัก (ล้างฉบับร่างในเครื่อง) — สำหรับแอดมิน">☁ Update</button>
       <span class="topbar-meta">
-        <span class="update-date">อัปเดตล่าสุดวันที่ 22/7/2569</span>
+        <span class="update-date">อัปเดตล่าสุดวันที่ 24/7/2569</span>
         <img src="https://visitor-badge.laobi.icu/badge?page_id=benzlovely12.row-map&left_color=%231c1f27&right_color=%235b8cff&left_text=visitors" alt="visitors" class="visitor-badge">
       </span>
       <div class="spacer"></div>
@@ -804,6 +834,7 @@ const ICONS = {
   mystery: {name:"กล่องลึกลับ",       group:"strange", color:"#8d7ab5", svg:mysteryBox(), desc:"กล่องลึกลับที่ยังหาไม่เจอ — ใช้ปักหมุดตำแหน่งที่สงสัยหรือยังไม่แน่ใจว่าเป็นกล่องอะไร"},
   landmark:{name:"กล้องถ่ายรูป (Landmark)", group:"landmark", color:"#5bb6ff", svg:camera(), desc:"จุดถ่ายรูป Landmark — ไปถึงจุดที่กำหนดแล้วถ่ายรูปเพื่อเก็บความคืบหน้า"},
   card:    {name:"การ์ดมอนสเตอร์",     group:"card",    color:"#7f77dd", svg:cardIcon(), desc:"การ์ดมอนสเตอร์ (Monster Cards) — ลากรูปการ์ดจากพาเลตต์ไปวาง คลิกบนแผนที่เพื่อดูชื่อและเลเวลที่ต้องมี ไม่นับรวมในเปอร์เซ็นต์กล่อง"},
+  cooking: {name:"เมนูอาหาร",          group:"cook",    color:"#e6b800", svg:cookIcon(), desc:"เมนูอาหาร (Cooking) — ลากรูปเมนูจากพาเลตต์ไปวาง คลิกบนแผนที่เพื่อดูชื่อและเลเวลที่ต้องมี นับแยกจากกล่องและการ์ด"},
 };
 
 /* หมวดสรุปตามเกม (รวมหลายไอคอนเข้าด้วยกัน) */
@@ -924,6 +955,13 @@ function cardIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
   <rect x="13" y="10" width="14" height="12" rx="1.5" fill="#7f77dd" opacity=".85"/>
   <path d="M13 26 h14 M13 30 h9" stroke="#cec9f6" stroke-width="2" stroke-linecap="round"/>
 </g></svg>`;}
+/* ไอคอนเมนูอาหาร — จาน ช้อน-ส้อม กรอบทอง */
+function cookIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <circle cx="20" cy="21" r="11" fill="#3a2f10" stroke="#e6b800" stroke-width="2"/>
+  <circle cx="20" cy="21" r="6" fill="#e6b800" opacity=".85"/>
+  <path d="M11 8 v9" stroke="#e6b800" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M29 8 v6 a2 2 0 0 1 -4 0 v-6 M29 14 v9" stroke="#e6b800" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</g></svg>`;}
 const XMARK = `<svg viewBox="0 0 40 40"><path d="M9 9 L31 31 M31 9 L9 31" stroke="#ff4b4b" stroke-width="5" stroke-linecap="round"/></svg>`;
 
 /* ============ Cities (เรียงตามลำดับ; map=null คือยังไม่มีแผนที่) ============ */
@@ -1022,6 +1060,7 @@ function cleanMarkers(arr){
     let t=m.type; if(!ICONS[t]&&TYPE_MIGRATE[t]) t=TYPE_MIGRATE[t];
     const o={id:m.id, type:t, x:Math.round(m.x), y:Math.round(m.y)};
     if(m.card) o.card=m.card;      // การ์ด: เก็บ key ของรูป เช่น "yoyo_40"
+    if(m.cook) o.cook=m.cook;      // เมนูอาหาร: เก็บ key ของรูป เช่น "steak_50"
     return o;
   }).filter(m=>ICONS[m.type]);
 }
@@ -1059,6 +1098,35 @@ async function loadCards(){
   // ทำดัชนี key -> ข้อมูล ให้ทุกเมือง/ชั้นย่อยที่ใช้โฟลเดอร์เดียวกัน
   ALL_KEYS.forEach(k=>{
     cardsOf(k).forEach(c=>{ CARD_BY_KEY[k+'|'+c.key]=c; });
+  });
+}
+
+/* ============ เมนูอาหาร (Cooking) ============
+   รูปเมนูวางไว้ใน <เมือง>/cooking/ ตั้งชื่อว่า  ชื่อเมนู_เลเวล.png
+   tools/build-cooking.js จะสแกนแล้วสร้าง cooking.json ให้อัตโนมัติ */
+let COOK = {};          // { "Prontera": [{key,name,lv,file}, ...] }
+const COOK_BY_KEY = {}; // { "prontera|steak_50": {...} }
+function cookingOf(key){
+  const f=cityFolder(key); if(!f)return [];
+  return COOK[f]||[];
+}
+function cookInfo(cityKey,cookKey){
+  return COOK_BY_KEY[cityKey+'|'+cookKey]||null;
+}
+let COOK_ERR=null;
+async function loadCooking(){
+  try{
+    const r=await fetch('cooking.json?v='+Date.now(),{cache:'no-store'});
+    if(!r.ok){ COOK_ERR='โหลด cooking.json ไม่ได้ (HTTP '+r.status+') — ไฟล์อาจยังไม่ได้อัปโหลด'; return; }
+    COOK=await r.json();
+  }catch(e){
+    COOK={};
+    COOK_ERR = (location.protocol==='file:')
+      ? 'เปิดเว็บแบบ file:// อยู่ เบราว์เซอร์เลยบล็อกการอ่าน cooking.json — ต้องเปิดผ่านเซิร์ฟเวอร์ เช่น "python -m http.server 8000" แล้วเข้า http://localhost:8000/index.html?admin'
+      : 'โหลด cooking.json ไม่ได้ — ตรวจว่าไฟล์อยู่ที่รากโปรเจกต์จริงไหม';
+  }
+  ALL_KEYS.forEach(k=>{
+    cookingOf(k).forEach(c=>{ COOK_BY_KEY[k+'|'+c.key]=c; });
   });
 }
 function loadPersonal(){
@@ -1132,7 +1200,7 @@ let view={scale:0.35, x:60, y:30};
 /* ============ Build icon palette ============ */
 const icoGrid=document.getElementById('icoGrid');
 Object.entries(ICONS).forEach(([key,def])=>{
-  if(key==='card')return;              // การ์ดมีพาเลตต์ของตัวเองด้านล่าง (ลากจากรูปจริง)
+  if(key==='card'||key==='cooking')return;  // การ์ด/เมนูอาหาร มีพาเลตต์ของตัวเองด้านล่าง (ลากจากรูปจริง)
   const card=document.createElement('div');
   card.className='ico-card'; card.draggable=true; card.dataset.type=key;
   card.style.borderColor=def.color;
@@ -1173,6 +1241,38 @@ function buildCardPalette(){
       e.dataTransfer.setData('text/card',c.key);
     });
     cardGrid.appendChild(chip);
+  });
+}
+
+/* ============ พาเลตต์เมนูอาหาร (เปลี่ยนตามเมืองที่เปิดอยู่) ============ */
+const cookGrid=document.getElementById('cookGrid');
+const cookEmpty=document.getElementById('cookEmpty');
+const cookCnt=document.getElementById('cookCnt');
+function buildCookPalette(){
+  const list=cookingOf(CITY);
+  const placed=new Set((state.markers[CITY]||[]).filter(m=>m.type==='cooking'&&m.cook).map(m=>m.cook));
+  cookGrid.innerHTML='';
+  cookCnt.textContent = list.length ? `วางแล้ว ${placed.size}/${list.length}` : '';
+  if(!list.length){
+    cookEmpty.textContent = COOK_ERR ? ('⚠ '+COOK_ERR)
+      : 'ยังไม่มีรูปเมนูในเมืองนี้ — ใส่ไฟล์ชื่อ "ชื่อเมนู_เลเวล.png" ไว้ในโฟลเดอร์ <เมือง>/cooking แล้วรัน node tools/build-cooking.js';
+    return;
+  }
+  cookEmpty.textContent='';
+  list.forEach(c=>{
+    const chip=document.createElement('div');
+    chip.className='card-chip'+(placed.has(c.key)?' used':'');
+    chip.draggable=true; chip.dataset.cook=c.key;
+    chip.title=placed.has(c.key)?`${c.name} — วางบนแผนที่แล้ว`:c.name;
+    chip.innerHTML=`<img src="${encodeURI(c.file)}" alt="${escHtml(c.name)}" loading="lazy">
+      <span class="nm">${escHtml(c.name)}</span>
+      <span class="lv">${c.lv?('Lv. '+c.lv):'ไม่มีเงื่อนไข'}</span>`;
+    chip.addEventListener('dragstart',e=>{
+      if(state.locked){e.preventDefault();return;}
+      e.dataTransfer.setData('text/icon','cooking');
+      e.dataTransfer.setData('text/cook',c.key);
+    });
+    cookGrid.appendChild(chip);
   });
 }
 
@@ -1359,6 +1459,159 @@ function buildCardList(){
   });
 })();
 
+/* ============ แท็บ "เมนูอาหาร" ฝั่งซ้าย — ทุกคนเห็น (ทำงานเหมือนการ์ด) ============ */
+const cookListEl=document.getElementById('cookList');
+const cookListEmpty=document.getElementById('cookListEmpty');
+let cookSort='lv';        // 'lv' | 'city'
+let cookHideGot=false;    // ซ่อนใบที่เก็บแล้ว
+
+/* รวมเมนูที่วางไว้ทุกเมือง (ใช้ตอนอยู่หน้า Home) */
+function allPlacedCooks(){
+  const out=[];
+  ALL_KEYS.forEach(k=>{
+    (state.markers[k]||[]).forEach(m=>{
+      if(m.type!=='cooking')return;
+      out.push({m, ci:cookInfo(k,m.cook), key:k});
+    });
+  });
+  return out;
+}
+function sortCookRows(rows){
+  const nm=r=>r.ci?r.ci.name:'';
+  const lv=r=>r.ci?r.ci.lv:9999;
+  if(cookSort==='city'){
+    const ord={}; ALL_KEYS.forEach((k,i)=>ord[k]=i);
+    rows.sort((a,b)=>(ord[a.key]-ord[b.key])||(lv(a)-lv(b))||nm(a).localeCompare(nm(b)));
+  }else{
+    rows.sort((a,b)=>(lv(a)-lv(b))||nm(a).localeCompare(nm(b)));
+  }
+  return rows;
+}
+function cookRowEl({m,ci,key},whereText){
+  const row=document.createElement('div');
+  row.className='cl-row'+(isCollected(m,key)?' got':'')+(ci?'':' missing');
+  row.dataset.id=m.id;
+  const img = ci ? `<img src="${encodeURI(ci.file)}" alt="" loading="lazy">`
+                 : `<span style="width:34px;height:34px;flex:none;"></span>`;
+  const sub = ci ? (ci.lv?`Base Lv. ${ci.lv}`:'ไม่มีเงื่อนไข') : '';
+  row.innerHTML = img+
+    `<span class="cl-txt"><span class="cl-nm">${ci?escHtml(ci.name):'ไม่พบรูปเมนู'}</span>`+
+    (ci?`<br><span class="cl-lv">${sub}</span>`:`<br><span class="cl-warn">${escHtml(m.cook||'')}</span>`)+
+    (whereText?`<br><span class="cl-where">${escHtml(whereText)}</span>`:'')+
+    `</span><span class="cl-tick"></span>`;
+  if(ci){ row.addEventListener('click',()=>{ gotoMarker(key,m); }); }
+  return row;
+}
+
+function buildCookList(){
+  const isHome = !!(CITIES[CITY] && CITIES[CITY].welcome);
+  const tools=document.getElementById('ckTools');
+  const sortBox=document.getElementById('ckSort');
+  if(sortBox) sortBox.style.display = isHome ? '' : 'none';
+  const homeBtn=document.getElementById('ckHome');
+  if(homeBtn) homeBtn.style.display = isHome ? 'none' : '';
+  const boxesBtn=document.getElementById('ckBoxes');
+  if(boxesBtn) boxesBtn.style.display = isHome ? 'none' : '';
+
+  cookListEl.innerHTML=''; cookListEmpty.textContent='';
+
+  const keys = isHome ? [] : floorKeys(CITY);
+  const multiFloor = keys.length>1;
+  let rows = isHome ? allPlacedCooks()
+                    : keys.flatMap(k=>(state.markers[k]||[])
+                        .filter(m=>m.type==='cooking')
+                        .map(m=>({m, ci:cookInfo(k,m.cook), key:k})));
+
+  document.getElementById('ckCity').textContent = isHome ? 'เมนูอาหารทั้งหมด' : cityLabel(CITY);
+
+  const total=rows.length;
+  const got=rows.filter(r=>isCollected(r.m,r.key)).length;
+  document.getElementById('ckCnt').textContent = total ? `${got}/${total}` : '';
+  if(tools) tools.style.display = total ? '' : 'none';
+
+  if(!total){
+    if(IS_ADMIN && COOK_ERR){ cookListEmpty.textContent='⚠ '+COOK_ERR; return; }
+    if(isHome){
+      cookListEmpty.textContent = IS_ADMIN
+        ? 'ยังไม่มีเมนูที่วางบนแผนที่เลย — เลือกเมืองแล้วไปแท็บ Admin เพื่อวาง'
+        : 'ยังไม่มีข้อมูลเมนูอาหาร';
+    }else{
+      const n=cookingOf(CITY).length;
+      cookListEmpty.textContent = (IS_ADMIN && n)
+        ? `เมืองนี้มีรูปเมนู ${n} อย่าง แต่ยังไม่ได้วางลงบนแผนที่ — ไปแท็บ Admin แล้วลากรูปเมนูไปวาง`
+        : 'เมืองนี้ยังไม่มีเมนูอาหาร';
+    }
+    return;
+  }
+
+  if(cookHideGot) rows=rows.filter(r=>!isCollected(r.m,r.key));
+  if(!rows.length){
+    cookListEmpty.textContent='เก็บครบทุกอย่างแล้ว 🎉 (ปิดตัวกรอง "ซ่อนที่เก็บแล้ว" เพื่อดูทั้งหมด)';
+    return;
+  }
+  sortCookRows(rows);
+
+  if(isHome && cookSort==='city'){
+    let cur=null, box=null;
+    rows.forEach(r=>{
+      if(r.key!==cur){
+        cur=r.key;
+        const grp=rows.filter(x=>x.key===cur);
+        const g=document.createElement('div'); g.className='cl-group';
+        g.innerHTML=`${escHtml(cityLabel(cur))}<span>${grp.filter(x=>isCollected(x.m,x.key)).length}/${grp.length}</span>`;
+        cookListEl.appendChild(g);
+        box=document.createElement('div'); box.className='cardlist';
+        cookListEl.appendChild(box);
+      }
+      box.appendChild(cookRowEl(r, floorLabel(r.key)));
+    });
+  }else{
+    rows.forEach(r=>cookListEl.appendChild(
+      cookRowEl(r, isHome ? cityLabel(r.key) : (multiFloor ? floorLabel(r.key) : ''))
+    ));
+  }
+}
+
+/* ปุ่มเรียง / ซ่อนที่เก็บแล้ว / ซ่อนกล่อง / กลับ Home — ของแท็บเมนูอาหาร */
+(function(){
+  const sb=document.getElementById('ckSort');
+  if(sb) sb.addEventListener('click',e=>{
+    const b=e.target.closest('button[data-sort]'); if(!b)return;
+    cookSort=b.dataset.sort;
+    sb.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+    buildCookList();
+  });
+  const boxBtn=document.getElementById('ckBoxes');
+  let boxHidePrev=null;
+  if(boxBtn) boxBtn.addEventListener('click',()=>{
+    const hiding = boxHidePrev===null;
+    if(hiding){
+      boxHidePrev={...state.hidden};
+      Object.keys(ICONS).forEach(t=>{ if(t!=='cooking') state.hidden[t]=true; });
+    }else{
+      state.hidden=boxHidePrev; boxHidePrev=null;
+    }
+    boxBtn.classList.toggle('on',hiding);
+    boxBtn.setAttribute('aria-label', hiding?'แสดงกล่องบนแผนที่':'ซ่อนกล่องบนแผนที่');
+    boxBtn.title = hiding?'แสดงกล่องกลับมา':'ซ่อน/แสดงกล่องบนแผนที่ (ให้เหลือแต่เมนูอาหาร)';
+    document.querySelectorAll('.lg-toggle').forEach(b=>b.classList.toggle('on',!state.hidden[b.dataset.type]));
+    save(); renderMarkers();
+    toast(hiding?'ซ่อนกล่องแล้ว — เหลือเฉพาะเมนูอาหาร':'แสดงกล่องกลับมาแล้ว');
+  });
+  const home=document.getElementById('ckHome');
+  if(home) home.addEventListener('click',()=>{
+    const w=CITY_LIST.find(c=>c.welcome);
+    if(w) switchCity(w.key);
+  });
+  const hb=document.getElementById('ckHide');
+  if(hb) hb.addEventListener('click',()=>{
+    cookHideGot=!cookHideGot;
+    hb.classList.toggle('on',cookHideGot);
+    hb.textContent = cookHideGot ? 'แสดงที่เก็บแล้ว' : 'ซ่อนที่เก็บแล้ว';
+    buildCookList();
+  });
+})();
+
 /* ============ Build legend (คำอธิบายกล่อง + toggle ซ่อน/แสดงบนแผนที่) ============ */
 const legendBody=document.getElementById('legendBody');
 Object.entries(ICONS).forEach(([key,def])=>{
@@ -1383,14 +1636,19 @@ legendBody.addEventListener('click',e=>{
 });
 
 /* ============ Tabs ============ */
+let mainTab='cities';   // แท็บซ้ายที่เปิดอยู่ ใช้กรองมาร์กเกอร์บนแผนที่
 document.querySelectorAll('.maintab').forEach(t=>t.addEventListener('click',()=>{
   document.querySelectorAll('.maintab').forEach(x=>x.classList.remove('active'));
   t.classList.add('active');
   const m=t.dataset.main;
+  mainTab=m;
   document.getElementById('panel-cities').style.display = m==='cities'?'':'none';
   document.getElementById('panel-cards').style.display  = m==='cards'?'':'none';
+  document.getElementById('panel-cook').style.display   = m==='cook'?'':'none';
   document.getElementById('panel-icons').style.display  = m==='icons'?'':'none';
   if(m==='cards') buildCardList();
+  if(m==='cook') buildCookList();
+  renderMarkers();   // กรองมาร์กเกอร์ตามแท็บที่เพิ่งเลือก
 }));
 
 /* ============ Mobile drawer ============ */
@@ -1429,6 +1687,17 @@ function cityCardPercent(key){
   }));
   return {total,got,pct: total?Math.round(got/total*100):0};
 }
+/* เปอร์เซ็นต์เมนูอาหารของเมือง (รวมทุกชั้นย่อย) — นับแยกจากกล่อง/การ์ด */
+function cityCookPercent(key){
+  const c=CITIES[key];
+  const keys=(c&&c.floors)?c.floors.map(f=>f.key):[key];
+  let total=0,got=0;
+  keys.forEach(k=>(state.markers[k]||[]).forEach(m=>{
+    if(m.type!=='cooking')return;
+    total++; if(personal.collected[k]&&personal.collected[k][m.id])got++;
+  }));
+  return {total,got,pct: total?Math.round(got/total*100):0};
+}
 function cityPercent(key){
   // ถ้าเมืองมีหลายชั้น (floors) ให้รวมทุกชั้น
   const c=CITIES[key];
@@ -1459,8 +1728,10 @@ function buildCityMenu(){
       front=`<button class="city-erase" data-erase="${c.key}" title="รีเซ็ตเมืองนี้">${ERASE_SVG}</button>`;
       const p=cityPercent(c.key);
       const cd=cityCardPercent(c.key);
+      const ck=cityCookPercent(c.key);
       right=`<span class="city-pct">${p.pct}% (${p.got}/${p.total})</span>`
-           + (cd.total?`<span class="city-pct card">${cd.pct}% (${cd.got}/${cd.total})</span>`:'');
+           + (cd.total?`<span class="city-pct card">${cd.pct}% (${cd.got}/${cd.total})</span>`:'')
+           + (ck.total?`<span class="city-pct cook">${ck.pct}% (${ck.got}/${ck.total})</span>`:'');
     }else{
       front=`<span class="erase-cap"></span>`;
       right='<span class="soon-tag">เร็วๆ นี้</span>';
@@ -1483,19 +1754,21 @@ function resetKeysForCity(key){
 }
 /* นับของที่เก็บไว้แล้ว แยกกล่อง/การ์ด — ใช้บอกในป็อปอัปก่อนลบ */
 function collectedCounts(keys){
-  let box=0,card=0;
+  let box=0,card=0,cook=0;
   keys.forEach(k=>{
     const col=personal.collected[k]||{};
-    (state.markers[k]||[]).forEach(m=>{ if(!col[m.id])return; if(m.type==='card')card++; else box++; });
+    (state.markers[k]||[]).forEach(m=>{ if(!col[m.id])return;
+      if(m.type==='card')card++; else if(m.type==='cooking')cook++; else box++; });
   });
-  return {box,card};
+  return {box,card,cook};
 }
 function countsText(keys){
   const c=collectedCounts(keys);
-  if(!c.box&&!c.card) return '<span class="r-none">ยังไม่มีอะไรให้ลบ</span>';
+  if(!c.box&&!c.card&&!c.cook) return '<span class="r-none">ยังไม่มีอะไรให้ลบ</span>';
   const parts=[];
   if(c.box)  parts.push('กล่อง <b>'+c.box+'</b>');
   if(c.card) parts.push('การ์ด <b class="r-card">'+c.card+'</b>');
+  if(c.cook) parts.push('เมนูอาหาร <b class="r-cook">'+c.cook+'</b>');
   return 'จะลบ '+parts.join(' และ ')+' รายการ';
 }
 let __resetPending=null;
@@ -1539,7 +1812,7 @@ function switchPreset(idx){
   if(idx<0||idx>=PRESET_COUNT)return;
   personal.activePreset=idx; personal.collected=personal.profiles[idx];
   savePersonal(); updatePresetLabel(); renderMarkers(); updateProgress();
-  hideCardInfo(); buildCardList();
+  hideCardInfo(); buildCardList(); buildCookList();
   if(cityMenu.classList.contains('open')) buildCityMenu();
   toast('สลับไปพรีเซ็ต "'+personal.presetNames[idx]+'"');
 }
@@ -1669,7 +1942,7 @@ function switchCity(city){
   }
   updateProgress();
   stageWrap.classList.toggle('mapmode', !def.welcome);   // หน้า Home ปล่อยให้ซูม/เลื่อนได้ตามปกติ
-  hideCardInfo(); buildCardPalette(); buildCardList();
+  hideCardInfo(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList();
   document.querySelector('.sidebar') && document.querySelector('.sidebar').classList.remove('open');
   document.getElementById('scrim') && document.getElementById('scrim').classList.remove('show');
 }
@@ -1781,17 +2054,32 @@ stageWrap.addEventListener('drop',e=>{
     nm.card=ck;
     const ci=cardInfo(CITY,ck); if(ci) label=ci.name;
   }
+  if(type==='cooking'){
+    const ck=e.dataTransfer.getData('text/cook');
+    if(!ck)return;                                    // เมนูต้องรู้ว่าเป็นอย่างไหน
+    nm.cook=ck;
+    const ci=cookInfo(CITY,ck); if(ci) label=ci.name;
+  }
   state.markers[CITY].push(nm);
-  saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList();
+  saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList();
   toast(`วาง ${label} แล้ว`);
 });
 
 /* ============ Markers ============ */
+/* กรองมาร์กเกอร์ตามแท็บที่เปิดอยู่: กล่อง→เฉพาะกล่อง, การ์ด→เฉพาะการ์ด, เมนูอาหาร→เฉพาะอาหาร
+   (แท็บ Admin โชว์ทุกอย่างเพื่อให้วาง/แก้ไขได้) */
+function passesTabFilter(type){
+  if(mainTab==='cards') return type==='card';
+  if(mainTab==='cook')  return type==='cooking';
+  if(mainTab==='cities')return type!=='card' && type!=='cooking';
+  return true;
+}
 function renderMarkers(){
   stage.querySelectorAll('.marker').forEach(n=>n.remove());
   (state.markers[CITY]||[]).forEach(m=>{
     const def=ICONS[m.type]; if(!def)return;
     if(state.hidden[m.type])return;          // ซ่อนชนิดที่ปิด toggle ไว้
+    if(!passesTabFilter(m.type))return;      // กรองตามแท็บซ้าย
     const el=document.createElement('div');
     el.className='marker'+(isCollected(m)?' collected':'');
     el.style.left=m.x+'px'; el.style.top=m.y+'px'; el.dataset.id=m.id;
@@ -1803,6 +2091,12 @@ function renderMarkers(){
       if(ci) face=`<img class="cardimg" src="${encodeURI(ci.file)}" alt="${escHtml(ci.name)}" loading="lazy">`;
       el.title=ci?(ci.name+(ci.lv?` — Lv. ${ci.lv}`:'')):'การ์ด (ไม่พบรูป)';
     }
+    if(m.type==='cooking'){
+      el.classList.add('mk-cook');
+      const ci=cookInfo(CITY,m.cook);
+      if(ci) face=`<img class="cardimg" src="${encodeURI(ci.file)}" alt="${escHtml(ci.name)}" loading="lazy">`;
+      el.title=ci?(ci.name+(ci.lv?` — Lv. ${ci.lv}`:'')):'เมนูอาหาร (ไม่พบรูป)';
+    }
     el.innerHTML=face+`<div class="xmark">${XMARK}</div><div class="del">×</div>`;
     el.addEventListener('mousedown',ev=>onMarkerDown(ev,m,el));
     el.querySelector('.del').addEventListener('click',ev=>{
@@ -1810,7 +2104,7 @@ function renderMarkers(){
       if(state.locked)return;
       state.markers[CITY]=state.markers[CITY].filter(x=>x.id!==m.id);
       if(__cardInfoId===m.id) hideCardInfo();
-      saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList();
+      saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList();
     });
     stage.appendChild(el);
   });
@@ -1849,6 +2143,7 @@ stage.addEventListener('click',e=>{
   const v=!isCollected(m); setCollected(m,v); el.classList.toggle('collected',v);
   updateProgress();
   if(m.type==='card'){ showCardInfo(m,v); buildCardList(); }
+  if(m.type==='cooking'){ showCookInfo(m,v); buildCookList(); }
 });
 
 /* ข้ามไปเมืองอื่นแล้วค่อยพาไปที่ marker (รอแมพใหม่โหลด+จัดมุมมองเสร็จก่อน) */
@@ -1910,6 +2205,22 @@ function showCardInfo(m,got){
   cardInfoEl.querySelector('.ci-close').addEventListener('click',hideCardInfo);
   cardInfoEl.classList.add('show');
 }
+function showCookInfo(m,got){
+  const ci=cookInfo(CITY,m.cook);
+  __cardInfoId=m.id;
+  const img = ci ? `<img src="${encodeURI(ci.file)}" alt="">` : '';
+  const nm  = ci ? escHtml(ci.name) : 'ไม่พบรูปเมนู';
+  const lv  = ci && ci.lv
+        ? `<div class="ci-val">Base Lv. ${ci.lv}</div>`
+        : `<div class="ci-val none">ไม่มีเงื่อนไข</div>`;
+  cardInfoEl.innerHTML =
+    `<button class="ci-close" aria-label="ปิด">✕</button>
+     <div class="ci-head">${img}<span class="ci-name">${nm}</span></div>
+     <div class="ci-row"><div class="ci-lbl">เลเวลที่ต้องมี</div>${lv}</div>
+     <div class="ci-state ${got?'got':'todo'}">${got?'✓ เก็บแล้ว':'ยังไม่เก็บ'}</div>`;
+  cardInfoEl.querySelector('.ci-close').addEventListener('click',hideCardInfo);
+  cardInfoEl.classList.add('show');
+}
 
 /* ============ Lock toggle ============ */
 function refreshLockUI(){
@@ -1923,9 +2234,12 @@ function refreshLockUI(){
     if(state.locked && document.getElementById('panel-icons').style.display!=='none'){
       // ออกจากโหมดแก้ไขขณะอยู่แท็บ Admin -> เด้งกลับแท็บกล่อง
       document.querySelectorAll('.maintab').forEach(x=>x.classList.toggle('active', x.dataset.main==='cities'));
+      mainTab='cities';
       document.getElementById('panel-cities').style.display='';
       document.getElementById('panel-cards').style.display='none';
+      document.getElementById('panel-cook').style.display='none';
       document.getElementById('panel-icons').style.display='none';
+      renderMarkers();
     }
   }
 }
@@ -1993,6 +2307,7 @@ document.getElementById('exportBtn').onclick=()=>{
   ALL_KEYS.forEach(k=>out.markers[k]=(state.markers[k]||[]).map(m=>{
     const o={id:m.id,type:m.type,x:m.x,y:m.y};
     if(m.card) o.card=m.card;
+    if(m.cook) o.cook=m.cook;
     return o;
   }));
   const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
@@ -2010,7 +2325,7 @@ document.getElementById('clearBtn').onclick=()=>{
   if(!confirm(`ลบไอคอนทั้งหมด ${count} ตัว ในแมพ "${cityName}" ใช่ไหม?`))return;
   state.markers[CITY]=[];
   hideCardInfo();
-  saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList();
+  saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList();
   toast(`ลบไอคอนทั้งหมดใน ${cityName} แล้ว`);
 };
 /* ---- โหลดไฟล์: ถามก่อนว่าจะ "ทับ" หรือ "รวมกับของเดิม" ---- */
@@ -2018,6 +2333,7 @@ const SAME_SPOT = 14;   // ห่างกันไม่เกินนี้ +
 function sameMarker(a,b){
   if(a.type!==b.type)return false;
   if((a.card||'')!==(b.card||''))return false;
+  if((a.cook||'')!==(b.cook||''))return false;
   return Math.abs(a.x-b.x)<=SAME_SPOT && Math.abs(a.y-b.y)<=SAME_SPOT;
 }
 function mergeMarkers(incoming){
@@ -2049,7 +2365,7 @@ function applyImport(src,mode){
     toast(`รวมข้อมูลแล้ว — เพิ่มใหม่ ${added} ตัว, ข้ามที่ซ้ำ ${skipped} ตัว`);
   }
   hideCardInfo();
-  saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList();
+  saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList();
 }
 (function(){
   const ov=document.getElementById('importOverlay');
@@ -2127,6 +2443,7 @@ async function init(){
   }
   refreshLockUI();
   await loadCards();
+  await loadCooking();
   published = await loadPublished();
   if(published && !__hadDraft){
     ALL_KEYS.forEach(k=>state.markers[k]=(published[k]||[]).map(m=>({...m})));
@@ -2285,6 +2602,7 @@ init();
       renderMarkers(); updateProgress();
       if(typeof updatePresetLabel==='function') updatePresetLabel();
       if(typeof buildCardList==='function') buildCardList();
+      if(typeof buildCookList==='function') buildCookList();
       if(typeof cityMenu!=='undefined'&&cityMenu.classList.contains('open')&&typeof buildCityMenu==='function') buildCityMenu();
     }
     return changed;
