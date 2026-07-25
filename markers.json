@@ -975,129 +975,171 @@
         "y": 1439
       },
       {
-        "id": 1114,
+        "id": 1134,
+        "type": "card",
+        "x": 1716,
+        "y": 228,
+        "card": "yoyo_40"
+      },
+      {
+        "id": 1135,
+        "type": "card",
+        "x": 1012,
+        "y": 539,
+        "card": "lunatic_10"
+      },
+      {
+        "id": 1136,
+        "type": "card",
+        "x": 376,
+        "y": 835,
+        "card": "fabre_0"
+      },
+      {
+        "id": 1137,
+        "type": "card",
+        "x": 569,
+        "y": 1248,
+        "card": "hornet_10"
+      },
+      {
+        "id": 1138,
+        "type": "card",
+        "x": 736,
+        "y": 1032,
+        "card": "thief_bug_20"
+      },
+      {
+        "id": 1139,
+        "type": "card",
+        "x": 1304,
+        "y": 1672,
+        "card": "poring_5"
+      },
+      {
+        "id": 1172,
         "type": "cooking",
         "x": 1580,
         "y": 233,
         "cook": "blueback_soup_38"
       },
       {
-        "id": 1115,
+        "id": 1173,
         "type": "cooking",
         "x": 964,
         "y": 1272,
         "cook": "grape_wine_38"
       },
       {
-        "id": 1116,
+        "id": 1174,
         "type": "cooking",
         "x": 1329,
         "y": 1569,
         "cook": "cherry_jelly_38"
       },
       {
-        "id": 1130,
+        "id": 1204,
         "type": "boss",
         "x": 979,
-        "y": 236,
+        "y": 482,
         "boss": "mini_Eclipse_30"
       },
       {
-        "id": 1131,
+        "id": 1205,
         "type": "boss",
-        "x": 1197,
-        "y": 226,
+        "x": 981,
+        "y": 237,
         "boss": "mini_Eclipse_30"
       },
       {
-        "id": 1132,
+        "id": 1206,
         "type": "boss",
-        "x": 984,
-        "y": 477,
+        "x": 1180,
+        "y": 222,
         "boss": "mini_Eclipse_30"
       },
       {
-        "id": 1133,
-        "type": "boss",
-        "x": 1309,
-        "y": 303,
-        "boss": "mini_Eclipse_30"
-      },
-      {
-        "id": 1134,
-        "type": "boss",
-        "x": 1658,
-        "y": 212,
-        "boss": "mini_Choco_50"
-      },
-      {
-        "id": 1135,
-        "type": "boss",
-        "x": 1797,
-        "y": 187,
-        "boss": "mini_Choco_50"
-      },
-      {
-        "id": 1136,
-        "type": "boss",
-        "x": 1642,
-        "y": 365,
-        "boss": "mini_Choco_50"
-      },
-      {
-        "id": 1137,
-        "type": "boss",
-        "x": 1826,
-        "y": 350,
-        "boss": "mini_Choco_50"
-      },
-      {
-        "id": 1138,
-        "type": "boss",
-        "x": 1009,
-        "y": 1529,
-        "boss": "mini_Mastering_40"
-      },
-      {
-        "id": 1139,
-        "type": "boss",
-        "x": 1333,
-        "y": 1814,
-        "boss": "mini_Mastering_40"
-      },
-      {
-        "id": 1140,
+        "id": 1207,
         "type": "boss",
         "x": 1310,
-        "y": 1894,
+        "y": 295,
+        "boss": "mini_Eclipse_30"
+      },
+      {
+        "id": 1208,
+        "type": "boss",
+        "x": 1659,
+        "y": 215,
+        "boss": "mini_Choco_50"
+      },
+      {
+        "id": 1209,
+        "type": "boss",
+        "x": 1792,
+        "y": 185,
+        "boss": "mini_Choco_50"
+      },
+      {
+        "id": 1210,
+        "type": "boss",
+        "x": 1822,
+        "y": 348,
+        "boss": "mini_Choco_50"
+      },
+      {
+        "id": 1211,
+        "type": "boss",
+        "x": 1646,
+        "y": 366,
+        "boss": "mini_Choco_50"
+      },
+      {
+        "id": 1212,
+        "type": "boss",
+        "x": 1006,
+        "y": 1540,
         "boss": "mini_Mastering_40"
       },
       {
-        "id": 1141,
+        "id": 1213,
         "type": "boss",
-        "x": 832,
-        "y": 927,
+        "x": 1330,
+        "y": 1815,
+        "boss": "mini_Mastering_40"
+      },
+      {
+        "id": 1214,
+        "type": "boss",
+        "x": 1307,
+        "y": 1896,
+        "boss": "mini_Mastering_40"
+      },
+      {
+        "id": 1231,
+        "type": "boss",
+        "x": 827,
+        "y": 939,
         "boss": "mini_Vocal_20"
       },
       {
-        "id": 1142,
+        "id": 1232,
         "type": "boss",
-        "x": 619,
-        "y": 1076,
+        "x": 488,
+        "y": 1134,
         "boss": "mini_Vocal_20"
       },
       {
-        "id": 1143,
+        "id": 1233,
         "type": "boss",
-        "x": 499,
-        "y": 1113,
+        "x": 635,
+        "y": 1073,
         "boss": "mini_Vocal_20"
       },
       {
-        "id": 1144,
+        "id": 1234,
         "type": "boss",
-        "x": 817,
-        "y": 1214,
+        "x": 821,
+        "y": 1221,
         "boss": "mini_Vocal_20"
       }
     ],
@@ -1817,45 +1859,94 @@
         "y": 1114
       },
       {
-        "id": 1117,
+        "id": 1140,
+        "type": "card",
+        "x": 1220,
+        "y": 369,
+        "card": "drops_5"
+      },
+      {
+        "id": 1141,
+        "type": "card",
+        "x": 1114,
+        "y": 1703,
+        "card": "picky_0"
+      },
+      {
+        "id": 1142,
+        "type": "card",
+        "x": 1058,
+        "y": 1797,
+        "card": "picky_10"
+      },
+      {
+        "id": 1143,
+        "type": "card",
+        "x": 1448,
+        "y": 1777,
+        "card": "condor_10"
+      },
+      {
+        "id": 1144,
+        "type": "card",
+        "x": 1762,
+        "y": 1817,
+        "card": "magnolia_55"
+      },
+      {
+        "id": 1145,
+        "type": "card",
+        "x": 1195,
+        "y": 1218,
+        "card": "giant_whisper_95"
+      },
+      {
+        "id": 1146,
+        "type": "card",
+        "x": 1810,
+        "y": 2021,
+        "card": "baby_desert_wolf_30"
+      },
+      {
+        "id": 1175,
         "type": "cooking",
         "x": 1545,
         "y": 1596,
         "cook": "purple_vadon_congee_38"
       },
       {
-        "id": 1118,
+        "id": 1176,
         "type": "cooking",
         "x": 707,
         "y": 2708,
         "cook": "supreme_STR_dish_38"
       },
       {
-        "id": 1145,
+        "id": 1200,
         "type": "boss",
-        "x": 1667,
-        "y": 1666,
+        "x": 1673,
+        "y": 1677,
         "boss": "mini_DragonFly_50"
       },
       {
-        "id": 1146,
+        "id": 1201,
         "type": "boss",
-        "x": 1559,
-        "y": 1800,
+        "x": 1562,
+        "y": 1795,
         "boss": "mini_DragonFly_50"
       },
       {
-        "id": 1147,
+        "id": 1202,
         "type": "boss",
-        "x": 1766,
-        "y": 1758,
+        "x": 1735,
+        "y": 1880,
         "boss": "mini_DragonFly_50"
       },
       {
-        "id": 1148,
+        "id": 1203,
         "type": "boss",
-        "x": 1734,
-        "y": 1882,
+        "x": 1761,
+        "y": 1761,
         "boss": "mini_DragonFly_50"
       }
     ],
@@ -2109,14 +2200,14 @@
         "y": 979
       },
       {
-        "id": 1119,
+        "id": 1177,
         "type": "cooking",
         "x": 977,
         "y": 740,
         "cook": "mana_chowder_38"
       },
       {
-        "id": 1120,
+        "id": 1178,
         "type": "cooking",
         "x": 278,
         "y": 941,
@@ -2149,10 +2240,10 @@
         "y": 372
       },
       {
-        "id": 1113,
+        "id": 873,
         "type": "landmark",
-        "x": 139,
-        "y": 630
+        "x": 300,
+        "y": 780
       }
     ],
     "payon": [
@@ -3411,28 +3502,56 @@
         "y": 4485
       },
       {
-        "id": 1121,
+        "id": 1147,
+        "type": "card",
+        "x": 3650,
+        "y": 344,
+        "card": "beetle_king_55"
+      },
+      {
+        "id": 1148,
+        "type": "card",
+        "x": 3358,
+        "y": 1170,
+        "card": "greatest_general_55"
+      },
+      {
+        "id": 1149,
+        "type": "card",
+        "x": 2908,
+        "y": 2874,
+        "card": "bigfoot_30"
+      },
+      {
+        "id": 1150,
+        "type": "card",
+        "x": 3411,
+        "y": 3587,
+        "card": "worm_tail_20"
+      },
+      {
+        "id": 1179,
         "type": "cooking",
         "x": 2543,
         "y": 2277,
         "cook": "seafood_soup_38"
       },
       {
-        "id": 1122,
+        "id": 1180,
         "type": "cooking",
         "x": 3403,
         "y": 2435,
         "cook": "apple_pudding_38"
       },
       {
-        "id": 1123,
+        "id": 1181,
         "type": "cooking",
         "x": 1020,
         "y": 2931,
         "cook": "red_fish_hotpot_38"
       },
       {
-        "id": 1124,
+        "id": 1182,
         "type": "cooking",
         "x": 2482,
         "y": 3026,
@@ -4609,8 +4728,8 @@
       {
         "id": 638,
         "type": "snowman",
-        "x": 3151,
-        "y": 2086
+        "x": 3135,
+        "y": 2093
       },
       {
         "id": 639,
@@ -4919,6 +5038,12 @@
         "y": 2082
       },
       {
+        "id": 690,
+        "type": "rain",
+        "x": 972,
+        "y": 2137
+      },
+      {
         "id": 691,
         "type": "high",
         "x": 1428,
@@ -5141,108 +5266,130 @@
         "y": 1625
       },
       {
-        "id": 1112,
-        "type": "rain",
-        "x": 3073,
-        "y": 1794
+        "id": 1151,
+        "type": "card",
+        "x": 4471,
+        "y": 1942,
+        "card": "roda_frog_15"
       },
       {
-        "id": 1125,
+        "id": 1152,
+        "type": "card",
+        "x": 702,
+        "y": 814,
+        "card": "ground_petite_85"
+      },
+      {
+        "id": 1153,
+        "type": "card",
+        "x": 836,
+        "y": 1887,
+        "card": "flying_petite_80"
+      },
+      {
+        "id": 1154,
+        "type": "card",
+        "x": 3102,
+        "y": 3255,
+        "card": "squirrel_40"
+      },
+      {
+        "id": 1183,
         "type": "cooking",
         "x": 3114,
         "y": 2099,
         "cook": "magic_broth_38"
       },
       {
-        "id": 1126,
+        "id": 1184,
         "type": "cooking",
         "x": 896,
         "y": 3144,
         "cook": "VIT_dish_38"
       },
       {
-        "id": 1149,
+        "id": 1188,
         "type": "boss",
-        "x": 843,
-        "y": 1754,
-        "boss": "mini_Gryphon_105"
-      },
-      {
-        "id": 1150,
-        "type": "boss",
-        "x": 670,
-        "y": 1974,
-        "boss": "mini_Gryphon_105"
-      },
-      {
-        "id": 1151,
-        "type": "boss",
-        "x": 1068,
-        "y": 1950,
-        "boss": "mini_Gryphon_105"
-      },
-      {
-        "id": 1152,
-        "type": "boss",
-        "x": 985,
-        "y": 2161,
-        "boss": "mini_Gryphon_105"
-      },
-      {
-        "id": 1153,
-        "type": "boss",
-        "x": 1174,
-        "y": 2591,
-        "boss": "mini_KoboldLeader_120"
-      },
-      {
-        "id": 1154,
-        "type": "boss",
-        "x": 770,
-        "y": 3057,
-        "boss": "mini_KoboldLeader_120"
-      },
-      {
-        "id": 1155,
-        "type": "boss",
-        "x": 1295,
-        "y": 2953,
-        "boss": "mini_KoboldLeader_120"
-      },
-      {
-        "id": 1156,
-        "type": "boss",
-        "x": 1226,
-        "y": 3211,
-        "boss": "mini_KoboldLeader_120"
-      },
-      {
-        "id": 1157,
-        "type": "boss",
-        "x": 4264,
-        "y": 3004,
+        "x": 4261,
+        "y": 3013,
         "boss": "mini_Toad_30"
       },
       {
-        "id": 1158,
+        "id": 1189,
         "type": "boss",
-        "x": 4019,
-        "y": 3160,
+        "x": 4020,
+        "y": 3158,
         "boss": "mini_Toad_30"
       },
       {
-        "id": 1159,
+        "id": 1190,
         "type": "boss",
-        "x": 4277,
-        "y": 3253,
+        "x": 4279,
+        "y": 3255,
         "boss": "mini_Toad_30"
       },
       {
-        "id": 1160,
+        "id": 1191,
         "type": "boss",
-        "x": 4605,
+        "x": 4604,
         "y": 3226,
         "boss": "mini_Toad_30"
+      },
+      {
+        "id": 1192,
+        "type": "boss",
+        "x": 1162,
+        "y": 2589,
+        "boss": "mini_KoboldLeader_120"
+      },
+      {
+        "id": 1193,
+        "type": "boss",
+        "x": 778,
+        "y": 3058,
+        "boss": "mini_KoboldLeader_120"
+      },
+      {
+        "id": 1194,
+        "type": "boss",
+        "x": 1299,
+        "y": 2951,
+        "boss": "mini_KoboldLeader_120"
+      },
+      {
+        "id": 1195,
+        "type": "boss",
+        "x": 1226,
+        "y": 3214,
+        "boss": "mini_KoboldLeader_120"
+      },
+      {
+        "id": 1196,
+        "type": "boss",
+        "x": 675,
+        "y": 1980,
+        "boss": "mini_Gryphon_105"
+      },
+      {
+        "id": 1197,
+        "type": "boss",
+        "x": 856,
+        "y": 1753,
+        "boss": "mini_Gryphon_105"
+      },
+      {
+        "id": 1198,
+        "type": "boss",
+        "x": 1066,
+        "y": 1949,
+        "boss": "mini_Gryphon_105"
+      },
+      {
+        "id": 1199,
+        "type": "boss",
+        "x": 983,
+        "y": 2149,
+        "boss": "mini_Gryphon_105"
       }
     ],
     "geffenriver": [
@@ -5527,6 +5674,20 @@
         "type": "landmark",
         "x": 581,
         "y": 1907
+      },
+      {
+        "id": 1157,
+        "type": "card",
+        "x": 390,
+        "y": 670,
+        "card": "ambernite_20"
+      },
+      {
+        "id": 1158,
+        "type": "card",
+        "x": 420,
+        "y": 1454,
+        "card": "savage_babe_15"
       }
     ],
     "mjolnir": [
@@ -5811,6 +5972,20 @@
         "type": "landmark",
         "x": 790,
         "y": 1426
+      },
+      {
+        "id": 1155,
+        "type": "card",
+        "x": 923,
+        "y": 440,
+        "card": "martin_40"
+      },
+      {
+        "id": 1156,
+        "type": "card",
+        "x": 1475,
+        "y": 460,
+        "card": "driller_65"
       }
     ],
     "poring": [
@@ -6311,6 +6486,132 @@
         "type": "landmark",
         "x": 1893,
         "y": 190
+      },
+      {
+        "id": 1159,
+        "type": "card",
+        "x": 533,
+        "y": 823,
+        "card": "muka_0"
+      },
+      {
+        "id": 1160,
+        "type": "card",
+        "x": 779,
+        "y": 2408,
+        "card": "steel_chonchon_50"
+      },
+      {
+        "id": 1215,
+        "type": "boss",
+        "x": 847,
+        "y": 2217,
+        "boss": "mini_Alligator_60"
+      },
+      {
+        "id": 1216,
+        "type": "boss",
+        "x": 886,
+        "y": 1887,
+        "boss": "mini_Alligator_60"
+      },
+      {
+        "id": 1217,
+        "type": "boss",
+        "x": 1256,
+        "y": 1919,
+        "boss": "mini_Alligator_60"
+      },
+      {
+        "id": 1218,
+        "type": "boss",
+        "x": 1252,
+        "y": 2277,
+        "boss": "mini_Alligator_60"
+      },
+      {
+        "id": 1219,
+        "type": "boss",
+        "x": 1788,
+        "y": 206,
+        "boss": "mini_ArcAngeling_80"
+      },
+      {
+        "id": 1220,
+        "type": "boss",
+        "x": 1638,
+        "y": 322,
+        "boss": "mini_ArcAngeling_80"
+      },
+      {
+        "id": 1221,
+        "type": "boss",
+        "x": 1773,
+        "y": 379,
+        "boss": "mini_ArcAngeling_80"
+      },
+      {
+        "id": 1222,
+        "type": "boss",
+        "x": 1854,
+        "y": 534,
+        "boss": "mini_ArcAngeling_80"
+      },
+      {
+        "id": 1223,
+        "type": "boss",
+        "x": 1241,
+        "y": 1071,
+        "boss": "mini_GrandPeco_75"
+      },
+      {
+        "id": 1224,
+        "type": "boss",
+        "x": 1024,
+        "y": 1364,
+        "boss": "mini_GrandPeco_75"
+      },
+      {
+        "id": 1225,
+        "type": "boss",
+        "x": 1333,
+        "y": 1468,
+        "boss": "mini_GrandPeco_75"
+      },
+      {
+        "id": 1226,
+        "type": "boss",
+        "x": 1572,
+        "y": 1275,
+        "boss": "mini_GrandPeco_75"
+      },
+      {
+        "id": 1227,
+        "type": "boss",
+        "x": 1342,
+        "y": 288,
+        "boss": "mini_HeavyMetaling_140"
+      },
+      {
+        "id": 1228,
+        "type": "boss",
+        "x": 1361,
+        "y": 433,
+        "boss": "mini_HeavyMetaling_140"
+      },
+      {
+        "id": 1229,
+        "type": "boss",
+        "x": 1513,
+        "y": 643,
+        "boss": "mini_HeavyMetaling_140"
+      },
+      {
+        "id": 1230,
+        "type": "boss",
+        "x": 1862,
+        "y": 765,
+        "boss": "mini_HeavyMetaling_140"
       }
     ],
     "izlude": [
@@ -6465,21 +6766,21 @@
         "y": 789
       },
       {
-        "id": 1127,
+        "id": 1185,
         "type": "cooking",
         "x": 346,
         "y": 277,
         "cook": "steamed_scorpion_38"
       },
       {
-        "id": 1128,
+        "id": 1186,
         "type": "cooking",
         "x": 346,
         "y": 340,
         "cook": "STR_dish_38"
       },
       {
-        "id": 1129,
+        "id": 1187,
         "type": "cooking",
         "x": 819,
         "y": 663,
@@ -6674,7 +6975,140 @@
         "y": 602
       }
     ],
-    "sakura": [],
+    "sakura": [
+      {
+        "id": 1112,
+        "type": "sun",
+        "x": 341,
+        "y": 794
+      },
+      {
+        "id": 1113,
+        "type": "box",
+        "x": 305,
+        "y": 771
+      },
+      {
+        "id": 1114,
+        "type": "butterfly",
+        "x": 402,
+        "y": 650
+      },
+      {
+        "id": 1115,
+        "type": "landmark",
+        "x": 364,
+        "y": 649
+      },
+      {
+        "id": 1116,
+        "type": "sun",
+        "x": 300,
+        "y": 650
+      },
+      {
+        "id": 1117,
+        "type": "box",
+        "x": 245,
+        "y": 619
+      },
+      {
+        "id": 1118,
+        "type": "box",
+        "x": 399,
+        "y": 744
+      },
+      {
+        "id": 1119,
+        "type": "box",
+        "x": 270,
+        "y": 797
+      },
+      {
+        "id": 1120,
+        "type": "guard",
+        "x": 226,
+        "y": 789
+      },
+      {
+        "id": 1121,
+        "type": "box",
+        "x": 256,
+        "y": 764
+      },
+      {
+        "id": 1122,
+        "type": "box",
+        "x": 155,
+        "y": 878
+      },
+      {
+        "id": 1123,
+        "type": "box",
+        "x": 319,
+        "y": 897
+      },
+      {
+        "id": 1124,
+        "type": "butterfly",
+        "x": 449,
+        "y": 793
+      },
+      {
+        "id": 1125,
+        "type": "box",
+        "x": 650,
+        "y": 845
+      },
+      {
+        "id": 1126,
+        "type": "guard",
+        "x": 588,
+        "y": 652
+      },
+      {
+        "id": 1127,
+        "type": "box",
+        "x": 476,
+        "y": 602
+      },
+      {
+        "id": 1128,
+        "type": "box",
+        "x": 464,
+        "y": 704
+      },
+      {
+        "id": 1129,
+        "type": "landmark",
+        "x": 504,
+        "y": 760
+      },
+      {
+        "id": 1130,
+        "type": "rain",
+        "x": 336,
+        "y": 651
+      },
+      {
+        "id": 1131,
+        "type": "rain",
+        "x": 390,
+        "y": 873
+      },
+      {
+        "id": 1132,
+        "type": "snowman",
+        "x": 443,
+        "y": 833
+      },
+      {
+        "id": 1133,
+        "type": "snowman",
+        "x": 463,
+        "y": 654
+      }
+    ],
     "glastheim2": [
       {
         "id": 735,
@@ -6871,6 +7305,13 @@
         "type": "landmark",
         "x": 404,
         "y": 433
+      },
+      {
+        "id": 1161,
+        "type": "card",
+        "x": 388,
+        "y": 488,
+        "card": "marina_40"
       }
     ],
     "byalan3": [
@@ -6885,15 +7326,275 @@
         "type": "landmark",
         "x": 313,
         "y": 349
+      },
+      {
+        "id": 1162,
+        "type": "card",
+        "x": 469,
+        "y": 94,
+        "card": "vadon_45"
+      },
+      {
+        "id": 1235,
+        "type": "boss",
+        "x": 139,
+        "y": 141,
+        "boss": "mini_AncientStrouf_60"
+      },
+      {
+        "id": 1236,
+        "type": "boss",
+        "x": 377,
+        "y": 114,
+        "boss": "mini_AncientStrouf_60"
+      },
+      {
+        "id": 1237,
+        "type": "boss",
+        "x": 226,
+        "y": 407,
+        "boss": "mini_AncientStrouf_60"
+      },
+      {
+        "id": 1238,
+        "type": "boss",
+        "x": 465,
+        "y": 481,
+        "boss": "mini_AncientStrouf_60"
       }
     ],
-    "mjolnir2": [],
-    "mjolnir3": [],
-    "alberta2": [],
-    "goblin2": [],
-    "prontera2": [],
-    "prontera3": [],
-    "prontera4": [],
-    "prontera5": []
+    "mjolnir2": [
+      {
+        "id": 1166,
+        "type": "card",
+        "x": 182,
+        "y": 532,
+        "card": "tarou_0"
+      }
+    ],
+    "mjolnir3": [
+      {
+        "id": 1167,
+        "type": "card",
+        "x": 485,
+        "y": 409,
+        "card": "cramp_45"
+      }
+    ],
+    "alberta2": [
+      {
+        "id": 1165,
+        "type": "card",
+        "x": 233,
+        "y": 518,
+        "card": "pirate_skeleton_50"
+      }
+    ],
+    "goblin2": [
+      {
+        "id": 1163,
+        "type": "card",
+        "x": 261,
+        "y": 142,
+        "card": "golem_60"
+      },
+      {
+        "id": 1164,
+        "type": "card",
+        "x": 513,
+        "y": 369,
+        "card": "zenorc_0"
+      }
+    ],
+    "prontera2": [
+      {
+        "id": 1168,
+        "type": "card",
+        "x": 198,
+        "y": 583,
+        "card": "giant_honet_70"
+      },
+      {
+        "id": 1239,
+        "type": "boss",
+        "x": 90,
+        "y": 555,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1240,
+        "type": "boss",
+        "x": 82,
+        "y": 446,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1241,
+        "type": "boss",
+        "x": 88,
+        "y": 308,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1242,
+        "type": "boss",
+        "x": 87,
+        "y": 216,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1243,
+        "type": "boss",
+        "x": 90,
+        "y": 71,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1244,
+        "type": "boss",
+        "x": 202,
+        "y": 69,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1245,
+        "type": "boss",
+        "x": 209,
+        "y": 200,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1246,
+        "type": "boss",
+        "x": 213,
+        "y": 320,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1247,
+        "type": "boss",
+        "x": 332,
+        "y": 318,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1248,
+        "type": "boss",
+        "x": 217,
+        "y": 440,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1249,
+        "type": "boss",
+        "x": 329,
+        "y": 441,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1250,
+        "type": "boss",
+        "x": 446,
+        "y": 443,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1251,
+        "type": "boss",
+        "x": 451,
+        "y": 319,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1252,
+        "type": "boss",
+        "x": 566,
+        "y": 330,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1253,
+        "type": "boss",
+        "x": 571,
+        "y": 199,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1254,
+        "type": "boss",
+        "x": 451,
+        "y": 211,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1255,
+        "type": "boss",
+        "x": 438,
+        "y": 75,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1256,
+        "type": "boss",
+        "x": 566,
+        "y": 83,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1257,
+        "type": "boss",
+        "x": 333,
+        "y": 547,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1258,
+        "type": "boss",
+        "x": 472,
+        "y": 541,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1259,
+        "type": "boss",
+        "x": 564,
+        "y": 550,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1260,
+        "type": "boss",
+        "x": 208,
+        "y": 554,
+        "boss": "mini_VagabondWolf_60"
+      }
+    ],
+    "prontera3": [
+      {
+        "id": 1169,
+        "type": "card",
+        "x": 310,
+        "y": 529,
+        "card": "sasquatch_70"
+      }
+    ],
+    "prontera4": [
+      {
+        "id": 1170,
+        "type": "card",
+        "x": 230,
+        "y": 189,
+        "card": "female_thief_bug_30"
+      }
+    ],
+    "prontera5": [
+      {
+        "id": 1171,
+        "type": "card",
+        "x": 312,
+        "y": 283,
+        "card": "spore_20"
+      }
+    ]
   }
 }

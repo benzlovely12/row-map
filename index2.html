@@ -195,7 +195,7 @@
   .stage-wrap.mapmode .floorbar,.stage-wrap.mapmode .zoomctl,
   .stage-wrap.mapmode .card-info{touch-action:manipulation;}
   .map-img{display:block;pointer-events:none;-webkit-user-drag:none;}
-  .marker{position:absolute;transform:translate(-50%,-50%);cursor:pointer;
+  .marker{position:absolute;transform:translate(-50%,-50%) scale(var(--mk-scale,1));cursor:pointer;
     width:50px;height:50px;display:flex;align-items:center;justify-content:center;
     border-radius:50%;background:rgba(20,23,28,.78);
     border:3px solid var(--ring,#888);box-sizing:border-box;
@@ -1069,7 +1069,17 @@ const CITY_LIST = [
        {key:"prontera4", label:"Sewer 1F",            map:"Prontera/Prontera_full_map_4.png"},
        {key:"prontera5", label:"Sewer 2F",            map:"Prontera/Prontera_full_map_5.png"},
      ]},
-  {key:"morroc",     name:"Morroc",        map:"Morroc/Morroc_full_map.png"},
+  {key:"morroc",     name:"Morroc",        map:"Morroc/Morroc_full_map.png",
+     floors:[
+       {key:"morroc",  label:"ด้านนอก",    map:"Morroc/Morroc_full_map.png"},
+       {key:"morroc2", label:"Ant Hell 1F", map:"Morroc/Morroc_full_map_2.png"},
+       {key:"morroc3", label:"Ant Hell 2F", map:"Morroc/Morroc_full_map_3.png"},
+       {key:"morroc4", label:"Pyramid 1F",  map:"Morroc/Morroc_full_map_4.png"},
+       {key:"morroc5", label:"Pyramid 2F",  map:"Morroc/Morroc_full_map_5.png"},
+       {key:"morroc6", label:"Pyramid 3F",  map:"Morroc/Morroc_full_map_6.png"},
+       {key:"morroc7", label:"Sphinx 1F",   map:"Morroc/Morroc_full_map_7.png"},
+       {key:"morroc8", label:"Sphinx 2F",   map:"Morroc/Morroc_full_map_8.png"},
+     ]},
   {key:"novice",     name:"Novice Village",map:"Novice%20village/Novice_village_full_map.png"},
   {key:"alberta",    name:"Alberta",       map:"Alberta/Alberta_full_map.png",
      floors:[
@@ -1082,7 +1092,12 @@ const CITY_LIST = [
        {key:"byalan2", label:"Undersea Tunnel 1F", map:"Byalan%20Island/Byalan_full_map_2.png"},
        {key:"byalan3", label:"Undersea Tunnel 2F", map:"Byalan%20Island/Byalan_full_map_3.png"},
      ]},
-  {key:"payon",      name:"Payon",         map:"Payon/Payon_full_map.png"},
+  {key:"payon",      name:"Payon",         map:"Payon/Payon_full_map.png",
+     floors:[
+       {key:"payon",  label:"ด้านนอก",       map:"Payon/Payon_full_map.png"},
+       {key:"payon2", label:"Munak Cave 2F", map:"Payon/Payon_full_map_2.png"},
+       {key:"payon3", label:"Munak Cave 3F", map:"Payon/Payon_full_map_3.png"},
+     ]},
   {key:"goblin",     name:"Goblin Forest", map:"Goblin%20Forest/Goblin_full_map.png",
      floors:[
        {key:"goblin",  label:"ด้านนอก",         map:"Goblin%20Forest/Goblin_full_map.png"},
@@ -1120,6 +1135,15 @@ const SUBFLOORS = [
   {key:"prontera3",  name:"Prontera (Labyrinth Forest 2F)", map:"Prontera/Prontera_full_map_3.png", parent:"prontera"},
   {key:"prontera4",  name:"Prontera (Sewer 1F)",            map:"Prontera/Prontera_full_map_4.png", parent:"prontera"},
   {key:"prontera5",  name:"Prontera (Sewer 2F)",            map:"Prontera/Prontera_full_map_5.png", parent:"prontera"},
+  {key:"morroc2",    name:"Morroc (Ant Hell 1F)", map:"Morroc/Morroc_full_map_2.png", parent:"morroc"},
+  {key:"morroc3",    name:"Morroc (Ant Hell 2F)", map:"Morroc/Morroc_full_map_3.png", parent:"morroc"},
+  {key:"morroc4",    name:"Morroc (Pyramid 1F)",  map:"Morroc/Morroc_full_map_4.png", parent:"morroc"},
+  {key:"morroc5",    name:"Morroc (Pyramid 2F)",  map:"Morroc/Morroc_full_map_5.png", parent:"morroc"},
+  {key:"morroc6",    name:"Morroc (Pyramid 3F)",  map:"Morroc/Morroc_full_map_6.png", parent:"morroc"},
+  {key:"morroc7",    name:"Morroc (Sphinx 1F)",   map:"Morroc/Morroc_full_map_7.png", parent:"morroc"},
+  {key:"morroc8",    name:"Morroc (Sphinx 2F)",   map:"Morroc/Morroc_full_map_8.png", parent:"morroc"},
+  {key:"payon2",     name:"Payon (Munak Cave 2F)", map:"Payon/Payon_full_map_2.png", parent:"payon"},
+  {key:"payon3",     name:"Payon (Munak Cave 3F)", map:"Payon/Payon_full_map_3.png", parent:"payon"},
 ];
 const CITIES = {}; CITY_LIST.forEach(c=>CITIES[c.key]=c);
 SUBFLOORS.forEach(c=>CITIES[c.key]=c);   // ให้ switchCity/markers รู้จัก key ชั้นย่อยด้วย
@@ -2346,6 +2370,9 @@ function passesTabFilter(type){   // เรียกเฉพาะ type ที�
 }
 function renderMarkers(){
   stage.querySelectorAll('.marker').forEach(n=>n.remove());
+  // ปรับขนาด icon แยกรายแมพ: ใส่ iconScale ในนิยามชั้น/เมือง (เช่น 0.7 = เล็กลง 30%)
+  const cdef=CITIES[CITY]||{}, par=parentCity(CITY)||{};
+  stage.style.setProperty('--mk-scale', cdef.iconScale || par.iconScale || 1);
   const bossSeq={};   // นับลำดับจุดเกิดของแต่ละบอสในเมืองนี้
   (state.markers[CITY]||[]).forEach(m=>{
     const def=ICONS[m.type]; if(!def)return;
