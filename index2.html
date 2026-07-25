@@ -2326,6 +2326,7 @@ let panning=null;
 stageWrap.addEventListener('mousedown',e=>{
   if(e.target.closest('.marker')) return;
   if(e.target.closest('.welcome')) return;
+  if(_mapLocked()) return;                        // ตารางบอส/Home: ไม่ต้อง pan แมพ
   panning={sx:e.clientX,sy:e.clientY,ox:view.x,oy:view.y};
 });
 window.addEventListener('mousemove',e=>{
@@ -2339,9 +2340,12 @@ let touchPan=null, pinch=null;
 function _tDist(t){const dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy);}
 function _tMid(t){return {x:(t[0].clientX+t[1].clientX)/2, y:(t[0].clientY+t[1].clientY)/2};}
 function _welcomeOpen(){const w=document.getElementById('welcome'); return w&&w.style.display!=='none';}
+function _bossCatOpen(){const b=document.getElementById('bossCatalog'); return !!(b&&b.classList.contains('show'));}
+/* หน้า Home หรือตารางบอส = ปล่อยให้เลื่อน/scroll ปกติ ไม่ pan/zoom แมพ */
+function _mapLocked(){ return _welcomeOpen()||_bossCatOpen(); }
 
 stageWrap.addEventListener('touchstart',e=>{
-  if(_welcomeOpen())return;                       // หน้า Home: ปล่อยให้เลื่อน/สกอลล์ปกติ
+  if(_mapLocked())return;                         // หน้า Home/ตารางบอส: ปล่อยให้เลื่อน/scroll ปกติ
   if(e.touches.length===2){
     touchPan=null;
     pinch={dist:_tDist(e.touches), mid:_tMid(e.touches)};
@@ -2353,7 +2357,7 @@ stageWrap.addEventListener('touchstart',e=>{
 },{passive:true});
 
 stageWrap.addEventListener('touchmove',e=>{
-  if(_welcomeOpen())return;
+  if(_mapLocked())return;
   if(pinch && e.touches.length===2){
     e.preventDefault();
     const nd=_tDist(e.touches), nm=_tMid(e.touches);
@@ -2379,7 +2383,7 @@ stageWrap.addEventListener('touchmove',e=>{
 
 /* iOS Safari ซูมทั้งหน้าผ่าน gesture events แม้ตั้ง touch-action แล้ว — ปิดเฉพาะในแผนที่ */
 ['gesturestart','gesturechange','gestureend'].forEach(function(ev){
-  stageWrap.addEventListener(ev,function(e){ if(!_welcomeOpen()) e.preventDefault(); },{passive:false});
+  stageWrap.addEventListener(ev,function(e){ if(!_mapLocked()) e.preventDefault(); },{passive:false});
 });
 
 stageWrap.addEventListener('touchend',e=>{
