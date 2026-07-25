@@ -1985,7 +1985,9 @@ document.querySelectorAll('.maintab').forEach(t=>t.addEventListener('click',()=>
 
 /* ปุ่มสลับ Mini/Elite (มีทั้งในแท็บซ้าย .bside-tab และหัวตารางมือถือ .bc-tab) — sync กัน */
 function setBossCatType(type){
-  bossCatType=type; buildBossCatalog();
+  bossCatType=type;
+  if(huntBoss) exitBossHunt(false);   // ถ้ากำลังดูแมพบอสอยู่ ให้เด้งกลับตารางบอส
+  openBossCatalog();                  // เปิดตาราง (เรียก buildBossCatalog ให้เอง)
   document.querySelectorAll('.bc-tab,.bside-tab').forEach(b=>b.classList.toggle('on',b.dataset.btype===type));
 }
 (function(){
