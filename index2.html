@@ -1296,6 +1296,15 @@ function loadDraftOrLegacy(){
   }catch(e){}
   return false;
 }
+/* อ่านจุดที่แอดมินวางไว้ในเครื่อง (draft) แบบไม่แตะ state — ไว้ merge ทับฉบับเผยแพร่ทีหลัง */
+function readDraftMarkers(){
+  for(const KEY of [DRAFT_KEY, LEGACY_KEY]){
+    try{const d=JSON.parse(localStorage.getItem(KEY));
+      if(d&&d.markers){ const o={}; ALL_KEYS.forEach(k=>o[k]=cleanMarkers(d.markers[k])); return o; }
+    }catch(e){}
+  }
+  return null;
+}
 async function loadPublished(){
   try{const r=await fetch('markers.json?_='+Date.now(),{cache:'no-store'});
     if(r.ok){const j=await r.json(); const src=j.markers||j; const out={};
@@ -1318,7 +1327,7 @@ loadPersonal();
 /* คนทั่วไป: โหลดจุดกล่องล่าสุดอัตโนมัติทุกครั้งที่เปิดเว็บ (ไม่สนฉบับร่าง)
    โหมดแก้ไข (?admin) เท่านั้น: ใช้ฉบับร่างในเครื่องต่อได้ */
 const IS_ADMIN = new URLSearchParams(location.search).has('admin');
-let __hadDraft = IS_ADMIN ? loadDraftOrLegacy() : false;
+let __draftMarkers = IS_ADMIN ? readDraftMarkers() : null;   // จุดที่แอดมินวางไว้ในเครื่อง (ค่อย merge ทับฉบับเผยแพร่ใน init)
 let nextId = Math.max(0,...allMarkers().map(m=>m.id||0))+1;
 
 /* ============ DOM refs ============ */
@@ -2299,6 +2308,8 @@ stageWrap.addEventListener('drop',e=>{
   e.preventDefault();
   const p=clientToMap(e.clientX,e.clientY);
   const nm={id:nextId++,type,x:Math.round(p.x),y:Math.round(p.y)};
+  // กันสถานะ "เก็บแล้ว" ผีที่ค้างใน localStorage ที่ ID เดียวกัน (ทุกพรีเซ็ต) มาติด marker ใหม่
+  for(let i=0;i<PRESET_COUNT;i++){ if(personal.profiles[i]&&personal.profiles[i][CITY]) delete personal.profiles[i][CITY][nm.id]; }
   let label=ICONS[type].name;
   if(type==='card'){
     const ck=e.dataTransfer.getData('text/card');
@@ -2345,7 +2356,7 @@ function renderMarkers(){
       }
     } else if(!passesTabFilter(m.type)) return;   // กรองตามแท็บซ้าย
     const el=document.createElement('div');
-    el.className='marker'+(isCollected(m)?' collected':'');
+    el.className='marker'+((m.type!=='boss'&&isCollected(m))?' collected':'');   // บอสไม่มีสถานะ "เก็บแล้ว" (กันขึ้นกากบาท X)
     el.style.left=m.x+'px'; el.style.top=m.y+'px'; el.dataset.id=m.id;
     el.style.setProperty('--ring',def.color);
     let face=def.svg;
@@ -2753,9 +2764,15 @@ async function init(){
   await loadCooking();
   await loadBoss();
   published = await loadPublished();
-  if(published && !__hadDraft){
+  // โหลด markers.json เป็นฐานเสมอ (admin เห็นเหมือนผู้ใช้ทั่วไป: การ์ด/กล่อง/% ครบ)
+  if(published){
     ALL_KEYS.forEach(k=>state.markers[k]=(published[k]||[]).map(m=>({...m})));
-    nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
+  }
+  nextId=Math.max(0,...allMarkers().map(m=>m.id||0))+1;
+  // admin: รวมจุดที่วางไว้ในเครื่อง (บอส/อาหารที่ยังไม่ export) ทับฐาน — ไม่ทำงานที่ค้างหาย
+  if(IS_ADMIN && __draftMarkers){
+    mergeMarkers(__draftMarkers);
+    saveDraft();   // อัปเดต draft ให้ครบ (มีการ์ด/กล่องจากไฟล์จริงด้วย) กันเพี้ยนรอบต่อไป
   }
   switchCity(CITY);
 }
