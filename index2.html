@@ -26,9 +26,11 @@
   .brand{padding:16px 18px;font-size:18px;font-weight:700;letter-spacing:.5px;
     border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
   .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
-  .maintabs{display:flex;border-bottom:1px solid var(--border);}
-  .maintab{flex:1;padding:12px;text-align:center;cursor:pointer;color:var(--muted);
-    font-weight:600;font-size:14px;border-bottom:2px solid transparent;user-select:none;}
+  .maintabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
+  .maintab{padding:11px 8px;text-align:center;cursor:pointer;color:var(--muted);line-height:1.15;
+    font-weight:600;font-size:13.5px;border-bottom:2px solid transparent;user-select:none;}
+  .maintab:nth-child(odd){border-right:1px solid var(--border);}
+  .maintab:last-child:nth-child(odd){grid-column:1 / -1;border-right:none;}
   .maintab.active{color:var(--text);border-bottom-color:var(--accent);background:var(--panel2);}
   .maintab:hover{color:var(--text);}
   .side-body{flex:1;overflow-y:auto;padding:10px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
@@ -539,6 +541,61 @@
     .collab-ava .av{width:78px;height:78px;}
     .collab-title{font-size:19px;}
   }
+  /* ============ โหมดล่าบอส ============ */
+  #panel-boss .boss-side{padding:6px 2px;text-align:center;}
+  .boss-side-ic{width:52px;height:52px;margin:6px auto 10px;color:#e2553f;}
+  .boss-side-ic svg{width:52px;height:52px;}
+  .boss-side-tx{font-size:15px;font-weight:700;color:var(--text);}
+  .boss-side-sub{font-size:12px;color:var(--muted);line-height:1.55;margin:6px 0 14px;}
+  #openBossBtn{width:100%;}
+  /* marker บอส = กรอบสี่เหลี่ยมแดงเลือด */
+  .marker img.bossimg{width:48px;height:48px;display:block;object-fit:contain;pointer-events:none;-webkit-user-drag:none;border-radius:5px;}
+  .marker.mk-boss{border-radius:10px;border-color:#e2553f;background:#1a0d0b;width:58px;height:58px;padding:2px;animation:bosspulse 1.4s ease-in-out infinite;}
+  @keyframes bosspulse{0%,100%{box-shadow:0 0 0 0 #e2553f88;}50%{box-shadow:0 0 0 7px #e2553f00;}}
+  .marker.mk-boss .bnum{position:absolute;top:-7px;left:-7px;background:#e2553f;color:#fff;font-size:10px;font-weight:700;min-width:16px;height:16px;line-height:16px;text-align:center;border-radius:8px;padding:0 3px;}
+  /* ตารางบอสเต็มจอ (overlay ทับ stage) */
+  .boss-catalog{position:absolute;inset:0;z-index:80;background:var(--bg);display:none;flex-direction:column;}
+  .boss-catalog.show{display:flex;}
+  .bc-head{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);flex:none;}
+  .bc-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;color:var(--text);}
+  .bc-title svg{width:20px;height:20px;color:#e2553f;}
+  .bc-tabs{display:flex;gap:6px;background:var(--panel2);border:1px solid var(--border);border-radius:9px;padding:2px;}
+  .bc-tab{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:13px;font-weight:600;padding:5px 16px;border-radius:7px;}
+  .bc-tab.on{background:#3a1f1a;color:#ff9a86;}
+  .bc-close{margin-left:auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--panel2);color:var(--muted);cursor:pointer;font-size:15px;}
+  .bc-close:hover{color:var(--text);border-color:#e2553f;}
+  .bc-body{flex:1;overflow-y:auto;padding:6px 20px 28px;}
+  .bc-lvsep{display:flex;align-items:center;gap:14px;margin:20px 4px 14px;}
+  .bc-lvsep .ln{flex:1;height:1px;background:var(--border);}
+  .bc-lvsep .lb{font-size:14px;font-weight:700;color:var(--muted);letter-spacing:1px;}
+  .bc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:14px;}
+  .bc-tile{position:relative;aspect-ratio:1/1;border:1px solid var(--border);border-radius:16px;background:var(--panel2);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;transition:transform .12s,border-color .12s;}
+  .bc-tile:hover{transform:translateY(-3px);border-color:#e2553f;}
+  .bc-tile img{width:80%;height:80%;object-fit:contain;-webkit-user-drag:none;}
+  .bc-tile .badge{position:absolute;top:6px;left:6px;background:#e2553f;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:7px;}
+  .bc-tile .placed{position:absolute;bottom:6px;right:7px;font-size:10px;color:#7fe0a0;background:#12331f;border-radius:6px;padding:1px 6px;}
+  .bc-tile .noplace{position:absolute;bottom:6px;right:7px;font-size:10px;color:var(--muted);}
+  .bc-empty{font-size:13px;color:var(--muted);padding:24px 6px;text-align:center;}
+  /* แผงจับเวลาแชแนล (มุมซ้ายบนของ stage โหมดล่าบอส) */
+  .boss-panel{position:absolute;top:12px;left:12px;z-index:70;width:250px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:12px 13px;display:none;box-shadow:0 8px 30px rgba(0,0,0,.4);}
+  .boss-panel.show{display:block;}
+  .bp-head{display:flex;align-items:center;gap:9px;margin-bottom:4px;}
+  .bp-head img{width:38px;height:38px;object-fit:contain;border:1.5px solid #e2553f;border-radius:8px;background:#1a0d0b;padding:1px;flex:none;}
+  .bp-name{font-size:14px;font-weight:700;color:var(--text);line-height:1.2;}
+  .bp-sub{font-size:11px;color:var(--muted);}
+  .bp-back{margin-left:auto;font-size:11.5px;padding:4px 9px;border:1px solid var(--border);border-radius:8px;background:var(--panel2);color:var(--text);cursor:pointer;}
+  .bp-back:hover{border-color:#e2553f;}
+  .bp-hint{font-size:11px;color:var(--muted);margin:8px 0 8px;line-height:1.5;}
+  .bp-rows{display:flex;flex-direction:column;gap:5px;}
+  .bp-row{display:flex;align-items:center;gap:8px;padding:5px 9px;border:1px solid var(--border);border-radius:8px;}
+  .bp-row .ch{font-size:12px;font-weight:700;color:var(--text);width:34px;}
+  .bp-row .tm{flex:1;font-size:12px;color:var(--muted);}
+  .bp-row .tm.set{color:var(--text);}
+  .bp-row .kill{font-size:11px;padding:3px 9px;border:1px solid var(--border);border-radius:7px;background:transparent;color:var(--text);cursor:pointer;}
+  .bp-row .kill:hover{border-color:#e2553f;color:#ff9a86;}
+  .bp-row .clr{font-size:13px;padding:2px 7px;border:none;background:transparent;color:var(--muted);cursor:pointer;}
+  .bp-row .clr:hover{color:#e2553f;}
+  @media(max-width:760px){ .boss-panel{width:210px;top:8px;left:8px;} }
 </style>
 </head>
 <body>
@@ -550,6 +607,7 @@
       <div class="maintab active" data-main="cities">กล่อง</div>
       <div class="maintab" id="tabCards" data-main="cards">การ์ด</div>
       <div class="maintab" id="tabCook" data-main="cook">เมนูอาหาร</div>
+      <div class="maintab" id="tabBoss" data-main="boss">ล่าบอส</div>
       <div class="maintab" id="tabIcons" data-main="icons">Admin</div>
     </div>
     <div class="side-body">
@@ -602,6 +660,15 @@
         <div class="cardlist" id="cookList"></div>
         <div class="card-empty" id="cookListEmpty"></div>
       </div>
+      <!-- Boss panel (ทุกคนเห็น) — เป็นแค่ปุ่มเปิดตารางบอสเต็มจอ -->
+      <div id="panel-boss" style="display:none;">
+        <div class="boss-side">
+          <div class="boss-side-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2 4 7v6c0 4 3.5 7 8 9 4.5-2 8-5 8-9V7l-5-5z"/><circle cx="9.5" cy="11" r="1.2"/><circle cx="14.5" cy="11" r="1.2"/><path d="M9 15h6"/></svg></div>
+          <div class="boss-side-tx">โหมดล่าบอส</div>
+          <div class="boss-side-sub">เปิดตารางบอสเต็มจอ เลือกบอสเพื่อไปดูจุดเกิด + จับเวลาแยกแชแนล</div>
+          <button class="btn primary" id="openBossBtn">เปิดตารางบอส</button>
+        </div>
+      </div>
       <!-- Admin panel -->
       <div id="panel-icons" style="display:none;">
         <div class="palette-hint">ลากไอคอนไปวางบนแผนที่ (เฉพาะโหมดแก้ไข). คลิกไอคอนบนแผนที่เพื่อกากบาท = เก็บแล้ว.</div>
@@ -615,6 +682,11 @@
           <h4>เมนูอาหาร <span class="cnt" id="cookCnt"></span></h4>
           <div class="card-grid" id="cookGrid"></div>
           <div class="card-empty" id="cookEmpty"></div>
+        </div>
+        <div class="card-sec" id="bossSec">
+          <h4>บอส (จุดเกิด) <span class="cnt" id="bossCnt"></span></h4>
+          <div class="card-grid" id="bossGrid"></div>
+          <div class="card-empty" id="bossEmpty"></div>
         </div>
         <div class="side-actions">
           <button class="btn" id="exportBtn" title="บันทึกเป็น markers.json เพื่อนำไป commit ขึ้น GitHub">⬇ บันทึกข้อมูลใหม่</button>
@@ -671,6 +743,20 @@
       <div class="empty" id="emptyMsg" style="display:none;">เมืองนี้ยังไม่มีแผนที่ — เร็วๆ นี้</div>
       <div class="toast" id="toast"></div>
       <div class="card-info" id="cardInfo"></div>
+      <!-- แผงจับเวลาแชแนล (โหมดล่าบอส) -->
+      <div class="boss-panel" id="bossPanel"></div>
+      <!-- ตารางบอสเต็มจอ -->
+      <div class="boss-catalog" id="bossCatalog">
+        <div class="bc-head">
+          <span class="bc-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2 4 7v6c0 4 3.5 7 8 9 4.5-2 8-5 8-9V7l-5-5z"/></svg>ล่าบอส</span>
+          <div class="bc-tabs">
+            <button class="bc-tab on" data-btype="mini">Mini</button>
+            <button class="bc-tab" data-btype="elite">Elite</button>
+          </div>
+          <button class="bc-close" id="bcClose" aria-label="ปิด">✕</button>
+        </div>
+        <div class="bc-body" id="bcBody"></div>
+      </div>
       <div class="welcome" id="welcome" style="display:none;">
         <div class="welcome-card">
           <h1><span class="dot"></span>ROW Map Tracker</h1>
@@ -835,6 +921,7 @@ const ICONS = {
   landmark:{name:"กล้องถ่ายรูป (Landmark)", group:"landmark", color:"#5bb6ff", svg:camera(), desc:"จุดถ่ายรูป Landmark — ไปถึงจุดที่กำหนดแล้วถ่ายรูปเพื่อเก็บความคืบหน้า"},
   card:    {name:"การ์ดมอนสเตอร์",     group:"card",    color:"#7f77dd", svg:cardIcon(), desc:"การ์ดมอนสเตอร์ (Monster Cards) — ลากรูปการ์ดจากพาเลตต์ไปวาง คลิกบนแผนที่เพื่อดูชื่อและเลเวลที่ต้องมี ไม่นับรวมในเปอร์เซ็นต์กล่อง"},
   cooking: {name:"เมนูอาหาร",          group:"cook",    color:"#e6b800", svg:cookIcon(), desc:"เมนูอาหาร (Cooking) — ลากรูปเมนูจากพาเลตต์ไปวาง คลิกบนแผนที่เพื่อดูชื่อและเลเวลที่ต้องมี นับแยกจากกล่องและการ์ด"},
+  boss:    {name:"บอส",                group:"boss",    color:"#e2553f", svg:bossIcon(), desc:"จุดเกิดบอส — ลากรูปบอสจากพาเลตต์ไปวางเป็นจุดเกิด (สูงสุด 3 จุด/บอส) ใช้ในโหมดล่าบอสเท่านั้น"},
 };
 
 /* หมวดสรุปตามเกม (รวมหลายไอคอนเข้าด้วยกัน) */
@@ -962,6 +1049,13 @@ function cookIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
   <path d="M11 8 v9" stroke="#e6b800" stroke-width="2.4" stroke-linecap="round"/>
   <path d="M29 8 v6 a2 2 0 0 1 -4 0 v-6 M29 14 v9" stroke="#e6b800" stroke-width="2.4" stroke-linecap="round" fill="none"/>
 </g></svg>`;}
+/* ไอคอนบอส — โล่หัวกะโหลก กรอบแดง */
+function bossIcon(){return `<svg viewBox="0 0 40 40"><g class="body">
+  <path d="M20 5 L8 10 v9 c0 7 5 11 12 14 c7-3 12-7 12-14 v-9z" fill="#2a100c" stroke="#e2553f" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="16" cy="18" r="2.2" fill="#e2553f"/>
+  <circle cx="24" cy="18" r="2.2" fill="#e2553f"/>
+  <path d="M15 25 h10" stroke="#e2553f" stroke-width="2" stroke-linecap="round"/>
+</g></svg>`;}
 const XMARK = `<svg viewBox="0 0 40 40"><path d="M9 9 L31 31 M31 9 L9 31" stroke="#ff4b4b" stroke-width="5" stroke-linecap="round"/></svg>`;
 
 /* ============ Cities (เรียงตามลำดับ; map=null คือยังไม่มีแผนที่) ============ */
@@ -1061,6 +1155,7 @@ function cleanMarkers(arr){
     const o={id:m.id, type:t, x:Math.round(m.x), y:Math.round(m.y)};
     if(m.card) o.card=m.card;      // การ์ด: เก็บ key ของรูป เช่น "yoyo_40"
     if(m.cook) o.cook=m.cook;      // เมนูอาหาร: เก็บ key ของรูป เช่น "steak_50"
+    if(m.boss) o.boss=m.boss;      // บอส: เก็บ key ของบอส เช่น "mini_eddga_25"
     return o;
   }).filter(m=>ICONS[m.type]);
 }
@@ -1128,6 +1223,42 @@ async function loadCooking(){
   ALL_KEYS.forEach(k=>{
     cookingOf(k).forEach(c=>{ COOK_BY_KEY[k+'|'+c.key]=c; });
   });
+}
+
+/* ============ บอส (Boss) ============
+   แคตตาล็อกรวมจาก boss.json = { mini:[{key,name,lv,type,file}], elite:[...] }
+   จุดเกิด = marker type "boss" (field boss=key) วางในแมพผ่านแอดมิน
+   เวลาฆ่าเก็บใน localStorage แยกตาม บอส+แชแนล (timestamp) */
+let BOSS = {mini:[], elite:[]};
+const BOSS_BY_KEY = {};
+let BOSS_ERR = null;
+const BOSS_CHANNELS = 5;
+const BOSS_TIMES_KEY = "row_boss_times_v1";
+let bossTimes = {};   // { bossKey: { "1": ms, ... } }
+try{ bossTimes = JSON.parse(localStorage.getItem(BOSS_TIMES_KEY))||{}; }catch(e){ bossTimes={}; }
+function saveBossTimes(){ try{ localStorage.setItem(BOSS_TIMES_KEY, JSON.stringify(bossTimes)); }catch(e){} }
+function allBosses(){ return [...(BOSS.mini||[]), ...(BOSS.elite||[])]; }
+function bossInfo(key){ return BOSS_BY_KEY[key]||null; }
+async function loadBoss(){
+  try{
+    const r=await fetch('boss.json?v='+Date.now(),{cache:'no-store'});
+    if(!r.ok){ BOSS_ERR='โหลด boss.json ไม่ได้ (HTTP '+r.status+')'; return; }
+    BOSS=await r.json(); if(!BOSS.mini)BOSS.mini=[]; if(!BOSS.elite)BOSS.elite=[];
+  }catch(e){
+    BOSS={mini:[],elite:[]};
+    BOSS_ERR = (location.protocol==='file:')
+      ? 'เปิดแบบ file:// เบราว์เซอร์บล็อก boss.json — เปิดผ่านเซิร์ฟเวอร์แทน'
+      : 'โหลด boss.json ไม่ได้ — ตรวจว่าไฟล์อยู่ที่รากโปรเจกต์จริงไหม';
+  }
+  allBosses().forEach(b=>{ BOSS_BY_KEY[b.key]=b; });
+}
+/* มาร์กเกอร์จุดเกิดของบอสตัวหนึ่ง (รวมทุกเมือง) — คืน [{m,key}] */
+function bossMarkers(bossKey){
+  const out=[];
+  ALL_KEYS.forEach(k=>{
+    (state.markers[k]||[]).forEach(m=>{ if(m.type==='boss'&&m.boss===bossKey) out.push({m,key:k}); });
+  });
+  return out;
 }
 function loadPersonal(){
   try{const p=JSON.parse(localStorage.getItem(PERSONAL_KEY));
@@ -1200,7 +1331,7 @@ let view={scale:0.35, x:60, y:30};
 /* ============ Build icon palette ============ */
 const icoGrid=document.getElementById('icoGrid');
 Object.entries(ICONS).forEach(([key,def])=>{
-  if(key==='card'||key==='cooking')return;  // การ์ด/เมนูอาหาร มีพาเลตต์ของตัวเองด้านล่าง (ลากจากรูปจริง)
+  if(key==='card'||key==='cooking'||key==='boss')return;  // การ์ด/เมนู/บอส มีพาเลตต์ของตัวเองด้านล่าง
   const card=document.createElement('div');
   card.className='ico-card'; card.draggable=true; card.dataset.type=key;
   card.style.borderColor=def.color;
@@ -1273,6 +1404,116 @@ function buildCookPalette(){
       e.dataTransfer.setData('text/cook',c.key);
     });
     cookGrid.appendChild(chip);
+  });
+}
+
+/* ============ พาเลตต์บอส (แอดมิน) — ลากจุดเกิดบอสไปวาง ============ */
+const bossGridEl=document.getElementById('bossGrid');
+const bossEmptyEl=document.getElementById('bossEmpty');
+const bossCntEl=document.getElementById('bossCnt');
+function buildBossPalette(){
+  if(!bossGridEl)return;
+  const list=allBosses();
+  const placedHere=(state.markers[CITY]||[]).filter(m=>m.type==='boss').length;
+  bossGridEl.innerHTML='';
+  bossCntEl.textContent = list.length ? `เมืองนี้วางแล้ว ${placedHere} จุด` : '';
+  if(!list.length){ bossEmptyEl.textContent = BOSS_ERR ? ('⚠ '+BOSS_ERR)
+      : 'ยังไม่มีรูปบอส — ใส่ไฟล์ใน boss/mini หรือ boss/elite แล้วรัน node tools/build-boss.js'; return; }
+  bossEmptyEl.textContent='';
+  list.forEach(b=>{
+    const n=bossMarkers(b.key).length;
+    const chip=document.createElement('div');
+    chip.className='card-chip'+(n?' used':'');
+    chip.draggable=true; chip.dataset.boss=b.key;
+    chip.title=b.name+(n?` — วางแล้ว ${n} จุด`:'');
+    chip.innerHTML=`<img src="${encodeURI(b.file)}" alt="${escHtml(b.name)}" loading="lazy">
+      <span class="nm">${escHtml(b.name)}</span>
+      <span class="lv">${b.type==='elite'?'Elite':'Mini'} · Lv.${b.lv}${n?(' · '+n+'จุด'):''}</span>`;
+    chip.addEventListener('dragstart',e=>{
+      if(state.locked){e.preventDefault();return;}
+      e.dataTransfer.setData('text/icon','boss');
+      e.dataTransfer.setData('text/boss',b.key);
+    });
+    bossGridEl.appendChild(chip);
+  });
+}
+
+/* ============ ตารางบอสเต็มจอ + โหมดล่าบอส ============ */
+const BOSS_LV_RANGES=[[1,20],[21,30],[31,40],[41,50],[51,60],[61,70],[71,80],[81,90],[91,100],[101,110],[111,120],[121,150]];
+let bossCatType='mini';   // แท็บในแคตตาล็อก
+let huntBoss=null;        // key ของบอสที่กำลังล่าอยู่ (null=ไม่ได้ล่า)
+const bossCatalogEl=document.getElementById('bossCatalog');
+const bcBody=document.getElementById('bcBody');
+const bossPanelEl=document.getElementById('bossPanel');
+
+function rangeLabel(lv){ const r=BOSS_LV_RANGES.find(x=>lv>=x[0]&&lv<=x[1]); return r?('LV.'+r[0]+'~LV.'+r[1]):('LV.'+lv); }
+function buildBossCatalog(){
+  const list=(BOSS[bossCatType]||[]).slice().sort((a,b)=>a.lv-b.lv);
+  bcBody.innerHTML='';
+  document.querySelectorAll('.bc-tab').forEach(t=>t.classList.toggle('on',t.dataset.btype===bossCatType));
+  if(!list.length){ bcBody.innerHTML='<div class="bc-empty">'+(BOSS_ERR?('⚠ '+BOSS_ERR):'ยังไม่มีบอสประเภทนี้ — ใส่รูปใน boss/'+bossCatType+' แล้วรัน node tools/build-boss.js')+'</div>'; return; }
+  let curRange=null, grid=null;
+  list.forEach(b=>{
+    const rl=rangeLabel(b.lv);
+    if(rl!==curRange){
+      curRange=rl;
+      const sep=document.createElement('div'); sep.className='bc-lvsep';
+      sep.innerHTML='<span class="ln"></span><span class="lb">'+rl.replace('LV.','LV.')+'</span><span class="ln"></span>';
+      bcBody.appendChild(sep);
+      grid=document.createElement('div'); grid.className='bc-grid'; bcBody.appendChild(grid);
+    }
+    const n=bossMarkers(b.key).length;
+    const t=document.createElement('div'); t.className='bc-tile'; t.setAttribute('role','button'); t.title=b.name+' · Lv.'+b.lv;
+    t.innerHTML=`<span class="badge">${b.type==='elite'?'Elite':'Mini'}</span>
+      <img src="${encodeURI(b.file)}" alt="${escHtml(b.name)}" loading="lazy">
+      ${n?`<span class="placed">${n} จุด</span>`:`<span class="noplace">ยังไม่วาง</span>`}`;
+    t.addEventListener('click',()=>openBossHunt(b.key));
+    grid.appendChild(t);
+  });
+}
+function openBossCatalog(){ buildBossCatalog(); bossCatalogEl.classList.add('show'); }
+function closeBossCatalog(){ bossCatalogEl.classList.remove('show'); }
+
+function openBossHunt(key){
+  const b=bossInfo(key); if(!b)return;
+  huntBoss=key; closeBossCatalog();
+  const mk=bossMarkers(key);
+  renderBossPanel(b);
+  bossPanelEl.classList.add('show');
+  if(mk.length){
+    gotoMarker(mk[0].key, mk[0].m);   // เด้งไปจุดแรก (ข้ามเมืองได้)
+    if(mk[0].key===CITY) renderMarkers();
+  }else{
+    renderMarkers();
+    toast('บอสนี้ยังไม่มีจุดเกิด — แอดมินต้องวางจุดก่อน');
+  }
+}
+function exitBossHunt(reopen){
+  huntBoss=null; bossPanelEl.classList.remove('show'); renderMarkers();
+  if(reopen) openBossCatalog();
+}
+function fmtKill(ms){ const d=new Date(ms); const p=n=>(n<10?'0':'')+n; return p(d.getHours())+':'+p(d.getMinutes()); }
+function renderBossPanel(b){
+  const t=bossTimes[b.key]||{};
+  let rows='';
+  for(let c=1;c<=BOSS_CHANNELS;c++){
+    const ms=t[c];
+    rows+=`<div class="bp-row"><span class="ch">CH${c}</span>`
+      +`<span class="tm${ms?' set':''}">${ms?('ฆ่า '+fmtKill(ms)+' น.'):'ยังไม่จับเวลา'}</span>`
+      +`<button class="kill" data-ch="${c}">ฆ่าแล้ว</button>`
+      +(ms?`<button class="clr" data-clr="${c}" title="ล้าง">✕</button>`:'')+`</div>`;
+  }
+  bossPanelEl.innerHTML=
+    `<div class="bp-head"><img src="${encodeURI(b.file)}" alt=""><div><div class="bp-name">${escHtml(b.name)}</div><div class="bp-sub">${b.type==='elite'?'Elite':'Mini'} · Lv.${b.lv} · จับเวลาตายแยกแชแนล</div></div><button class="bp-back" id="bpBack">‹ ตารางบอส</button></div>`
+    +`<div class="bp-hint">แตะ “ฆ่าแล้ว” ของแชแนลที่เพิ่งเคลียร์ = บันทึกเวลาปัจจุบัน (สุ่มเกิด 1 ใน ${Math.max(3,bossMarkers(b.key).length||3)} จุด)</div>`
+    +`<div class="bp-rows">${rows}</div>`;
+  bossPanelEl.querySelector('#bpBack').onclick=()=>exitBossHunt(true);
+  bossPanelEl.querySelectorAll('.kill').forEach(btn=>btn.onclick=()=>{
+    const c=btn.dataset.ch; if(!bossTimes[b.key])bossTimes[b.key]={};
+    bossTimes[b.key][c]=Date.now(); saveBossTimes(); renderBossPanel(b); toast('บันทึกเวลา '+b.name+' CH'+c);
+  });
+  bossPanelEl.querySelectorAll('.clr').forEach(btn=>btn.onclick=()=>{
+    const c=btn.dataset.clr; if(bossTimes[b.key]){ delete bossTimes[b.key][c]; saveBossTimes(); } renderBossPanel(b);
   });
 }
 
@@ -1645,11 +1886,21 @@ document.querySelectorAll('.maintab').forEach(t=>t.addEventListener('click',()=>
   document.getElementById('panel-cities').style.display = m==='cities'?'':'none';
   document.getElementById('panel-cards').style.display  = m==='cards'?'':'none';
   document.getElementById('panel-cook').style.display   = m==='cook'?'':'none';
+  document.getElementById('panel-boss').style.display   = m==='boss'?'':'none';
   document.getElementById('panel-icons').style.display  = m==='icons'?'':'none';
   if(m==='cards') buildCardList();
   if(m==='cook') buildCookList();
+  if(m==='boss'){ buildBossPalette(); openBossCatalog(); }
+  else { closeBossCatalog(); if(huntBoss) exitBossHunt(false); }
   renderMarkers();   // กรองมาร์กเกอร์ตามแท็บที่เพิ่งเลือก
 }));
+
+/* ปุ่ม/แท็บของโหมดล่าบอส */
+(function(){
+  const ob=document.getElementById('openBossBtn'); if(ob) ob.onclick=openBossCatalog;
+  const bc=document.getElementById('bcClose'); if(bc) bc.onclick=()=>{ closeBossCatalog(); if(huntBoss) exitBossHunt(false); };
+  document.querySelectorAll('.bc-tab').forEach(t=>t.onclick=()=>{ bossCatType=t.dataset.btype; buildBossCatalog(); });
+})();
 
 /* ============ Mobile drawer ============ */
 (function(){
@@ -1942,7 +2193,7 @@ function switchCity(city){
   }
   updateProgress();
   stageWrap.classList.toggle('mapmode', !def.welcome);   // หน้า Home ปล่อยให้ซูม/เลื่อนได้ตามปกติ
-  hideCardInfo(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList();
+  hideCardInfo(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList(); buildBossPalette();
   document.querySelector('.sidebar') && document.querySelector('.sidebar').classList.remove('open');
   document.getElementById('scrim') && document.getElementById('scrim').classList.remove('show');
 }
@@ -2060,26 +2311,39 @@ stageWrap.addEventListener('drop',e=>{
     nm.cook=ck;
     const ci=cookInfo(CITY,ck); if(ci) label=ci.name;
   }
+  if(type==='boss'){
+    const bk=e.dataTransfer.getData('text/boss');
+    if(!bk)return;                                    // ต้องรู้ว่าเป็นบอสไหน
+    if(bossMarkers(bk).length>=3){ toast('บอสนี้มีจุดเกิดครบ 3 จุดแล้ว'); return; }
+    nm.boss=bk;
+    const bi=bossInfo(bk); if(bi) label=bi.name+' (จุดเกิด)';
+  }
   state.markers[CITY].push(nm);
-  saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList();
+  saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList(); buildBossPalette();
   toast(`วาง ${label} แล้ว`);
 });
 
 /* ============ Markers ============ */
 /* กรองมาร์กเกอร์ตามแท็บที่เปิดอยู่: กล่อง→เฉพาะกล่อง, การ์ด→เฉพาะการ์ด, เมนูอาหาร→เฉพาะอาหาร
    (แท็บ Admin โชว์ทุกอย่างเพื่อให้วาง/แก้ไขได้) */
-function passesTabFilter(type){
+function passesTabFilter(type){   // เรียกเฉพาะ type ที่ไม่ใช่ boss (boss จัดการแยกใน renderMarkers)
   if(mainTab==='cards') return type==='card';
   if(mainTab==='cook')  return type==='cooking';
+  if(mainTab==='boss')  return false;        // โหมดล่าบอส: ซ่อน กล่อง/การ์ด/อาหาร
   if(mainTab==='cities')return type!=='card' && type!=='cooking';
-  return true;
+  return true;   // icons/admin
 }
 function renderMarkers(){
   stage.querySelectorAll('.marker').forEach(n=>n.remove());
+  const bossSeq={};   // นับลำดับจุดเกิดของแต่ละบอสในเมืองนี้
   (state.markers[CITY]||[]).forEach(m=>{
     const def=ICONS[m.type]; if(!def)return;
     if(state.hidden[m.type])return;          // ซ่อนชนิดที่ปิด toggle ไว้
-    if(!passesTabFilter(m.type))return;      // กรองตามแท็บซ้าย
+    if(m.type==='boss'){
+      if(mainTab!=='icons'){                 // นอกโหมดแอดมิน: โชว์เฉพาะบอสที่กำลังล่า
+        if(!(huntBoss && m.boss===huntBoss)) return;
+      }
+    } else if(!passesTabFilter(m.type)) return;   // กรองตามแท็บซ้าย
     const el=document.createElement('div');
     el.className='marker'+(isCollected(m)?' collected':'');
     el.style.left=m.x+'px'; el.style.top=m.y+'px'; el.dataset.id=m.id;
@@ -2097,6 +2361,14 @@ function renderMarkers(){
       if(ci) face=`<img class="cardimg" src="${encodeURI(ci.file)}" alt="${escHtml(ci.name)}" loading="lazy">`;
       el.title=ci?(ci.name+(ci.lv?` — Lv. ${ci.lv}`:'')):'เมนูอาหาร (ไม่พบรูป)';
     }
+    if(m.type==='boss'){
+      el.classList.add('mk-boss');
+      const bi=bossInfo(m.boss);
+      bossSeq[m.boss]=(bossSeq[m.boss]||0)+1;
+      if(bi) face=`<img class="bossimg" src="${encodeURI(bi.file)}" alt="${escHtml(bi.name)}" loading="lazy">`;
+      face+=`<div class="bnum">${bossSeq[m.boss]}</div>`;
+      el.title=bi?(bi.name+' — จุดเกิด '+bossSeq[m.boss]):'บอส (ไม่พบรูป)';
+    }
     el.innerHTML=face+`<div class="xmark">${XMARK}</div><div class="del">×</div>`;
     el.addEventListener('mousedown',ev=>onMarkerDown(ev,m,el));
     el.querySelector('.del').addEventListener('click',ev=>{
@@ -2104,7 +2376,7 @@ function renderMarkers(){
       if(state.locked)return;
       state.markers[CITY]=state.markers[CITY].filter(x=>x.id!==m.id);
       if(__cardInfoId===m.id) hideCardInfo();
-      saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList();
+      saveDraft(); renderMarkers(); updateProgress(); buildCardPalette(); buildCardList(); buildCookPalette(); buildCookList(); buildBossPalette();
     });
     stage.appendChild(el);
   });
@@ -2140,6 +2412,11 @@ stage.addEventListener('click',e=>{
   if(e.target.closest('.del'))return;          // delete handled separately
   if(justDragged){ justDragged=false; return; } // ignore the click that ends a drag
   const id=+el.dataset.id; const m=state.markers[CITY].find(x=>x.id===id); if(!m)return;
+  if(m.type==='boss'){                     // บอสไม่มี "เก็บแล้ว" — คลิกเพื่อเปิดแผงจับเวลาบอสตัวนั้น
+    const bi=bossInfo(m.boss);
+    if(bi){ huntBoss=m.boss; renderBossPanel(bi); bossPanelEl.classList.add('show'); renderMarkers(); }
+    return;
+  }
   const v=!isCollected(m); setCollected(m,v); el.classList.toggle('collected',v);
   updateProgress();
   if(m.type==='card'){ showCardInfo(m,v); buildCardList(); }
@@ -2238,6 +2515,7 @@ function refreshLockUI(){
       document.getElementById('panel-cities').style.display='';
       document.getElementById('panel-cards').style.display='none';
       document.getElementById('panel-cook').style.display='none';
+      document.getElementById('panel-boss').style.display='none';
       document.getElementById('panel-icons').style.display='none';
       renderMarkers();
     }
@@ -2308,6 +2586,7 @@ document.getElementById('exportBtn').onclick=()=>{
     const o={id:m.id,type:m.type,x:m.x,y:m.y};
     if(m.card) o.card=m.card;
     if(m.cook) o.cook=m.cook;
+    if(m.boss) o.boss=m.boss;
     return o;
   }));
   const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
@@ -2334,6 +2613,7 @@ function sameMarker(a,b){
   if(a.type!==b.type)return false;
   if((a.card||'')!==(b.card||''))return false;
   if((a.cook||'')!==(b.cook||''))return false;
+  if((a.boss||'')!==(b.boss||''))return false;
   return Math.abs(a.x-b.x)<=SAME_SPOT && Math.abs(a.y-b.y)<=SAME_SPOT;
 }
 function mergeMarkers(incoming){
@@ -2444,6 +2724,7 @@ async function init(){
   refreshLockUI();
   await loadCards();
   await loadCooking();
+  await loadBoss();
   published = await loadPublished();
   if(published && !__hadDraft){
     ALL_KEYS.forEach(k=>state.markers[k]=(published[k]||[]).map(m=>({...m})));

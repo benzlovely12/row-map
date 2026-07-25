@@ -1,0 +1,124 @@
+{
+  "mini": [
+    {
+      "key": "mini_Vocal_20",
+      "name": "Vocal",
+      "lv": 20,
+      "type": "mini",
+      "file": "boss/mini/Vocal_20.png"
+    },
+    {
+      "key": "mini_Eclipse_30",
+      "name": "Eclipse",
+      "lv": 30,
+      "type": "mini",
+      "file": "boss/mini/Eclipse_30.png"
+    },
+    {
+      "key": "mini_Toad_30",
+      "name": "Toad",
+      "lv": 30,
+      "type": "mini",
+      "file": "boss/mini/Toad_30.png"
+    },
+    {
+      "key": "mini_Mastering_40",
+      "name": "Mastering",
+      "lv": 40,
+      "type": "mini",
+      "file": "boss/mini/Mastering_40.png"
+    },
+    {
+      "key": "mini_Choco_50",
+      "name": "Choco",
+      "lv": 50,
+      "type": "mini",
+      "file": "boss/mini/Choco_50.png"
+    },
+    {
+      "key": "mini_DragonFly_50",
+      "name": "Dragon Fly",
+      "lv": 50,
+      "type": "mini",
+      "file": "boss/mini/DragonFly_50.png"
+    },
+    {
+      "key": "mini_Alligator_60",
+      "name": "Alligator",
+      "lv": 60,
+      "type": "mini",
+      "file": "boss/mini/Alligator_60.png"
+    },
+    {
+      "key": "mini_AncientStrouf_60",
+      "name": "Ancient Strouf",
+      "lv": 60,
+      "type": "mini",
+      "file": "boss/mini/AncientStrouf_60.png"
+    },
+    {
+      "key": "mini_VagabondWolf_60",
+      "name": "Vagabond Wolf",
+      "lv": 60,
+      "type": "mini",
+      "file": "boss/mini/VagabondWolf_60.png"
+    },
+    {
+      "key": "mini_YaoJun_60",
+      "name": "Yao Jun",
+      "lv": 60,
+      "type": "mini",
+      "file": "boss/mini/YaoJun_60.png"
+    },
+    {
+      "key": "mini_GrandPeco_75",
+      "name": "Grand Peco",
+      "lv": 75,
+      "type": "mini",
+      "file": "boss/mini/GrandPeco_75.png"
+    },
+    {
+      "key": "mini_ArcAngeling_80",
+      "name": "Arc Angeling",
+      "lv": 80,
+      "type": "mini",
+      "file": "boss/mini/ArcAngeling_80.png"
+    },
+    {
+      "key": "mini_Abubis_105",
+      "name": "Abubis",
+      "lv": 105,
+      "type": "mini",
+      "file": "boss/mini/Abubis_105.png"
+    },
+    {
+      "key": "mini_Gryphon_105",
+      "name": "Gryphon",
+      "lv": 105,
+      "type": "mini",
+      "file": "boss/mini/Gryphon_105.png"
+    },
+    {
+      "key": "mini_AncientMummy_110",
+      "name": "Ancient Mummy",
+      "lv": 110,
+      "type": "mini",
+      "file": "boss/mini/AncientMummy_110.png"
+    },
+    {
+      "key": "mini_KoboldLeader_120",
+      "name": "Kobold Leader",
+      "lv": 120,
+      "type": "mini",
+      "file": "boss/mini/KoboldLeader_120.png"
+    },
+    {
+      "key": "mini_HeavyMetaling_140",
+      "name": "Heavy Metaling",
+      "lv": 140,
+      "type": "mini",
+      "file": "boss/mini/HeavyMetaling_140.png"
+    }
+  ],
+  "elite": []
+}

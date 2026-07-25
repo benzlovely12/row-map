@@ -19,7 +19,11 @@ const IGNORE = new Set(['tools', 'node_modules', '.git', '.github']);
 
 function titleCase(s) {
   return s.split(/[_\s]+/).filter(Boolean)
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .map(w => {
+      // คงตัวย่อพิมพ์ใหญ่ทั้งคำไว้ตามเดิม เช่น "STR" -> "STR" (ไม่กลายเป็น "Str")
+      if (w.length >= 2 && w === w.toUpperCase() && /[A-Z]/.test(w)) return w;
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
     .join(' ');
 }
 
