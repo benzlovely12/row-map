@@ -1961,11 +1961,13 @@ legendBody.addEventListener('click',e=>{
 
 /* ============ Tabs ============ */
 let mainTab='cities';   // แท็บซ้ายที่เปิดอยู่ ใช้กรองมาร์กเกอร์บนแผนที่
+let lastNonBossTab='cities';   // แท็บล่าสุดที่ไม่ใช่ "ล่าบอส" (มือถือ: กด ☰ ตอนอยู่บอส จะเด้งกลับอันนี้)
 document.querySelectorAll('.maintab').forEach(t=>t.addEventListener('click',()=>{
   document.querySelectorAll('.maintab').forEach(x=>x.classList.remove('active'));
   t.classList.add('active');
   const m=t.dataset.main;
   mainTab=m;
+  if(m!=='boss') lastNonBossTab=m;   // จำแท็บที่ไม่ใช่บอสไว้ (ใช้ตอนกด ☰ ในมือถือ)
   document.getElementById('panel-cities').style.display = m==='cities'?'':'none';
   document.getElementById('panel-cards').style.display  = m==='cards'?'':'none';
   document.getElementById('panel-cook').style.display   = m==='cook'?'':'none';
@@ -2000,7 +2002,15 @@ function setBossCatType(type){
   const scrim=document.getElementById('scrim');
   const menuBtn=document.getElementById('menuBtn');
   function setDrawer(open){ sidebar.classList.toggle('open',open); scrim.classList.toggle('show',open); }
-  menuBtn.addEventListener('click',()=>setDrawer(!sidebar.classList.contains('open')));
+  menuBtn.addEventListener('click',()=>{
+    const opening=!sidebar.classList.contains('open');
+    // มือถือ: เปิดเมนูตอนอยู่แท็บล่าบอส -> เด้งกลับแท็บล่าสุดที่ไม่ใช่บอส (ไม่โชว์ UI แบบคอม)
+    if(opening && mainTab==='boss'){
+      const tabEl=document.querySelector('.maintab[data-main="'+lastNonBossTab+'"]');
+      if(tabEl) tabEl.click();
+    }
+    setDrawer(opening);
+  });
   scrim.addEventListener('click',()=>setDrawer(false));
 })();
 
