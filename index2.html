@@ -1481,8 +1481,9 @@ function openBossHunt(key){
   renderBossPanel(b);
   bossPanelEl.classList.add('show');
   if(mk.length){
-    gotoMarker(mk[0].key, mk[0].m);   // เด้งไปจุดแรก (ข้ามเมืองได้)
-    if(mk[0].key===CITY) renderMarkers();
+    const city=mk[0].key;             // จุดเกิดของบอสตัวหนึ่งอยู่เมืองเดียว
+    if(city===CITY){ renderMarkers(); focusBoss(key); }   // อยู่เมืองเดียวกัน: เฉลี่ยทุกจุดเลย
+    else { __pendingBossFocus=key; switchCity(city); }    // ข้ามเมือง: ไปโหลดแมพก่อนแล้วค่อยเฉลี่ย
   }else{
     renderMarkers();
     toast('บอสนี้ยังไม่มีจุดเกิด — แอดมินต้องวางจุดก่อน');
@@ -1505,7 +1506,7 @@ function renderBossPanel(b){
   }
   bossPanelEl.innerHTML=
     `<div class="bp-head"><img src="${encodeURI(b.file)}" alt=""><div><div class="bp-name">${escHtml(b.name)}</div><div class="bp-sub">${b.type==='elite'?'Elite':'Mini'} · Lv.${b.lv} · จับเวลาตายแยกแชแนล</div></div><button class="bp-back" id="bpBack">‹ ตารางบอส</button></div>`
-    +`<div class="bp-hint">แตะ “ฆ่าแล้ว” ของแชแนลที่เพิ่งเคลียร์ = บันทึกเวลาปัจจุบัน (สุ่มเกิด 1 ใน ${Math.max(3,bossMarkers(b.key).length||3)} จุด)</div>`
+    +`<div class="bp-hint">แตะ “ฆ่าแล้ว” ของแชแนลที่เพิ่งเคลียร์ = บันทึกเวลาปัจจุบัน${(()=>{const n=bossMarkers(b.key).length;return n?` (สุ่มเกิด 1 ใน ${n} จุด)`:'';})()}</div>`
     +`<div class="bp-rows">${rows}</div>`;
   bossPanelEl.querySelector('#bpBack').onclick=()=>exitBossHunt(true);
   bossPanelEl.querySelectorAll('.kill').forEach(btn=>btn.onclick=()=>{
@@ -2313,8 +2314,7 @@ stageWrap.addEventListener('drop',e=>{
   }
   if(type==='boss'){
     const bk=e.dataTransfer.getData('text/boss');
-    if(!bk)return;                                    // ต้องรู้ว่าเป็นบอสไหน
-    if(bossMarkers(bk).length>=3){ toast('บอสนี้มีจุดเกิดครบ 3 จุดแล้ว'); return; }
+    if(!bk)return;                                    // ต้องรู้ว่าเป็นบอสไหน — วางกี่จุดก็ได้ ไม่จำกัด
     nm.boss=bk;
     const bi=bossInfo(bk); if(bi) label=bi.name+' (จุดเกิด)';
   }
@@ -2425,36 +2425,63 @@ stage.addEventListener('click',e=>{
 
 /* ข้ามไปเมืองอื่นแล้วค่อยพาไปที่ marker (รอแมพใหม่โหลด+จัดมุมมองเสร็จก่อน) */
 let __pendingFocus=null;
+let __pendingBossFocus=null;   // key ของบอสที่ต้องโฟกัส (เฉลี่ยทุกจุด) หลังเปลี่ยนเมืองเสร็จ
 function gotoMarker(key,m){
   if(key===CITY){ focusMarker(m); return; }
   __pendingFocus={key,id:m.id};
   switchCity(key);
 }
 function applyPendingFocus(){
+  if(__pendingBossFocus){
+    const key=__pendingBossFocus;
+    if((state.markers[CITY]||[]).some(m=>m.type==='boss'&&m.boss===key)){
+      __pendingBossFocus=null; focusBoss(key); return;
+    }
+  }
   if(!__pendingFocus || __pendingFocus.key!==CITY) return;
   const m=(state.markers[CITY]||[]).find(x=>x.id===__pendingFocus.id);
   __pendingFocus=null;
   if(m) focusMarker(m);
 }
 
-/* ============ พาไปดู marker: เลื่อนแผนที่ไปหา + วงแดงกระพริบ 3 วิ ============ */
+/* ============ พาไปดู marker: บังคับซูมให้เหมาะสม + จัดกลาง + วงแดงกระพริบ 3 วิ ============ */
 let __flashT=null;
-function focusMarker(m){
-  // เลื่อนแผนที่ให้ marker อยู่กลางจอ (คงระดับซูมเดิม)
+const FOCUS_VIEW_SPAN=760;   // อยากเห็นพื้นที่รอบจุดประมาณเท่านี้ (map px) ตอนโฟกัสจุดเดียว
+/* เลื่อน+ซูมให้ "ทุกจุด" ที่ส่งมาอยู่กลางจอพอดี แล้วกระพริบทุกจุด */
+function focusPoints(pts, ids){
+  if(!pts.length) return;
   const rect=stageWrap.getBoundingClientRect();
-  view.x = rect.width/2  - m.x*view.scale;
-  view.y = rect.height/2 - m.y*view.scale;
+  const meanX = pts.reduce((a,p)=>a+p.x,0)/pts.length;
+  const meanY = pts.reduce((a,p)=>a+p.y,0)/pts.length;
+  let maxDx=0,maxDy=0;
+  pts.forEach(p=>{ maxDx=Math.max(maxDx,Math.abs(p.x-meanX)); maxDy=Math.max(maxDy,Math.abs(p.y-meanY)); });
+  let s;
+  if(maxDx<2 && maxDy<2){                          // จุดเดียว: ซูมคงที่ให้เห็นพื้นที่รอบๆ พอดี
+    s = clampScale(Math.min(rect.width,rect.height)/FOCUS_VIEW_SPAN);
+  }else{                                           // หลายจุด (บอส): ซูมให้เห็นครบทุกจุด + เผื่อขอบ
+    const availX = rect.width/2  - (rect.width*0.14 + 60);
+    const availY = rect.height/2 - (rect.height*0.14 + 60);
+    s = clampScale(Math.min(availX/Math.max(maxDx,1), availY/Math.max(maxDy,1)));
+  }
+  view.scale = s;
+  view.x = rect.width/2  - meanX*s;
+  view.y = rect.height/2 - meanY*s;
   applyView();
-
   clearTimeout(__flashT);
   stage.querySelectorAll('.marker.flash').forEach(n=>n.classList.remove('flash'));
-  const el=stage.querySelector(`.marker[data-id="${m.id}"]`);
-  if(el){
-    el.classList.add('flash');
-    __flashT=setTimeout(()=>el.classList.remove('flash'),3000);
-  }
-  showCardInfo(m,isCollected(m));
-  // มือถือ: ปิดลิ้นชักเมนูให้เห็นแผนที่
+  ids.forEach(id=>{ const el=stage.querySelector(`.marker[data-id="${id}"]`); if(el) el.classList.add('flash'); });
+  __flashT=setTimeout(()=>stage.querySelectorAll('.marker.flash').forEach(n=>n.classList.remove('flash')),3000);
+}
+/* บอส: เฉลี่ยจุดเกิดทั้งหมดของบอสตัวนั้นในเมืองปัจจุบัน */
+function focusBoss(bossKey){
+  const pts=(state.markers[CITY]||[]).filter(m=>m.type==='boss'&&m.boss===bossKey);
+  if(pts.length) focusPoints(pts.map(m=>({x:m.x,y:m.y})), pts.map(m=>m.id));
+}
+function focusMarker(m){
+  focusPoints([{x:m.x,y:m.y}],[m.id]);
+  if(m.type==='card') showCardInfo(m,isCollected(m));
+  else if(m.type==='cooking') showCookInfo(m,isCollected(m));
+  // บอส: ไม่โชว์ป็อปอัปการ์ด (มีแผงจับเวลาแยกอยู่แล้ว)
   const sb=document.querySelector('.sidebar');
   if(sb&&sb.classList.contains('open')){
     sb.classList.remove('open');
