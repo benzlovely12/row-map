@@ -2071,6 +2071,14 @@ function overallPercent(){
   CITY_LIST.forEach(c=>{ if(c.map){ const r=cityPercent(c.key); total+=r.total; got+=r.got; } });
   return {total,got,pct: total? Math.round(got/total*100):0};
 }
+/* ความสำเร็จรวมทุกเมือง แยกการ์ด/อาหาร (ใช้โชว์ที่แถว Home) */
+function overallOf(fn){
+  let total=0,got=0;
+  CITY_LIST.forEach(c=>{ if(c.map){ const r=fn(c.key); total+=r.total; got+=r.got; } });
+  return {total,got,pct: total?Math.round(got/total*100):0};
+}
+function overallCardPercent(){ return overallOf(cityCardPercent); }
+function overallCookPercent(){ return overallOf(cityCookPercent); }
 const ERASE_SVG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 12.5 7l5 5-8.5 8.5H7z"/><path d="M9 20.5h11"/></svg>`;
 let expandedCity=null;   // มือถือ: เมืองที่กางชั้นย่อยอยู่ใน dropdown
 function buildCityMenu(){
@@ -2086,7 +2094,10 @@ function buildCityMenu(){
     let front='',right='';
     if(c.welcome){
       front=`<button class="city-erase all" data-erase="all" title="รีเซ็ตทุกเมือง">${ERASE_SVG}</button>`;
-      right='';
+      const op=overallPercent(), oc=overallCardPercent(), ok=overallCookPercent();   // ความสำเร็จรวมทุกเมือง
+      right=`<span class="city-pct">${op.pct}% (${op.got}/${op.total})</span>`
+           + (oc.total?`<span class="city-pct card">${oc.pct}% (${oc.got}/${oc.total})</span>`:'')
+           + (ok.total?`<span class="city-pct cook">${ok.pct}% (${ok.got}/${ok.total})</span>`:'');
     }else if(c.map){
       front=`<button class="city-erase" data-erase="${c.key}" title="รีเซ็ตเมืองนี้">${ERASE_SVG}</button>`;
       // เมืองที่มีชั้นย่อย (มือถือ): ไม่โชว์ยอดรวมที่หัว — ไปแสดง %รายชั้นแทน
