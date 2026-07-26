@@ -597,6 +597,14 @@
   .bc-tile .placed{position:absolute;bottom:6px;right:7px;font-size:10px;color:#7fe0a0;background:#12331f;border-radius:6px;padding:1px 6px;}
   .bc-tile .noplace{position:absolute;bottom:6px;right:7px;font-size:10px;color:var(--muted);}
   .bc-empty{font-size:13px;color:var(--muted);padding:24px 6px;text-align:center;}
+  /* ป้าย Elite "เร็วๆ นี้" ตัวใหญ่กลางจอ */
+  .bc-soon{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+    min-height:52vh;text-align:center;padding:20px;}
+  .bc-soon-ic{color:#e2553f;}
+  .bc-soon-ic svg{width:64px;height:64px;}
+  .bc-soon-big{font-size:34px;font-weight:800;letter-spacing:2px;color:var(--text);}
+  .bc-soon-sub{font-size:18px;font-weight:600;color:#ff9a86;letter-spacing:.5px;}
+  @media(max-width:768px){ .bc-soon-big{font-size:26px;} .bc-soon-sub{font-size:15px;} .bc-soon-ic svg{width:52px;height:52px;} }
   /* แผงจับเวลาแชแนล (มุมซ้ายบนของ stage โหมดล่าบอส) */
   /* แผงจับเวลาบอส — มุมขวาบน สไตล์/ขนาดเดียวกับป็อปอัปการ์ด/อาหาร */
   .boss-panel{position:absolute;top:12px;right:12px;z-index:70;width:216px;
@@ -1593,6 +1601,10 @@ function buildBossCatalog(){
   const list=(BOSS[bossCatType]||[]).slice().sort((a,b)=>a.lv-b.lv);
   bcBody.innerHTML='';
   document.querySelectorAll('.bc-tab,.bside-tab').forEach(t=>t.classList.toggle('on',t.dataset.btype===bossCatType));
+  if(bossCatType==='elite'){   // Elite ยังไม่เปิดใช้งาน — โชว์ป้าย "เร็วๆ นี้" ตัวใหญ่
+    bcBody.innerHTML='<div class="bc-soon"><i class="bc-soon-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></i><div class="bc-soon-big">ELITE BOSS</div><div class="bc-soon-sub">จะอัปเดตในเร็วๆ นี้</div></div>';
+    return;
+  }
   if(!list.length){ bcBody.innerHTML='<div class="bc-empty">'+(BOSS_ERR?('⚠ '+BOSS_ERR):'ยังไม่มีบอสประเภทนี้ — ใส่รูปใน boss/'+bossCatType+' แล้วรัน node tools/build-boss.js')+'</div>'; return; }
   let curRange=null, grid=null;
   list.forEach(b=>{
