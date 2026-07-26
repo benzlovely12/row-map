@@ -546,8 +546,10 @@
   .collab-donor.open .donor-caret{transform:rotate(180deg);}
   .collab-donor .donor-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
     max-height:0;overflow:hidden;margin:0;transition:max-height .3s ease,margin .3s ease;}
-  .collab-donor.open .donor-list{max-height:600px;margin:10px 0 0;}
+  .collab-donor.open .donor-list{max-height:min(42vh,360px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;margin:10px 0 0;padding-right:2px;}
   .collab-donor .donor-card{justify-content:center;text-align:center;flex-direction:column;gap:2px;padding:8px 6px;}
+  /* แถวแรก: ไม่ทราบชื่อผู้โดเนท — เต็มแถว (span 3 คอลัมน์) */
+  .collab-donor .donor-unknown{grid-column:1 / -1;color:var(--muted);font-size:12.5px;font-weight:600;background:transparent;border-style:dashed;}
   .collab-enter{margin-top:15px;background:transparent;border:none;color:var(--muted);
     font-size:13px;cursor:pointer;text-decoration:underline;}
   .collab-enter:hover{color:var(--text);}
@@ -907,7 +909,7 @@
     <div class="collab-donor" id="collabDonor">
       <p class="collab-donor-title" id="donorToggle"><span class="dt-lead">🙏 ขอบคุณผู้สนับสนุนโปรเจกต์นี้ <span class="donor-count"></span></span><span class="dt-hint" id="donorHint">แตะดูรายชื่อ <span class="donor-caret">▾</span></span></p>
       <div class="donor-list">
-        <div class="donor-card" data-count="44">ไม่ทราบชื่อ <span class="donor-amt">44 คน</span></div>
+        <div class="donor-card donor-unknown" data-count="44">ไม่ทราบชื่อผู้โดเนท จำนวน 44 คน</div>
         <div class="donor-card">คุณเจษฎา</div>
         <div class="donor-card">คุณอัษฎา</div>
         <div class="donor-card">คุณธัญญพัฒน์</div>
