@@ -331,10 +331,16 @@
   /* มือถือ: ชั้นย่อยซ้อนใน dropdown เมือง (แทน floorbar) */
   .city-caret{font-size:10px;color:var(--muted);margin-left:6px;display:inline-block;transition:transform .15s;}
   .city-caret.open{transform:rotate(90deg);color:var(--accent);}
-  .floor-item{padding:9px 14px 9px 26px;margin:1px 6px 1px 16px;border-left:2px solid var(--border);
+  .floor-item{display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+    padding:9px 12px 9px 22px;margin:1px 6px 1px 16px;border-left:2px solid var(--border);
     color:var(--muted);font-size:13px;cursor:pointer;border-radius:0 8px 8px 0;}
   .floor-item:active,.floor-item:hover{color:var(--text);}
   .floor-item.active{background:#233052;border-left-color:var(--accent);color:#cfe0ff;font-weight:600;}
+  .floor-item .fl-name{flex:0 0 auto;}
+  .floor-item .city-pct{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;color:#9be29b;}
+  .floor-item .city-pct:first-of-type{margin-left:auto;}
+  .floor-item .city-pct.card{color:#b9a7ff;}
+  .floor-item .city-pct.cook{color:#f2c94c;}
   .zoomctl{position:absolute;right:16px;bottom:16px;display:flex;flex-direction:column;gap:6px;}
   .zoomctl button{width:38px;height:38px;border-radius:9px;background:var(--panel);
     border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;}
@@ -2037,6 +2043,13 @@ function cityPercentOne(key){
   });
   return {total,got};
 }
+/* %รายชั้นเดียว (ไม่รวมชั้นอื่น) — ใช้กระจาย % ในลิสต์ dropdown มือถือ */
+function _isBoxMk(m){ const d=ICONS[m.type]; return d && GROUPS[d.group]; }
+function keyPct(key,pred){
+  let t=0,g=0; const col=personal.collected[key]||{};
+  (state.markers[key]||[]).forEach(m=>{ if(!pred(m))return; t++; if(col[m.id])g++; });
+  return {total:t,got:g,pct:t?Math.round(g/t*100):0};
+}
 /* เปอร์เซ็นต์การ์ดของเมือง (รวมทุกชั้นย่อย) — นับแยกจากกล่อง ไม่ปนกัน */
 function cityCardPercent(key){
   const c=CITIES[key];
@@ -2092,12 +2105,15 @@ function buildCityMenu(){
       right='';
     }else if(c.map){
       front=`<button class="city-erase" data-erase="${c.key}" title="รีเซ็ตเมืองนี้">${ERASE_SVG}</button>`;
-      const p=cityPercent(c.key);
-      const cd=cityCardPercent(c.key);
-      const ck=cityCookPercent(c.key);
-      right=`<span class="city-pct">${p.pct}% (${p.got}/${p.total})</span>`
-           + (cd.total?`<span class="city-pct card">${cd.pct}% (${cd.got}/${cd.total})</span>`:'')
-           + (ck.total?`<span class="city-pct cook">${ck.pct}% (${ck.got}/${ck.total})</span>`:'');
+      // เมืองที่มีชั้นย่อย (มือถือ): ไม่โชว์ยอดรวมที่หัว — ไปแสดง %รายชั้นแทน
+      if(!hasFloors){
+        const p=cityPercent(c.key);
+        const cd=cityCardPercent(c.key);
+        const ck=cityCookPercent(c.key);
+        right=`<span class="city-pct">${p.pct}% (${p.got}/${p.total})</span>`
+             + (cd.total?`<span class="city-pct card">${cd.pct}% (${cd.got}/${cd.total})</span>`:'')
+             + (ck.total?`<span class="city-pct cook">${ck.pct}% (${ck.got}/${ck.total})</span>`:'');
+      }
     }else{
       front=`<span class="erase-cap"></span>`;
       right='<span class="soon-tag">เร็วๆ นี้</span>';
@@ -2119,7 +2135,12 @@ function buildCityMenu(){
       c.floors.forEach(f=>{
         const fr=document.createElement('div');
         fr.className='floor-item'+(f.key===CITY?' active':'');
-        fr.textContent=(f.key===c.key?c.name:f.label);   // ชั้นแรก = ชื่อเมืองหลัก
+        const label=(f.key===c.key?c.name:f.label);      // ชั้นแรก = ชื่อเมืองหลัก
+        const bp=keyPct(f.key,_isBoxMk), cp=keyPct(f.key,m=>m.type==='card'), kp=keyPct(f.key,m=>m.type==='cooking');
+        const badges=`<span class="city-pct">${bp.pct}% (${bp.got}/${bp.total})</span>`
+          +(cp.total?`<span class="city-pct card">${cp.pct}% (${cp.got}/${cp.total})</span>`:'')
+          +(kp.total?`<span class="city-pct cook">${kp.pct}% (${kp.got}/${kp.total})</span>`:'');
+        fr.innerHTML=`<span class="fl-name">${escHtml(label)}</span>${badges}`;
         fr.addEventListener('click',e=>{ e.stopPropagation(); closeCityMenu(); switchCity(f.key); });
         cityMenu.appendChild(fr);
       });
