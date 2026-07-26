@@ -192,7 +192,7 @@
   /* โหมดแผนที่: ปิด gesture ของเบราว์เซอร์ (ซูมทั้งหน้า/ดับเบิลแท็ปซูม/สกอลล์) ให้เหลือแต่ของเรา */
   .stage-wrap.mapmode{touch-action:none;-webkit-user-select:none;user-select:none;}
   .stage-wrap.mapmode .stage,.stage-wrap.mapmode .marker{touch-action:none;}
-  .stage-wrap.mapmode .floorbar,.stage-wrap.mapmode .zoomctl,
+  .stage-wrap.mapmode .zoomctl,
   .stage-wrap.mapmode .card-info{touch-action:manipulation;}
   .map-img{display:block;pointer-events:none;-webkit-user-drag:none;}
   .marker{position:absolute;transform:translate(-50%,-50%) scale(var(--mk-scale,1));cursor:pointer;
@@ -313,22 +313,7 @@
   .empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     color:var(--muted);font-size:15px;text-align:center;padding:40px;}
 
-  .floorbar{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:40;
-    display:flex;gap:4px;background:rgba(24,27,34,.92);border:1px solid var(--border);
-    border-radius:10px;padding:4px;box-shadow:var(--shadow);}
-  .floorbar button{background:transparent;border:none;color:var(--muted);cursor:pointer;
-    font-size:13px;font-weight:600;padding:7px 14px;border-radius:7px;white-space:nowrap;}
-  .floorbar button:hover{color:var(--text);background:var(--panel2);}
-  .floorbar button.active{background:var(--accent2);color:#fff;}
-  /* มือถือ: แถบชั้นยาวเกินจอ -> เรียงลงมาแนวตั้ง ชิดมุมซ้ายบน (กันไปทับแผงการ์ดที่มุมขวา) */
-  @media(max-width:760px){
-    .floorbar{top:8px;left:8px;transform:none;flex-direction:column;align-items:stretch;
-      gap:3px;max-width:min(52vw,190px);max-height:calc(100% - 16px);overflow-y:auto;
-      overscroll-behavior:contain;}
-    .floorbar button{text-align:left;font-size:12px;padding:7px 10px;
-      white-space:normal;line-height:1.3;}
-  }
-  /* มือถือ: ชั้นย่อยซ้อนใน dropdown เมือง (แทน floorbar) */
+  /* ชั้นย่อยซ้อนใน dropdown เมือง (ทุกจอ) */
   .city-caret{font-size:10px;color:var(--muted);margin-left:6px;display:inline-block;transition:transform .15s;}
   .city-caret.open{transform:rotate(90deg);color:var(--accent);}
   .floor-item{display:flex;align-items:center;gap:6px;flex-wrap:wrap;
@@ -756,7 +741,6 @@
       <button class="btn primary" id="lockBtn" style="display:none;">🔓 เปิดแก้ไขกล่อง</button>
     </div>
     <div class="stage-wrap" id="stageWrap">
-      <div class="floorbar" id="floorbar" style="display:none;"></div>
       <div class="stage" id="stage">
         <img class="map-img" id="mapImg" src="Novice%20village/Novice_village_full_map.png" alt="Novice Village map">
         <!-- markers injected here -->
@@ -2091,10 +2075,10 @@ const ERASE_SVG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 let expandedCity=null;   // มือถือ: เมืองที่กางชั้นย่อยอยู่ใน dropdown
 function buildCityMenu(){
   cityMenu.innerHTML='';
-  const mobile=_isMobile();
   const parKey=(parentCity(CITY)||{}).key;
   CITY_LIST.forEach(c=>{
-    const hasFloors = mobile && c.floors && c.floors.length>1;
+    const hasFloors = !!c.map;                           // ทุกเมืองที่มีแมพ กางเป็นแถวย่อยได้ (ทุกจอ สม่ำเสมอ)
+    const floorsList = (c.floors && c.floors.length) ? c.floors : [{key:c.key, label:c.name}];
     const item=document.createElement('div');
     const isActive = (c.key===CITY) || (c.key===parKey);
     item.className='city-item'+(isActive?' active':'')+((!c.map&&!c.welcome)?' soon':'');
@@ -2131,8 +2115,8 @@ function buildCityMenu(){
       closeCityMenu(); switchCity(c.key);
     });
     cityMenu.appendChild(item);
-    if(hasFloors && expandedCity===c.key){             // กางชั้นย่อยใต้เมืองนั้น
-      c.floors.forEach(f=>{
+    if(hasFloors && expandedCity===c.key){             // กางชั้นย่อยใต้เมืองนั้น (เมืองไม่มีชั้น = แถวเดียวของตัวเอง)
+      floorsList.forEach(f=>{
         const fr=document.createElement('div');
         fr.className='floor-item'+(f.key===CITY?' active':'');
         const label=(f.key===c.key?c.name:f.label);      // ชั้นแรก = ชื่อเมืองหลัก
@@ -2286,8 +2270,6 @@ function positionCityMenu(){
   cityMenu.style.top=Math.round(r.bottom+6)+'px';               // มือถือ: แถบบนสูงไม่คงที่ ต้องวัดจริง
 }
 function openCityMenu(){ closePresetMenu(); expandedCity=(parentCity(CITY)||{}).key||null; buildCityMenu(); cityMenu.classList.add('open'); positionCityMenu(); }
-/* สลับมือถือ/คอม (หมุนจอ/ย่อขยาย) -> สลับ floorbar กับชั้นซ้อนใน dropdown ให้ถูก */
-window.addEventListener('resize',()=>{ renderFloorbar(CITY); if(cityMenu.classList.contains('open')) buildCityMenu(); });
 window.addEventListener('resize',function(){ if(cityMenu.classList.contains('open')) positionCityMenu(); });
 function closeCityMenu(){ cityMenu.classList.remove('open'); }
 cityBtn.addEventListener('click',e=>{ e.stopPropagation(); cityMenu.classList.contains('open')?closeCityMenu():openCityMenu(); });
@@ -2300,24 +2282,6 @@ function parentCity(key){
   if(c&&c.parent) return CITIES[c.parent];
   return c;
 }
-function _isMobile(){ return window.matchMedia('(max-width:768px)').matches; }
-function renderFloorbar(city){
-  const floorbar=document.getElementById('floorbar');
-  const par=parentCity(city);
-  if(par&&par.floors&&!_isMobile()){   // มือถือ: ใช้ชั้นซ้อนใน dropdown แทน (ไม่โชว์ floorbar ลอย)
-    floorbar.innerHTML='';
-    par.floors.forEach(f=>{
-      const b=document.createElement('button');
-      b.textContent=(f.key===par.key?par.name:f.label);   // ชั้นแรก = ชื่อเมืองหลัก
-      b.className=(f.key===city?'active':'');
-      b.addEventListener('click',()=>switchCity(f.key));
-      floorbar.appendChild(b);
-    });
-    floorbar.style.display='flex';
-  }else{
-    floorbar.style.display='none';
-  }
-}
 function switchCity(city){
   if(!CITIES[city])return;
   CITY=city;
@@ -2325,7 +2289,6 @@ function switchCity(city){
   // ป้ายปุ่มเมือง: ถ้าเป็นชั้นย่อย ให้โชว์ชื่อเมืองแม่
   const par=parentCity(city);
   cityBtnLabel.textContent=(par&&par.name)||def.name;
-  renderFloorbar(city);
   const welcomeEl=document.getElementById('welcome');
   if(def.welcome){
     welcomeEl.style.display='flex';
