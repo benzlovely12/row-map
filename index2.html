@@ -1629,7 +1629,8 @@ function floorLabel(key){
   const par=parentCity(key);
   if(!par||!par.floors)return '';
   const f=par.floors.find(x=>x.key===key);
-  return f?f.label:'';
+  if(!f)return '';
+  return (f.key===par.key?par.name:f.label);   // ชั้นแรก = ชื่อเมืองหลัก
 }
 /* ทุก key ของเมืองที่เปิดอยู่ (ถ้ามีชั้นย่อย = ทุกชั้น) */
 function floorKeys(key){
@@ -2105,6 +2106,7 @@ function buildCityMenu(){
     item.innerHTML=`${front}<span class="city-name">${c.name}${caret}</span>${right}`;
     if(c.map||c.welcome) item.addEventListener('click',e=>{
       if(e.target.closest('.city-erase'))return;
+      e.stopPropagation();                             // กัน document-handler ปิดเมนูตอน re-render
       if(hasFloors){                                   // มือถือ+มีชั้นย่อย: แตะเพื่อกาง/หุบ (ไม่สลับทันที)
         expandedCity = (expandedCity===c.key ? null : c.key);
         buildCityMenu();
@@ -2117,8 +2119,8 @@ function buildCityMenu(){
       c.floors.forEach(f=>{
         const fr=document.createElement('div');
         fr.className='floor-item'+(f.key===CITY?' active':'');
-        fr.textContent=f.label;
-        fr.addEventListener('click',()=>{ closeCityMenu(); switchCity(f.key); });
+        fr.textContent=(f.key===c.key?c.name:f.label);   // ชั้นแรก = ชื่อเมืองหลัก
+        fr.addEventListener('click',e=>{ e.stopPropagation(); closeCityMenu(); switchCity(f.key); });
         cityMenu.appendChild(fr);
       });
     }
@@ -2285,7 +2287,7 @@ function renderFloorbar(city){
     floorbar.innerHTML='';
     par.floors.forEach(f=>{
       const b=document.createElement('button');
-      b.textContent=f.label;
+      b.textContent=(f.key===par.key?par.name:f.label);   // ชั้นแรก = ชื่อเมืองหลัก
       b.className=(f.key===city?'active':'');
       b.addEventListener('click',()=>switchCity(f.key));
       floorbar.appendChild(b);
