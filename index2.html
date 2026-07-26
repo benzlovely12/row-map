@@ -604,16 +604,16 @@
   .bp-head{display:flex;align-items:center;gap:10px;padding-right:20px;}
   .bp-head img{width:44px;height:44px;object-fit:contain;border:1.5px solid #e2553f;border-radius:8px;background:#1a0d0b;padding:1px;flex:none;}
   .bp-name{font-size:15px;font-weight:700;color:var(--text);line-height:1.25;}
-  .bp-sub{font-size:11px;color:var(--muted);margin-top:1px;}
-  .bp-rows{border-top:1px solid var(--border);margin-top:11px;padding-top:9px;display:flex;flex-direction:column;gap:6px;}
-  .bp-row{display:flex;align-items:center;gap:8px;}
-  .bp-row .ch{font-size:12px;font-weight:700;color:var(--muted);width:30px;flex:none;}
-  .bp-row .tm{flex:1;font-size:12px;color:var(--muted);}
-  .bp-row.set .ch,.bp-row.set .tm{color:var(--good);}
-  .bp-row .act{font-size:11px;padding:4px 11px;border:1px solid var(--border);border-radius:7px;background:transparent;color:var(--text);cursor:pointer;flex:none;}
-  .bp-row .act:hover{border-color:#e2553f;color:#ff9a86;}
-  .bp-row.set .act{border-color:#3a4a5a;}
-  @media(max-width:760px){ .boss-panel{width:190px;top:8px;right:8px;padding:10px;} }
+  .bp-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4;}
+  .bp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;border-top:1px solid var(--border);margin-top:11px;padding-top:10px;}
+  .bp-cell{display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid var(--border);border-radius:10px;padding:7px 2px;cursor:pointer;background:transparent;}
+  .bp-cell:hover{border-color:#e2553f;}
+  .bp-cell .dot{width:26px;height:26px;border-radius:50%;border:1.5px solid #3a4152;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:var(--muted);}
+  .bp-cell .tt{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;line-height:1;}
+  .bp-cell.set{border-color:#2f6b46;background:#12331f;}
+  .bp-cell.set .dot{border-color:#2f6b46;background:#0f2a19;color:#7fe0a0;}
+  .bp-cell.set .tt{color:#b7f2cf;font-weight:600;}
+  @media(max-width:760px){ .boss-panel{width:198px;top:8px;right:8px;padding:10px;} }
 </style>
 </head>
 <body>
@@ -1280,7 +1280,7 @@ async function loadCooking(){
 let BOSS = {mini:[], elite:[]};
 const BOSS_BY_KEY = {};
 let BOSS_ERR = null;
-const BOSS_CHANNELS = 5;
+const BOSS_CHANNELS = 6;
 const BOSS_TIMES_KEY = "row_boss_times_v1";
 let bossTimes = {};   // { bossKey: { "1": ms, ... } }
 try{ bossTimes = JSON.parse(localStorage.getItem(BOSS_TIMES_KEY))||{}; }catch(e){ bossTimes={}; }
@@ -1591,25 +1591,23 @@ function fmtKill(ms){ const d=new Date(ms); const p=n=>(n<10?'0':'')+n; return p
 function renderBossPanel(b){
   hideCardInfo();                       // กันซ้อนกับป็อปอัปการ์ด/อาหาร (มุมขวาบนเดียวกัน)
   const t=bossTimes[b.key]||{};
-  const nPts=bossMarkers(b.key).length;
-  let rows='';
+  let cells='';
   for(let c=1;c<=BOSS_CHANNELS;c++){
     const ms=t[c];
-    rows+=`<div class="bp-row${ms?' set':''}"><span class="ch">CH${c}</span>`
-      +`<span class="tm">${ms?('ฆ่า '+fmtKill(ms)+' น.'):'ยังไม่จับ'}</span>`
-      +`<button class="act" data-ch="${c}">${ms?'ล้าง':'ฆ่า'}</button></div>`;
+    cells+=`<button class="bp-cell${ms?' set':''}" data-ch="${c}">`
+      +`<span class="dot">${c}</span><span class="tt">${ms?fmtKill(ms):'—'}</span></button>`;
   }
   bossPanelEl.innerHTML=
     `<button class="bp-back" id="bpBack" aria-label="กลับตารางบอส" title="กลับตารางบอส">‹</button>`
     +`<div class="bp-head"><img src="${encodeURI(b.file)}" alt=""><div>`
     +`<div class="bp-name">${escHtml(b.name)}</div>`
-    +`<div class="bp-sub">${b.type==='elite'?'Elite':'Mini'} · Lv.${b.lv}${nPts?(' · '+nPts+' จุด'):''}</div></div></div>`
-    +`<div class="bp-rows">${rows}</div>`;
+    +`<div class="bp-sub">แตะเลขแชแนลเพื่อบันทึกเวลาที่ล้มบอส</div></div></div>`
+    +`<div class="bp-grid">${cells}</div>`;
   bossPanelEl.querySelector('#bpBack').onclick=()=>exitBossHunt(true);
-  bossPanelEl.querySelectorAll('.act').forEach(btn=>btn.onclick=()=>{
+  bossPanelEl.querySelectorAll('.bp-cell').forEach(btn=>btn.onclick=()=>{
     const c=btn.dataset.ch; if(!bossTimes[b.key])bossTimes[b.key]={};
     if(bossTimes[b.key][c]){ delete bossTimes[b.key][c]; }                 // แตะซ้ำ = ล้าง
-    else { bossTimes[b.key][c]=Date.now(); toast('บันทึกเวลา '+b.name+' CH'+c); }   // แตะ = ฆ่า(บันทึกเวลา)
+    else { bossTimes[b.key][c]=Date.now(); toast('บันทึกเวลา '+b.name+' CH'+c); }   // แตะ = บันทึกเวลาตาย
     saveBossTimes(); renderBossPanel(b);
   });
 }
