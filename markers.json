@@ -1948,6 +1948,24 @@
         "x": 1761,
         "y": 1761,
         "boss": "mini_DragonFly_50"
+      },
+      {
+        "id": 1276,
+        "type": "high",
+        "x": 1249,
+        "y": 1787
+      },
+      {
+        "id": 1281,
+        "type": "butterfly",
+        "x": 1164,
+        "y": 1149
+      },
+      {
+        "id": 1282,
+        "type": "sun",
+        "x": 962,
+        "y": 941
       }
     ],
     "novice": [
@@ -2212,6 +2230,24 @@
         "x": 278,
         "y": 941,
         "cook": "squid_tentacle_soup_38"
+      },
+      {
+        "id": 1274,
+        "type": "box",
+        "x": 806,
+        "y": 614
+      },
+      {
+        "id": 1283,
+        "type": "high",
+        "x": 772,
+        "y": 616
+      },
+      {
+        "id": 1284,
+        "type": "sun",
+        "x": 1054,
+        "y": 793
       }
     ],
     "byalan": [
@@ -3556,6 +3592,12 @@
         "x": 2482,
         "y": 3026,
         "cook": "fried_sweet_potato_38"
+      },
+      {
+        "id": 1277,
+        "type": "sun",
+        "x": 3504,
+        "y": 340
       }
     ],
     "goblin": [
@@ -5390,6 +5432,18 @@
         "x": 983,
         "y": 2149,
         "boss": "mini_Gryphon_105"
+      },
+      {
+        "id": 1275,
+        "type": "rain",
+        "x": 3118,
+        "y": 1738
+      },
+      {
+        "id": 1278,
+        "type": "rain",
+        "x": 1182,
+        "y": 1801
       }
     ],
     "geffenriver": [
@@ -7567,6 +7621,27 @@
         "x": 208,
         "y": 554,
         "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1273,
+        "type": "boss",
+        "x": 70,
+        "y": 68,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1279,
+        "type": "boss",
+        "x": 230,
+        "y": 421,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1280,
+        "type": "boss",
+        "x": 564,
+        "y": 107,
+        "boss": "mini_VagabondWolf_60"
       }
     ],
     "prontera3": [
@@ -7685,5 +7760,24 @@
         "boss": "mini_YaoJun_60"
       }
     ]
+  },
+  "iconScales": {
+    "prontera2": 0.4,
+    "prontera3": 0.5,
+    "prontera4": 0.5,
+    "prontera5": 0.5,
+    "morroc5": 0.5,
+    "morroc7": 0.45,
+    "alberta": 0.7,
+    "alberta2": 0.6,
+    "byalan2": 0.55,
+    "byalan3": 0.5,
+    "payon3": 0.5,
+    "goblin": 0.8,
+    "goblin2": 0.5,
+    "geffenriver": 0.9,
+    "izlude": 0.75,
+    "glastheim": 0.55,
+    "sakura": 0.55
   }
 }
