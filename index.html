@@ -763,7 +763,7 @@
       </div>
       <button class="btn" id="pubBtn" style="display:none;" title="โหลดข้อมูลหลัก (ล้างฉบับร่างในเครื่อง) — สำหรับแอดมิน">☁ Update</button>
       <span class="topbar-meta">
-        <span class="update-date">อัปเดตล่าสุดวันที่ 26/7/2569</span>
+        <span class="update-date">อัปเดตล่าสุดวันที่ 2/8/2569</span>
         <img src="https://visitor-badge.laobi.icu/badge?page_id=benzlovely12.row-map&left_color=%231c1f27&right_color=%235b8cff&left_text=visitors" alt="visitors" class="visitor-badge">
       </span>
       <div class="spacer"></div>
@@ -859,11 +859,13 @@
             <div class="cl-row"><span class="cl-date">22/07/2569</span><span class="cl-ver">V 8.00</span><span class="cl-desc">[เพิ่มระบบแผนที่ย่อย — เหมืองร้าง เรือจม ถ้ำออร์ค ป่าเขาวงกต และท่อระบายน้ำ]</span></div>
             <div class="cl-row"><span class="cl-date">22/07/2569</span><span class="cl-ver">V 8.00</span><span class="cl-desc">[แก้ไขปัญหาการเชื่อมต่อข้ามอุปกรณ์]</span></div>
             <div class="cl-row"><span class="cl-date">22/07/2569</span><span class="cl-ver">V 8.00</span><span class="cl-desc">[แก้ไขปัญหาซูมด้วยสองนิ้วบางกรณีแล้ว UI ซูมตามไปด้วย]</span></div>
-            <div class="cl-row latest"><span class="cl-date">26/07/2569</span><span class="cl-ver">V 9.00</span><span class="cl-desc">[เพิ่มข้อมูลการเก็บเมนูอาหาร] <span class="cl-tag">ล่าสุด</span></span></div>
-            <div class="cl-row latest"><span class="cl-date">26/07/2569</span><span class="cl-ver">V 9.00</span><span class="cl-desc">[เพิ่มแผนที่ย่อย — มอร็อค (รังมด/พีระมิด/สฟิงซ์) และพายอน (ถ้ำมูนัก)] <span class="cl-tag">ล่าสุด</span></span></div>
-            <div class="cl-row latest"><span class="cl-date">26/07/2569</span><span class="cl-ver">V 9.00</span><span class="cl-desc">[เพิ่มระบบค้นหา MINI BOSS พร้อมจดบันทึกเวลาตายแยกแชแนล] <span class="cl-tag">ล่าสุด</span></span></div>
-            <div class="cl-row latest"><span class="cl-date">26/07/2569</span><span class="cl-ver">V 9.00</span><span class="cl-desc">[ปรับปรุง UX/UI บางส่วนให้ดียิ่งขึ้น] <span class="cl-tag">ล่าสุด</span></span></div>
-            <div class="cl-row latest"><span class="cl-date">26/07/2569</span><span class="cl-ver">V 9.00</span><span class="cl-desc">[เพิ่มกล่องฝนตก กล่องที่สูง ตามแผนที่ต่างๆ หลายจุด] <span class="cl-tag">ล่าสุด</span></span></div>
+            <div class="cl-row"><span class="cl-date">26/07/2569</span><span class="cl-ver">V 9.00</span><span class="cl-desc">[เพิ่มข้อมูลการเก็บเมนูอาหาร]</span></div>
+            <div class="cl-row"><span class="cl-date">26/07/2569</span><span class="cl-ver">V 9.00</span><span class="cl-desc">[เพิ่มแผนที่ย่อย — มอร็อค (รังมด/พีระมิด/สฟิงซ์) และพายอน (ถ้ำมูนัก)]</span></div>
+            <div class="cl-row"><span class="cl-date">26/07/2569</span><span class="cl-ver">V 9.00</span><span class="cl-desc">[เพิ่มระบบค้นหา MINI BOSS พร้อมจดบันทึกเวลาตายแยกแชแนล]</span></div>
+            <div class="cl-row"><span class="cl-date">26/07/2569</span><span class="cl-ver">V 9.00</span><span class="cl-desc">[ปรับปรุง UX/UI บางส่วนให้ดียิ่งขึ้น]</span></div>
+            <div class="cl-row"><span class="cl-date">26/07/2569</span><span class="cl-ver">V 9.00</span><span class="cl-desc">[เพิ่มกล่องฝนตก กล่องที่สูง ตามแผนที่ต่างๆ หลายจุด]</span></div>
+            <div class="cl-row latest"><span class="cl-date">02/08/2569</span><span class="cl-ver">V 9.01</span><span class="cl-desc">[เพิ่มระบบค้นหา ELITE BOSS พร้อมจดบันทึกเวลาตายแยกแชแนล] <span class="cl-tag">ล่าสุด</span></span></div>
+            <div class="cl-row latest"><span class="cl-date">02/08/2569</span><span class="cl-ver">V 9.01</span><span class="cl-desc">[เพิ่มกล่องในจุดต่าง ๆ] <span class="cl-tag">ล่าสุด</span></span></div>
           </div>
         </div>
       </div>
@@ -1601,10 +1603,6 @@ function buildBossCatalog(){
   const list=(BOSS[bossCatType]||[]).slice().sort((a,b)=>a.lv-b.lv);
   bcBody.innerHTML='';
   document.querySelectorAll('.bc-tab,.bside-tab').forEach(t=>t.classList.toggle('on',t.dataset.btype===bossCatType));
-  if(bossCatType==='elite'){   // Elite ยังไม่เปิดใช้งาน — โชว์ป้าย "เร็วๆ นี้" ตัวใหญ่
-    bcBody.innerHTML='<div class="bc-soon"><i class="bc-soon-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></i><div class="bc-soon-big">ELITE BOSS</div><div class="bc-soon-sub">จะอัปเดตในเร็วๆ นี้</div></div>';
-    return;
-  }
   if(!list.length){ bcBody.innerHTML='<div class="bc-empty">'+(BOSS_ERR?('⚠ '+BOSS_ERR):'ยังไม่มีบอสประเภทนี้ — ใส่รูปใน boss/'+bossCatType+' แล้วรัน node tools/build-boss.js')+'</div>'; return; }
   let curRange=null, grid=null;
   list.forEach(b=>{
@@ -1630,7 +1628,6 @@ function closeBossCatalog(){ bossCatalogEl.classList.remove('show'); }
 
 function openBossHunt(key){
   const b=bossInfo(key); if(!b)return;
-  if(b.type==='elite'){ toast('บอส Elite จะอัปเดตในเร็วๆ นี้'); return; }   // Elite ยังไม่เปิด
   huntBoss=key; closeBossCatalog();
   const mk=bossMarkers(key);
   renderBossPanel(b);
