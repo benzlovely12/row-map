@@ -1141,6 +1141,118 @@
         "x": 821,
         "y": 1221,
         "boss": "mini_020_vocal"
+      },
+      {
+        "id": 1372,
+        "type": "boss",
+        "x": 1640,
+        "y": 567,
+        "boss": "elite_040_swift_yoyo"
+      },
+      {
+        "id": 1373,
+        "type": "boss",
+        "x": 1832,
+        "y": 549,
+        "boss": "elite_040_swift_yoyo"
+      },
+      {
+        "id": 1374,
+        "type": "boss",
+        "x": 1780,
+        "y": 673,
+        "boss": "elite_040_swift_yoyo"
+      },
+      {
+        "id": 1375,
+        "type": "boss",
+        "x": 1932,
+        "y": 594,
+        "boss": "elite_040_swift_yoyo"
+      },
+      {
+        "id": 1376,
+        "type": "boss",
+        "x": 963,
+        "y": 249,
+        "boss": "elite_010_solid_lunatic"
+      },
+      {
+        "id": 1377,
+        "type": "boss",
+        "x": 992,
+        "y": 420,
+        "boss": "elite_010_solid_lunatic"
+      },
+      {
+        "id": 1378,
+        "type": "boss",
+        "x": 1184,
+        "y": 474,
+        "boss": "elite_010_solid_lunatic"
+      },
+      {
+        "id": 1379,
+        "type": "boss",
+        "x": 1327,
+        "y": 516,
+        "boss": "elite_010_solid_lunatic"
+      },
+      {
+        "id": 1380,
+        "type": "boss",
+        "x": 1712,
+        "y": 1006,
+        "boss": "elite_010_solid_fabre"
+      },
+      {
+        "id": 1381,
+        "type": "boss",
+        "x": 1751,
+        "y": 1123,
+        "boss": "elite_010_solid_fabre"
+      },
+      {
+        "id": 1382,
+        "type": "boss",
+        "x": 1827,
+        "y": 832,
+        "boss": "elite_010_solid_fabre"
+      },
+      {
+        "id": 1383,
+        "type": "boss",
+        "x": 1916,
+        "y": 974,
+        "boss": "elite_010_solid_fabre"
+      },
+      {
+        "id": 1384,
+        "type": "boss",
+        "x": 357,
+        "y": 849,
+        "boss": "elite_010_elusive_hornet"
+      },
+      {
+        "id": 1385,
+        "type": "boss",
+        "x": 469,
+        "y": 929,
+        "boss": "elite_010_elusive_hornet"
+      },
+      {
+        "id": 1386,
+        "type": "boss",
+        "x": 626,
+        "y": 990,
+        "boss": "elite_010_elusive_hornet"
+      },
+      {
+        "id": 1387,
+        "type": "boss",
+        "x": 382,
+        "y": 1189,
+        "boss": "elite_010_elusive_hornet"
       }
     ],
     "morroc": [
@@ -1966,6 +2078,118 @@
         "type": "sun",
         "x": 962,
         "y": 941
+      },
+      {
+        "id": 1388,
+        "type": "boss",
+        "x": 1506,
+        "y": 1633,
+        "boss": "elite_015_desert_wolf_ringleader"
+      },
+      {
+        "id": 1389,
+        "type": "boss",
+        "x": 1885,
+        "y": 1608,
+        "boss": "elite_015_desert_wolf_ringleader"
+      },
+      {
+        "id": 1390,
+        "type": "boss",
+        "x": 1504,
+        "y": 1980,
+        "boss": "elite_015_desert_wolf_ringleader"
+      },
+      {
+        "id": 1391,
+        "type": "boss",
+        "x": 1848,
+        "y": 1982,
+        "boss": "elite_010_elusive_hornet"
+      },
+      {
+        "id": 1392,
+        "type": "boss",
+        "x": 873,
+        "y": 313,
+        "boss": "elite_005_drops_ringleader"
+      },
+      {
+        "id": 1393,
+        "type": "boss",
+        "x": 1131,
+        "y": 348,
+        "boss": "elite_005_drops_ringleader"
+      },
+      {
+        "id": 1394,
+        "type": "boss",
+        "x": 843,
+        "y": 443,
+        "boss": "elite_005_drops_ringleader"
+      },
+      {
+        "id": 1395,
+        "type": "boss",
+        "x": 1183,
+        "y": 456,
+        "boss": "elite_005_drops_ringleader"
+      },
+      {
+        "id": 1396,
+        "type": "boss",
+        "x": 1658,
+        "y": 1697,
+        "boss": "elite_030_elite_baby_desert_wolf"
+      },
+      {
+        "id": 1397,
+        "type": "boss",
+        "x": 1543,
+        "y": 1873,
+        "boss": "elite_030_elite_baby_desert_wolf"
+      },
+      {
+        "id": 1398,
+        "type": "boss",
+        "x": 1713,
+        "y": 1924,
+        "boss": "elite_030_elite_baby_desert_wolf"
+      },
+      {
+        "id": 1399,
+        "type": "boss",
+        "x": 1741,
+        "y": 1814,
+        "boss": "elite_030_elite_baby_desert_wolf"
+      },
+      {
+        "id": 1400,
+        "type": "boss",
+        "x": 786,
+        "y": 1635,
+        "boss": "elite_010_furious_picky"
+      },
+      {
+        "id": 1401,
+        "type": "boss",
+        "x": 961,
+        "y": 1650,
+        "boss": "elite_010_furious_picky"
+      },
+      {
+        "id": 1402,
+        "type": "boss",
+        "x": 1134,
+        "y": 1576,
+        "boss": "elite_010_furious_picky"
+      },
+      {
+        "id": 1403,
+        "type": "boss",
+        "x": 892,
+        "y": 1916,
+        "boss": "elite_010_furious_picky"
       }
     ],
     "novice": [
@@ -3846,6 +4070,62 @@
         "type": "rain",
         "x": 841,
         "y": 1540
+      },
+      {
+        "id": 1404,
+        "type": "boss",
+        "x": 616,
+        "y": 206,
+        "boss": "elite_045_solid_orc_lady"
+      },
+      {
+        "id": 1405,
+        "type": "boss",
+        "x": 431,
+        "y": 309,
+        "boss": "elite_045_solid_orc_lady"
+      },
+      {
+        "id": 1406,
+        "type": "boss",
+        "x": 737,
+        "y": 514,
+        "boss": "elite_045_solid_orc_lady"
+      },
+      {
+        "id": 1407,
+        "type": "boss",
+        "x": 777,
+        "y": 664,
+        "boss": "elite_045_solid_orc_lady"
+      },
+      {
+        "id": 1408,
+        "type": "boss",
+        "x": 459,
+        "y": 994,
+        "boss": "elite_050_elite_knife_goblin"
+      },
+      {
+        "id": 1409,
+        "type": "boss",
+        "x": 763,
+        "y": 1000,
+        "boss": "elite_050_elite_knife_goblin"
+      },
+      {
+        "id": 1410,
+        "type": "boss",
+        "x": 682,
+        "y": 1206,
+        "boss": "elite_040_swift_yoyo"
+      },
+      {
+        "id": 1411,
+        "type": "boss",
+        "x": 477,
+        "y": 1324,
+        "boss": "elite_050_elite_knife_goblin"
       }
     ],
     "geffen": [
@@ -5444,6 +5724,230 @@
         "type": "rain",
         "x": 1182,
         "y": 1801
+      },
+      {
+        "id": 1412,
+        "type": "boss",
+        "x": 401,
+        "y": 419,
+        "boss": "elite_085_mighty_groundpetite"
+      },
+      {
+        "id": 1413,
+        "type": "boss",
+        "x": 421,
+        "y": 891,
+        "boss": "elite_085_mighty_groundpetite"
+      },
+      {
+        "id": 1414,
+        "type": "boss",
+        "x": 734,
+        "y": 705,
+        "boss": "elite_085_mighty_groundpetite"
+      },
+      {
+        "id": 1415,
+        "type": "boss",
+        "x": 988,
+        "y": 718,
+        "boss": "elite_085_mighty_groundpetite"
+      },
+      {
+        "id": 1416,
+        "type": "boss",
+        "x": 2229,
+        "y": 1451,
+        "boss": "elite_030_poporing_ringleader"
+      },
+      {
+        "id": 1417,
+        "type": "boss",
+        "x": 2049,
+        "y": 1620,
+        "boss": "elite_030_poporing_ringleader"
+      },
+      {
+        "id": 1418,
+        "type": "boss",
+        "x": 1953,
+        "y": 1891,
+        "boss": "elite_030_poporing_ringleader"
+      },
+      {
+        "id": 1419,
+        "type": "boss",
+        "x": 2409,
+        "y": 1806,
+        "boss": "elite_030_poporing_ringleader"
+      },
+      {
+        "id": 1420,
+        "type": "boss",
+        "x": 4166,
+        "y": 2985,
+        "boss": "elite_015_roda_frog_ringleader"
+      },
+      {
+        "id": 1421,
+        "type": "boss",
+        "x": 4180,
+        "y": 3299,
+        "boss": "elite_015_roda_frog_ringleader"
+      },
+      {
+        "id": 1422,
+        "type": "boss",
+        "x": 4455,
+        "y": 3335,
+        "boss": "elite_015_roda_frog_ringleader"
+      },
+      {
+        "id": 1423,
+        "type": "boss",
+        "x": 4531,
+        "y": 3214,
+        "boss": "elite_015_roda_frog_ringleader"
+      },
+      {
+        "id": 1424,
+        "type": "boss",
+        "x": 3128,
+        "y": 457,
+        "boss": "elite_015_solid_mandragora"
+      },
+      {
+        "id": 1425,
+        "type": "boss",
+        "x": 3318,
+        "y": 376,
+        "boss": "elite_015_solid_mandragora"
+      },
+      {
+        "id": 1426,
+        "type": "boss",
+        "x": 2997,
+        "y": 1064,
+        "boss": "elite_015_solid_mandragora"
+      },
+      {
+        "id": 1427,
+        "type": "boss",
+        "x": 3321,
+        "y": 1088,
+        "boss": "elite_015_solid_mandragora"
+      },
+      {
+        "id": 1428,
+        "type": "boss",
+        "x": 4151,
+        "y": 537,
+        "boss": "elite_025_solid_poison_spore"
+      },
+      {
+        "id": 1429,
+        "type": "boss",
+        "x": 4564,
+        "y": 353,
+        "boss": "elite_025_solid_poison_spore"
+      },
+      {
+        "id": 1430,
+        "type": "boss",
+        "x": 4565,
+        "y": 682,
+        "boss": "elite_025_solid_poison_spore"
+      },
+      {
+        "id": 1431,
+        "type": "boss",
+        "x": 4601,
+        "y": 875,
+        "boss": "elite_025_solid_poison_spore"
+      },
+      {
+        "id": 1432,
+        "type": "boss",
+        "x": 3228,
+        "y": 3164,
+        "boss": "elite_040_swift_coco"
+      },
+      {
+        "id": 1433,
+        "type": "boss",
+        "x": 2699,
+        "y": 3355,
+        "boss": "elite_040_swift_coco"
+      },
+      {
+        "id": 1434,
+        "type": "boss",
+        "x": 2977,
+        "y": 3244,
+        "boss": "elite_040_swift_yoyo"
+      },
+      {
+        "id": 1435,
+        "type": "boss",
+        "x": 3401,
+        "y": 3309,
+        "boss": "elite_040_swift_coco"
+      },
+      {
+        "id": 1436,
+        "type": "boss",
+        "x": 1866,
+        "y": 538,
+        "boss": "elite_025_swift_creamy"
+      },
+      {
+        "id": 1437,
+        "type": "boss",
+        "x": 2087,
+        "y": 540,
+        "boss": "elite_025_swift_creamy"
+      },
+      {
+        "id": 1438,
+        "type": "boss",
+        "x": 1780,
+        "y": 806,
+        "boss": "elite_025_swift_creamy"
+      },
+      {
+        "id": 1439,
+        "type": "boss",
+        "x": 2124,
+        "y": 775,
+        "boss": "elite_025_swift_creamy"
+      },
+      {
+        "id": 1440,
+        "type": "boss",
+        "x": 555,
+        "y": 1637,
+        "boss": "elite_080_swift_flyingpetite"
+      },
+      {
+        "id": 1441,
+        "type": "boss",
+        "x": 612,
+        "y": 2069,
+        "boss": "elite_080_swift_flyingpetite"
+      },
+      {
+        "id": 1442,
+        "type": "boss",
+        "x": 1240,
+        "y": 2095,
+        "boss": "elite_080_swift_flyingpetite"
+      },
+      {
+        "id": 1443,
+        "type": "boss",
+        "x": 1105,
+        "y": 1655,
+        "boss": "elite_080_swift_flyingpetite"
       }
     ],
     "geffenriver": [
@@ -5742,6 +6246,62 @@
         "x": 420,
         "y": 1454,
         "card": "savage_babe_15"
+      },
+      {
+        "id": 1444,
+        "type": "boss",
+        "x": 454,
+        "y": 701,
+        "boss": "elite_020_elusive_ambernite"
+      },
+      {
+        "id": 1445,
+        "type": "boss",
+        "x": 735,
+        "y": 845,
+        "boss": "elite_020_elusive_ambernite"
+      },
+      {
+        "id": 1446,
+        "type": "boss",
+        "x": 1074,
+        "y": 879,
+        "boss": "elite_020_elusive_ambernite"
+      },
+      {
+        "id": 1447,
+        "type": "boss",
+        "x": 1215,
+        "y": 823,
+        "boss": "elite_020_elusive_ambernite"
+      },
+      {
+        "id": 1448,
+        "type": "boss",
+        "x": 1131,
+        "y": 646,
+        "boss": "elite_015_swift_savage_babe"
+      },
+      {
+        "id": 1449,
+        "type": "boss",
+        "x": 910,
+        "y": 189,
+        "boss": "elite_015_swift_savage_babe"
+      },
+      {
+        "id": 1450,
+        "type": "boss",
+        "x": 1097,
+        "y": 176,
+        "boss": "elite_015_swift_savage_babe"
+      },
+      {
+        "id": 1451,
+        "type": "boss",
+        "x": 1239,
+        "y": 171,
+        "boss": "elite_015_swift_savage_babe"
       }
     ],
     "mjolnir": [
@@ -6040,6 +6600,34 @@
         "x": 1475,
         "y": 460,
         "card": "driller_65"
+      },
+      {
+        "id": 1452,
+        "type": "boss",
+        "x": 932,
+        "y": 1488,
+        "boss": "elite_035_swift_elder_willow"
+      },
+      {
+        "id": 1453,
+        "type": "boss",
+        "x": 717,
+        "y": 1505,
+        "boss": "elite_035_swift_elder_willow"
+      },
+      {
+        "id": 1454,
+        "type": "boss",
+        "x": 692,
+        "y": 1690,
+        "boss": "elite_035_swift_elder_willow"
+      },
+      {
+        "id": 1455,
+        "type": "boss",
+        "x": 872,
+        "y": 1688,
+        "boss": "elite_035_swift_elder_willow"
       }
     ],
     "poring": [
@@ -6666,6 +7254,90 @@
         "x": 1862,
         "y": 765,
         "boss": "mini_140_heavy_metaling"
+      },
+      {
+        "id": 1456,
+        "type": "boss",
+        "x": 1235,
+        "y": 1202,
+        "boss": "elite_025_furious_toucan"
+      },
+      {
+        "id": 1457,
+        "type": "boss",
+        "x": 1546,
+        "y": 1326,
+        "boss": "elite_025_furious_toucan"
+      },
+      {
+        "id": 1458,
+        "type": "boss",
+        "x": 1040,
+        "y": 1412,
+        "boss": "elite_025_furious_toucan"
+      },
+      {
+        "id": 1459,
+        "type": "boss",
+        "x": 1026,
+        "y": 1064,
+        "boss": "elite_025_furious_toucan"
+      },
+      {
+        "id": 1460,
+        "type": "boss",
+        "x": 516,
+        "y": 684,
+        "boss": "elite_025_muka_ringleader"
+      },
+      {
+        "id": 1461,
+        "type": "boss",
+        "x": 1018,
+        "y": 684,
+        "boss": "elite_025_muka_ringleader"
+      },
+      {
+        "id": 1462,
+        "type": "boss",
+        "x": 516,
+        "y": 384,
+        "boss": "elite_025_muka_ringleader"
+      },
+      {
+        "id": 1463,
+        "type": "boss",
+        "x": 1075,
+        "y": 432,
+        "boss": "elite_025_muka_ringleader"
+      },
+      {
+        "id": 1464,
+        "type": "boss",
+        "x": 1567,
+        "y": 382,
+        "boss": "elite_005_poring_ringleader"
+      },
+      {
+        "id": 1465,
+        "type": "boss",
+        "x": 1707,
+        "y": 362,
+        "boss": "elite_005_poring_ringleader"
+      },
+      {
+        "id": 1466,
+        "type": "boss",
+        "x": 1681,
+        "y": 643,
+        "boss": "elite_005_poring_ringleader"
+      },
+      {
+        "id": 1467,
+        "type": "boss",
+        "x": 1666,
+        "y": 512,
+        "boss": "elite_005_poring_ringleader"
       }
     ],
     "izlude": [
@@ -7415,6 +8087,34 @@
         "x": 465,
         "y": 481,
         "boss": "mini_060_ancient_strouf"
+      },
+      {
+        "id": 1523,
+        "type": "boss",
+        "x": 549,
+        "y": 88,
+        "boss": "elite_045_solid_vadon"
+      },
+      {
+        "id": 1524,
+        "type": "boss",
+        "x": 123,
+        "y": 211,
+        "boss": "elite_045_solid_vadon"
+      },
+      {
+        "id": 1525,
+        "type": "boss",
+        "x": 104,
+        "y": 404,
+        "boss": "elite_045_solid_vadon"
+      },
+      {
+        "id": 1526,
+        "type": "boss",
+        "x": 485,
+        "y": 478,
+        "boss": "elite_045_solid_vadon"
       }
     ],
     "mjolnir2": [
@@ -7424,6 +8124,34 @@
         "x": 182,
         "y": 532,
         "card": "tarou_0"
+      },
+      {
+        "id": 1468,
+        "type": "boss",
+        "x": 256,
+        "y": 133,
+        "boss": "elite_020_tarou_ringleader"
+      },
+      {
+        "id": 1469,
+        "type": "boss",
+        "x": 437,
+        "y": 131,
+        "boss": "elite_020_tarou_ringleader"
+      },
+      {
+        "id": 1470,
+        "type": "boss",
+        "x": 459,
+        "y": 333,
+        "boss": "elite_020_tarou_ringleader"
+      },
+      {
+        "id": 1471,
+        "type": "boss",
+        "x": 192,
+        "y": 542,
+        "boss": "elite_020_tarou_ringleader"
       }
     ],
     "mjolnir3": [
@@ -7433,6 +8161,27 @@
         "x": 485,
         "y": 409,
         "card": "cramp_45"
+      },
+      {
+        "id": 1472,
+        "type": "boss",
+        "x": 183,
+        "y": 465,
+        "boss": "elite_045_elusive_skel_worker"
+      },
+      {
+        "id": 1473,
+        "type": "boss",
+        "x": 185,
+        "y": 186,
+        "boss": "elite_045_elusive_skel_worker"
+      },
+      {
+        "id": 1474,
+        "type": "boss",
+        "x": 517,
+        "y": 426,
+        "boss": "elite_045_elusive_skel_worker"
       }
     ],
     "alberta2": [
@@ -7458,6 +8207,34 @@
         "x": 513,
         "y": 369,
         "card": "zenorc_0"
+      },
+      {
+        "id": 1499,
+        "type": "boss",
+        "x": 132,
+        "y": 218,
+        "boss": "elite_050_elusive_orc_zombie"
+      },
+      {
+        "id": 1500,
+        "type": "boss",
+        "x": 77,
+        "y": 171,
+        "boss": "elite_050_elusive_orc_zombie"
+      },
+      {
+        "id": 1501,
+        "type": "boss",
+        "x": 172,
+        "y": 92,
+        "boss": "elite_050_elusive_orc_zombie"
+      },
+      {
+        "id": 1502,
+        "type": "boss",
+        "x": 241,
+        "y": 106,
+        "boss": "elite_050_elusive_orc_zombie"
       }
     ],
     "prontera2": [
@@ -7660,6 +8437,34 @@
         "x": 230,
         "y": 189,
         "card": "female_thief_bug_30"
+      },
+      {
+        "id": 1491,
+        "type": "boss",
+        "x": 142,
+        "y": 144,
+        "boss": "elite_025_elusive_familiar"
+      },
+      {
+        "id": 1492,
+        "type": "boss",
+        "x": 141,
+        "y": 510,
+        "boss": "elite_025_elusive_familiar"
+      },
+      {
+        "id": 1493,
+        "type": "boss",
+        "x": 500,
+        "y": 509,
+        "boss": "elite_025_elusive_familiar"
+      },
+      {
+        "id": 1494,
+        "type": "boss",
+        "x": 488,
+        "y": 152,
+        "boss": "elite_025_elusive_familiar"
       }
     ],
     "prontera5": [
@@ -7669,10 +8474,152 @@
         "x": 312,
         "y": 283,
         "card": "spore_20"
+      },
+      {
+        "id": 1495,
+        "type": "boss",
+        "x": 184,
+        "y": 159,
+        "boss": "elite_020_solid_thief_bug"
+      },
+      {
+        "id": 1496,
+        "type": "boss",
+        "x": 472,
+        "y": 167,
+        "boss": "elite_020_solid_thief_bug"
+      },
+      {
+        "id": 1497,
+        "type": "boss",
+        "x": 168,
+        "y": 469,
+        "boss": "elite_020_solid_thief_bug"
+      },
+      {
+        "id": 1498,
+        "type": "boss",
+        "x": 460,
+        "y": 476,
+        "boss": "elite_020_solid_thief_bug"
       }
     ],
-    "morroc2": [],
-    "morroc3": [],
+    "morroc2": [
+      {
+        "id": 1475,
+        "type": "boss",
+        "x": 601,
+        "y": 251,
+        "boss": "elite_030_elite_ant_larva"
+      },
+      {
+        "id": 1476,
+        "type": "boss",
+        "x": 583,
+        "y": 385,
+        "boss": "elite_030_elite_ant_larva"
+      },
+      {
+        "id": 1477,
+        "type": "boss",
+        "x": 344,
+        "y": 359,
+        "boss": "elite_030_elite_ant_larva"
+      },
+      {
+        "id": 1478,
+        "type": "boss",
+        "x": 180,
+        "y": 471,
+        "boss": "elite_030_elite_ant_larva"
+      },
+      {
+        "id": 1479,
+        "type": "boss",
+        "x": 253,
+        "y": 293,
+        "boss": "elite_030_elusive_deniro"
+      },
+      {
+        "id": 1480,
+        "type": "boss",
+        "x": 138,
+        "y": 525,
+        "boss": "elite_030_elusive_deniro"
+      },
+      {
+        "id": 1481,
+        "type": "boss",
+        "x": 596,
+        "y": 444,
+        "boss": "elite_030_elusive_deniro"
+      },
+      {
+        "id": 1482,
+        "type": "boss",
+        "x": 576,
+        "y": 109,
+        "boss": "elite_030_elusive_deniro"
+      }
+    ],
+    "morroc3": [
+      {
+        "id": 1483,
+        "type": "boss",
+        "x": 636,
+        "y": 337,
+        "boss": "elite_035_solid_andre"
+      },
+      {
+        "id": 1484,
+        "type": "boss",
+        "x": 133,
+        "y": 319,
+        "boss": "elite_035_solid_andre"
+      },
+      {
+        "id": 1485,
+        "type": "boss",
+        "x": 196,
+        "y": 489,
+        "boss": "elite_035_solid_andre"
+      },
+      {
+        "id": 1486,
+        "type": "boss",
+        "x": 601,
+        "y": 594,
+        "boss": "elite_035_solid_andre"
+      },
+      {
+        "id": 1487,
+        "type": "boss",
+        "x": 665,
+        "y": 319,
+        "boss": "elite_040_elite_giearth"
+      },
+      {
+        "id": 1488,
+        "type": "boss",
+        "x": 125,
+        "y": 331,
+        "boss": "elite_040_elite_giearth"
+      },
+      {
+        "id": 1489,
+        "type": "boss",
+        "x": 211,
+        "y": 509,
+        "boss": "elite_040_elite_giearth"
+      },
+      {
+        "id": 1490,
+        "type": "boss",
+        "x": 622,
+        "y": 602,
+        "boss": "elite_040_elite_giearth"
+      }
+    ],
     "morroc4": [],
     "morroc5": [
       {
@@ -7702,9 +8649,94 @@
         "x": 528,
         "y": 505,
         "boss": "mini_110_ancient_mummy"
+      },
+      {
+        "id": 1503,
+        "type": "boss",
+        "x": 338,
+        "y": 153,
+        "boss": "elite_055_swift_mummy"
+      },
+      {
+        "id": 1504,
+        "type": "boss",
+        "x": 152,
+        "y": 348,
+        "boss": "elite_055_swift_mummy"
+      },
+      {
+        "id": 1505,
+        "type": "boss",
+        "x": 579,
+        "y": 354,
+        "boss": "elite_055_swift_mummy"
+      },
+      {
+        "id": 1506,
+        "type": "boss",
+        "x": 335,
+        "y": 567,
+        "boss": "elite_055_swift_mummy"
       }
     ],
-    "morroc6": [],
+    "morroc6": [
+      {
+        "id": 1507,
+        "type": "boss",
+        "x": 266,
+        "y": 268,
+        "boss": "elite_060_angry_minorous"
+      },
+      {
+        "id": 1508,
+        "type": "boss",
+        "x": 257,
+        "y": 426,
+        "boss": "elite_060_angry_minorous"
+      },
+      {
+        "id": 1509,
+        "type": "boss",
+        "x": 421,
+        "y": 368,
+        "boss": "elite_060_angry_minorous"
+      },
+      {
+        "id": 1510,
+        "type": "boss",
+        "x": 480,
+        "y": 266,
+        "boss": "elite_060_angry_minorous"
+      },
+      {
+        "id": 1511,
+        "type": "boss",
+        "x": 88,
+        "y": 127,
+        "boss": "elite_055_furious_mimic"
+      },
+      {
+        "id": 1512,
+        "type": "boss",
+        "x": 58,
+        "y": 540,
+        "boss": "elite_055_furious_mimic"
+      },
+      {
+        "id": 1513,
+        "type": "boss",
+        "x": 582,
+        "y": 239,
+        "boss": "elite_055_furious_mimic"
+      },
+      {
+        "id": 1514,
+        "type": "boss",
+        "x": 616,
+        "y": 582,
+        "boss": "elite_055_furious_mimic"
+      }
+    ],
     "morroc7": [
       {
         "id": 1270,
@@ -7726,9 +8758,66 @@
         "x": 428,
         "y": 463,
         "boss": "mini_105_abubis"
+      },
+      {
+        "id": 1515,
+        "type": "boss",
+        "x": 266,
+        "y": 252,
+        "boss": "elite_080_swift_pasana"
+      },
+      {
+        "id": 1516,
+        "type": "boss",
+        "x": 280,
+        "y": 425,
+        "boss": "elite_080_swift_pasana"
+      },
+      {
+        "id": 1517,
+        "type": "boss",
+        "x": 471,
+        "y": 494,
+        "boss": "elite_080_swift_pasana"
+      },
+      {
+        "id": 1518,
+        "type": "boss",
+        "x": 488,
+        "y": 252,
+        "boss": "elite_080_swift_pasana"
       }
     ],
-    "morroc8": [],
+    "morroc8": [
+      {
+        "id": 1519,
+        "type": "boss",
+        "x": 266,
+        "y": 481,
+        "boss": "elite_075_elusive_marduk"
+      },
+      {
+        "id": 1520,
+        "type": "boss",
+        "x": 555,
+        "y": 575,
+        "boss": "elite_075_elusive_marduk"
+      },
+      {
+        "id": 1521,
+        "type": "boss",
+        "x": 251,
+        "y": 636,
+        "boss": "elite_075_elusive_marduk"
+      },
+      {
+        "id": 1522,
+        "type": "boss",
+        "x": 478,
+        "y": 475,
+        "boss": "elite_075_elusive_marduk"
+      }
+    ],
     "payon2": [],
     "payon3": [
       {
@@ -7778,6 +8867,13 @@
     "geffenriver": 0.9,
     "izlude": 0.75,
     "glastheim": 0.55,
-    "sakura": 0.55
+    "sakura": 0.55,
+    "prontera": 0.75,
+    "mjolnir2": 0.55,
+    "mjolnir3": 0.45,
+    "morroc2": 0.65,
+    "morroc3": 0.55,
+    "morroc6": 0.65,
+    "morroc8": 0.6
   }
 }
