@@ -3,8 +3,9 @@
    โครงสร้างโฟลเดอร์:
      boss/mini/ชื่อบอส_เลเวล.png     -> ประเภท mini
      boss/elite/ชื่อบอส_เลเวล.png    -> ประเภท elite
-   กติกาชื่อไฟล์:  ชื่อบอส_เลเวล.png   เช่น  eddga_25.png , orc_hero_30.png
-   - ตัวเลขท้ายสุด = เลเวลของบอส
+   กติกาชื่อไฟล์: รองรับ 2 แบบ (เลเวลอยู่ตัวเลขล้วน token แรกหรือ token สุดท้าย)
+   - เลเวลท้าย:  Vocal_20.png , orc_hero_30.png            (ชื่อ_เลเวล)
+   - เลเวลหน้า:  005_poring_ringleader.png , 085_xxx.png    (เลเวลเติมศูนย์_ชื่อ) -> เรียงตามเลเวลในโฟลเดอร์
    - ที่เหลือ = ชื่อบอส (ขีดล่างเป็นช่องว่าง, คำพิมพ์ใหญ่ทั้งคำคงไว้ เช่น MVP)
    รัน:  node tools/build-boss.js
 */
@@ -14,7 +15,21 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, 'boss.json');
 const IMG_RE = /\.(png|jpe?g|webp|gif)$/i;
-const NAME_RE = /^(.+)_(\d+)$/;
+
+// แยกชื่อ/เลเวลจากชื่อไฟล์ (ไม่รวมนามสกุล) รองรับเลเวลอยู่หน้า/หลัง
+function parseBase(base) {
+  const parts = base.split('_').filter(Boolean);
+  if (parts.length < 2) return null;
+  // เลเวลนำหน้า: 005_poring_ringleader
+  if (/^\d+$/.test(parts[0])) {
+    return { lv: parseInt(parts[0], 10), name: parts.slice(1).join('_') };
+  }
+  // เลเวลต่อท้าย: Vocal_20
+  if (/^\d+$/.test(parts[parts.length - 1])) {
+    return { lv: parseInt(parts[parts.length - 1], 10), name: parts.slice(0, -1).join('_') };
+  }
+  return null;
+}
 
 function titleCase(s) {
   // แยกคำ camelCase: "AncientMummy" -> "Ancient Mummy", "MVPBoss" -> "MVP Boss"
@@ -34,12 +49,12 @@ function scan(type) {
   for (const e of entries) {
     if (!e.isFile() || !IMG_RE.test(e.name)) continue;
     const base = e.name.replace(IMG_RE, '');
-    const m = base.match(NAME_RE);
-    if (!m) continue;
+    const p = parseBase(base);
+    if (!p) continue;
     out.push({
       key: type + '_' + base,
-      name: titleCase(m[1]),
-      lv: parseInt(m[2], 10),
+      name: titleCase(p.name),
+      lv: p.lv,
       type: type,
       file: 'boss/' + type + '/' + e.name
     });

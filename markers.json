@@ -1042,105 +1042,105 @@
         "type": "boss",
         "x": 979,
         "y": 482,
-        "boss": "mini_Eclipse_30"
+        "boss": "mini_030_eclipse"
       },
       {
         "id": 1205,
         "type": "boss",
         "x": 981,
         "y": 237,
-        "boss": "mini_Eclipse_30"
+        "boss": "mini_030_eclipse"
       },
       {
         "id": 1206,
         "type": "boss",
         "x": 1180,
         "y": 222,
-        "boss": "mini_Eclipse_30"
+        "boss": "mini_030_eclipse"
       },
       {
         "id": 1207,
         "type": "boss",
         "x": 1310,
         "y": 295,
-        "boss": "mini_Eclipse_30"
+        "boss": "mini_030_eclipse"
       },
       {
         "id": 1208,
         "type": "boss",
         "x": 1659,
         "y": 215,
-        "boss": "mini_Choco_50"
+        "boss": "mini_050_choco"
       },
       {
         "id": 1209,
         "type": "boss",
         "x": 1792,
         "y": 185,
-        "boss": "mini_Choco_50"
+        "boss": "mini_050_choco"
       },
       {
         "id": 1210,
         "type": "boss",
         "x": 1822,
         "y": 348,
-        "boss": "mini_Choco_50"
+        "boss": "mini_050_choco"
       },
       {
         "id": 1211,
         "type": "boss",
         "x": 1646,
         "y": 366,
-        "boss": "mini_Choco_50"
+        "boss": "mini_050_choco"
       },
       {
         "id": 1212,
         "type": "boss",
         "x": 1006,
         "y": 1540,
-        "boss": "mini_Mastering_40"
+        "boss": "mini_040_mastering"
       },
       {
         "id": 1213,
         "type": "boss",
         "x": 1330,
         "y": 1815,
-        "boss": "mini_Mastering_40"
+        "boss": "mini_040_mastering"
       },
       {
         "id": 1214,
         "type": "boss",
         "x": 1307,
         "y": 1896,
-        "boss": "mini_Mastering_40"
+        "boss": "mini_040_mastering"
       },
       {
         "id": 1231,
         "type": "boss",
         "x": 827,
         "y": 939,
-        "boss": "mini_Vocal_20"
+        "boss": "mini_020_vocal"
       },
       {
         "id": 1232,
         "type": "boss",
         "x": 488,
         "y": 1134,
-        "boss": "mini_Vocal_20"
+        "boss": "mini_020_vocal"
       },
       {
         "id": 1233,
         "type": "boss",
         "x": 635,
         "y": 1073,
-        "boss": "mini_Vocal_20"
+        "boss": "mini_020_vocal"
       },
       {
         "id": 1234,
         "type": "boss",
         "x": 821,
         "y": 1221,
-        "boss": "mini_Vocal_20"
+        "boss": "mini_020_vocal"
       }
     ],
     "morroc": [
@@ -1926,28 +1926,28 @@
         "type": "boss",
         "x": 1673,
         "y": 1677,
-        "boss": "mini_DragonFly_50"
+        "boss": "mini_050_dragon_fly"
       },
       {
         "id": 1201,
         "type": "boss",
         "x": 1562,
         "y": 1795,
-        "boss": "mini_DragonFly_50"
+        "boss": "mini_050_dragon_fly"
       },
       {
         "id": 1202,
         "type": "boss",
         "x": 1735,
         "y": 1880,
-        "boss": "mini_DragonFly_50"
+        "boss": "mini_050_dragon_fly"
       },
       {
         "id": 1203,
         "type": "boss",
         "x": 1761,
         "y": 1761,
-        "boss": "mini_DragonFly_50"
+        "boss": "mini_050_dragon_fly"
       },
       {
         "id": 1276,
@@ -5354,84 +5354,84 @@
         "type": "boss",
         "x": 4261,
         "y": 3013,
-        "boss": "mini_Toad_30"
+        "boss": "mini_030_toad"
       },
       {
         "id": 1189,
         "type": "boss",
         "x": 4020,
         "y": 3158,
-        "boss": "mini_Toad_30"
+        "boss": "mini_030_toad"
       },
       {
         "id": 1190,
         "type": "boss",
         "x": 4279,
         "y": 3255,
-        "boss": "mini_Toad_30"
+        "boss": "mini_030_toad"
       },
       {
         "id": 1191,
         "type": "boss",
         "x": 4604,
         "y": 3226,
-        "boss": "mini_Toad_30"
+        "boss": "mini_030_toad"
       },
       {
         "id": 1192,
         "type": "boss",
         "x": 1162,
         "y": 2589,
-        "boss": "mini_KoboldLeader_120"
+        "boss": "mini_120_kobold_leader"
       },
       {
         "id": 1193,
         "type": "boss",
         "x": 778,
         "y": 3058,
-        "boss": "mini_KoboldLeader_120"
+        "boss": "mini_120_kobold_leader"
       },
       {
         "id": 1194,
         "type": "boss",
         "x": 1299,
         "y": 2951,
-        "boss": "mini_KoboldLeader_120"
+        "boss": "mini_120_kobold_leader"
       },
       {
         "id": 1195,
         "type": "boss",
         "x": 1226,
         "y": 3214,
-        "boss": "mini_KoboldLeader_120"
+        "boss": "mini_120_kobold_leader"
       },
       {
         "id": 1196,
         "type": "boss",
         "x": 675,
         "y": 1980,
-        "boss": "mini_Gryphon_105"
+        "boss": "mini_105_gryphon"
       },
       {
         "id": 1197,
         "type": "boss",
         "x": 856,
         "y": 1753,
-        "boss": "mini_Gryphon_105"
+        "boss": "mini_105_gryphon"
       },
       {
         "id": 1198,
         "type": "boss",
         "x": 1066,
         "y": 1949,
-        "boss": "mini_Gryphon_105"
+        "boss": "mini_105_gryphon"
       },
       {
         "id": 1199,
         "type": "boss",
         "x": 983,
         "y": 2149,
-        "boss": "mini_Gryphon_105"
+        "boss": "mini_105_gryphon"
       },
       {
         "id": 1275,
@@ -6560,112 +6560,112 @@
         "type": "boss",
         "x": 847,
         "y": 2217,
-        "boss": "mini_Alligator_60"
+        "boss": "mini_060_alligator"
       },
       {
         "id": 1216,
         "type": "boss",
         "x": 886,
         "y": 1887,
-        "boss": "mini_Alligator_60"
+        "boss": "mini_060_alligator"
       },
       {
         "id": 1217,
         "type": "boss",
         "x": 1256,
         "y": 1919,
-        "boss": "mini_Alligator_60"
+        "boss": "mini_060_alligator"
       },
       {
         "id": 1218,
         "type": "boss",
         "x": 1252,
         "y": 2277,
-        "boss": "mini_Alligator_60"
+        "boss": "mini_060_alligator"
       },
       {
         "id": 1219,
         "type": "boss",
         "x": 1788,
         "y": 206,
-        "boss": "mini_ArcAngeling_80"
+        "boss": "mini_080_arc_angeling"
       },
       {
         "id": 1220,
         "type": "boss",
         "x": 1638,
         "y": 322,
-        "boss": "mini_ArcAngeling_80"
+        "boss": "mini_080_arc_angeling"
       },
       {
         "id": 1221,
         "type": "boss",
         "x": 1773,
         "y": 379,
-        "boss": "mini_ArcAngeling_80"
+        "boss": "mini_080_arc_angeling"
       },
       {
         "id": 1222,
         "type": "boss",
         "x": 1854,
         "y": 534,
-        "boss": "mini_ArcAngeling_80"
+        "boss": "mini_080_arc_angeling"
       },
       {
         "id": 1223,
         "type": "boss",
         "x": 1241,
         "y": 1071,
-        "boss": "mini_GrandPeco_75"
+        "boss": "mini_075_grand_peco"
       },
       {
         "id": 1224,
         "type": "boss",
         "x": 1024,
         "y": 1364,
-        "boss": "mini_GrandPeco_75"
+        "boss": "mini_075_grand_peco"
       },
       {
         "id": 1225,
         "type": "boss",
         "x": 1333,
         "y": 1468,
-        "boss": "mini_GrandPeco_75"
+        "boss": "mini_075_grand_peco"
       },
       {
         "id": 1226,
         "type": "boss",
         "x": 1572,
         "y": 1275,
-        "boss": "mini_GrandPeco_75"
+        "boss": "mini_075_grand_peco"
       },
       {
         "id": 1227,
         "type": "boss",
         "x": 1342,
         "y": 288,
-        "boss": "mini_HeavyMetaling_140"
+        "boss": "mini_140_heavy_metaling"
       },
       {
         "id": 1228,
         "type": "boss",
         "x": 1361,
         "y": 433,
-        "boss": "mini_HeavyMetaling_140"
+        "boss": "mini_140_heavy_metaling"
       },
       {
         "id": 1229,
         "type": "boss",
         "x": 1513,
         "y": 643,
-        "boss": "mini_HeavyMetaling_140"
+        "boss": "mini_140_heavy_metaling"
       },
       {
         "id": 1230,
         "type": "boss",
         "x": 1862,
         "y": 765,
-        "boss": "mini_HeavyMetaling_140"
+        "boss": "mini_140_heavy_metaling"
       }
     ],
     "izlude": [
@@ -7393,28 +7393,28 @@
         "type": "boss",
         "x": 139,
         "y": 141,
-        "boss": "mini_AncientStrouf_60"
+        "boss": "mini_060_ancient_strouf"
       },
       {
         "id": 1236,
         "type": "boss",
         "x": 377,
         "y": 114,
-        "boss": "mini_AncientStrouf_60"
+        "boss": "mini_060_ancient_strouf"
       },
       {
         "id": 1237,
         "type": "boss",
         "x": 226,
         "y": 407,
-        "boss": "mini_AncientStrouf_60"
+        "boss": "mini_060_ancient_strouf"
       },
       {
         "id": 1238,
         "type": "boss",
         "x": 465,
         "y": 481,
-        "boss": "mini_AncientStrouf_60"
+        "boss": "mini_060_ancient_strouf"
       }
     ],
     "mjolnir2": [
@@ -7473,175 +7473,175 @@
         "type": "boss",
         "x": 90,
         "y": 555,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1240,
         "type": "boss",
         "x": 82,
         "y": 446,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1241,
         "type": "boss",
         "x": 88,
         "y": 308,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1242,
         "type": "boss",
         "x": 87,
         "y": 216,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1243,
         "type": "boss",
         "x": 90,
         "y": 71,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1244,
         "type": "boss",
         "x": 202,
         "y": 69,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1245,
         "type": "boss",
         "x": 209,
         "y": 200,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1246,
         "type": "boss",
         "x": 213,
         "y": 320,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1247,
         "type": "boss",
         "x": 332,
         "y": 318,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1248,
         "type": "boss",
         "x": 217,
         "y": 440,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1249,
         "type": "boss",
         "x": 329,
         "y": 441,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1250,
         "type": "boss",
         "x": 446,
         "y": 443,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1251,
         "type": "boss",
         "x": 451,
         "y": 319,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1252,
         "type": "boss",
         "x": 566,
         "y": 330,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1253,
         "type": "boss",
         "x": 571,
         "y": 199,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1254,
         "type": "boss",
         "x": 451,
         "y": 211,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1255,
         "type": "boss",
         "x": 438,
         "y": 75,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1256,
         "type": "boss",
         "x": 566,
         "y": 83,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1257,
         "type": "boss",
         "x": 333,
         "y": 547,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1258,
         "type": "boss",
         "x": 472,
         "y": 541,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1259,
         "type": "boss",
         "x": 564,
         "y": 550,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1260,
         "type": "boss",
         "x": 208,
         "y": 554,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1273,
         "type": "boss",
         "x": 70,
         "y": 68,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1279,
         "type": "boss",
         "x": 230,
         "y": 421,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       },
       {
         "id": 1280,
         "type": "boss",
         "x": 564,
         "y": 107,
-        "boss": "mini_VagabondWolf_60"
+        "boss": "mini_060_vagabond_wolf"
       }
     ],
     "prontera3": [
@@ -7680,28 +7680,28 @@
         "type": "boss",
         "x": 188,
         "y": 161,
-        "boss": "mini_AncientMummy_110"
+        "boss": "mini_110_ancient_mummy"
       },
       {
         "id": 1263,
         "type": "boss",
         "x": 526,
         "y": 169,
-        "boss": "mini_AncientMummy_110"
+        "boss": "mini_110_ancient_mummy"
       },
       {
         "id": 1264,
         "type": "boss",
         "x": 187,
         "y": 462,
-        "boss": "mini_AncientMummy_110"
+        "boss": "mini_110_ancient_mummy"
       },
       {
         "id": 1265,
         "type": "boss",
         "x": 528,
         "y": 505,
-        "boss": "mini_AncientMummy_110"
+        "boss": "mini_110_ancient_mummy"
       }
     ],
     "morroc6": [],
@@ -7711,21 +7711,21 @@
         "type": "boss",
         "x": 348,
         "y": 275,
-        "boss": "mini_Abubis_105"
+        "boss": "mini_105_abubis"
       },
       {
         "id": 1271,
         "type": "boss",
         "x": 354,
         "y": 533,
-        "boss": "mini_Abubis_105"
+        "boss": "mini_105_abubis"
       },
       {
         "id": 1272,
         "type": "boss",
         "x": 428,
         "y": 463,
-        "boss": "mini_Abubis_105"
+        "boss": "mini_105_abubis"
       }
     ],
     "morroc8": [],
@@ -7736,28 +7736,28 @@
         "type": "boss",
         "x": 233,
         "y": 584,
-        "boss": "mini_YaoJun_60"
+        "boss": "mini_060_yao_jun"
       },
       {
         "id": 1267,
         "type": "boss",
         "x": 252,
         "y": 429,
-        "boss": "mini_YaoJun_60"
+        "boss": "mini_060_yao_jun"
       },
       {
         "id": 1268,
         "type": "boss",
         "x": 554,
         "y": 402,
-        "boss": "mini_YaoJun_60"
+        "boss": "mini_060_yao_jun"
       },
       {
         "id": 1269,
         "type": "boss",
         "x": 526,
         "y": 266,
-        "boss": "mini_YaoJun_60"
+        "boss": "mini_060_yao_jun"
       }
     ]
   },

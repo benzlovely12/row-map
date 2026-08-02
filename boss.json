@@ -1,124 +1,398 @@
 {
   "mini": [
     {
-      "key": "mini_Vocal_20",
+      "key": "mini_020_vocal",
       "name": "Vocal",
       "lv": 20,
       "type": "mini",
-      "file": "boss/mini/Vocal_20.png"
+      "file": "boss/mini/020_vocal.png"
     },
     {
-      "key": "mini_Eclipse_30",
+      "key": "mini_030_eclipse",
       "name": "Eclipse",
       "lv": 30,
       "type": "mini",
-      "file": "boss/mini/Eclipse_30.png"
+      "file": "boss/mini/030_eclipse.png"
     },
     {
-      "key": "mini_Toad_30",
+      "key": "mini_030_toad",
       "name": "Toad",
       "lv": 30,
       "type": "mini",
-      "file": "boss/mini/Toad_30.png"
+      "file": "boss/mini/030_toad.png"
     },
     {
-      "key": "mini_Mastering_40",
+      "key": "mini_040_mastering",
       "name": "Mastering",
       "lv": 40,
       "type": "mini",
-      "file": "boss/mini/Mastering_40.png"
+      "file": "boss/mini/040_mastering.png"
     },
     {
-      "key": "mini_Choco_50",
+      "key": "mini_050_choco",
       "name": "Choco",
       "lv": 50,
       "type": "mini",
-      "file": "boss/mini/Choco_50.png"
+      "file": "boss/mini/050_choco.png"
     },
     {
-      "key": "mini_DragonFly_50",
+      "key": "mini_050_dragon_fly",
       "name": "Dragon Fly",
       "lv": 50,
       "type": "mini",
-      "file": "boss/mini/DragonFly_50.png"
+      "file": "boss/mini/050_dragon_fly.png"
     },
     {
-      "key": "mini_Alligator_60",
+      "key": "mini_060_alligator",
       "name": "Alligator",
       "lv": 60,
       "type": "mini",
-      "file": "boss/mini/Alligator_60.png"
+      "file": "boss/mini/060_alligator.png"
     },
     {
-      "key": "mini_AncientStrouf_60",
+      "key": "mini_060_ancient_strouf",
       "name": "Ancient Strouf",
       "lv": 60,
       "type": "mini",
-      "file": "boss/mini/AncientStrouf_60.png"
+      "file": "boss/mini/060_ancient_strouf.png"
     },
     {
-      "key": "mini_VagabondWolf_60",
+      "key": "mini_060_vagabond_wolf",
       "name": "Vagabond Wolf",
       "lv": 60,
       "type": "mini",
-      "file": "boss/mini/VagabondWolf_60.png"
+      "file": "boss/mini/060_vagabond_wolf.png"
     },
     {
-      "key": "mini_YaoJun_60",
+      "key": "mini_060_yao_jun",
       "name": "Yao Jun",
       "lv": 60,
       "type": "mini",
-      "file": "boss/mini/YaoJun_60.png"
+      "file": "boss/mini/060_yao_jun.png"
     },
     {
-      "key": "mini_GrandPeco_75",
+      "key": "mini_075_grand_peco",
       "name": "Grand Peco",
       "lv": 75,
       "type": "mini",
-      "file": "boss/mini/GrandPeco_75.png"
+      "file": "boss/mini/075_grand_peco.png"
     },
     {
-      "key": "mini_ArcAngeling_80",
+      "key": "mini_080_arc_angeling",
       "name": "Arc Angeling",
       "lv": 80,
       "type": "mini",
-      "file": "boss/mini/ArcAngeling_80.png"
+      "file": "boss/mini/080_arc_angeling.png"
     },
     {
-      "key": "mini_Abubis_105",
+      "key": "mini_105_abubis",
       "name": "Abubis",
       "lv": 105,
       "type": "mini",
-      "file": "boss/mini/Abubis_105.png"
+      "file": "boss/mini/105_abubis.png"
     },
     {
-      "key": "mini_Gryphon_105",
+      "key": "mini_105_gryphon",
       "name": "Gryphon",
       "lv": 105,
       "type": "mini",
-      "file": "boss/mini/Gryphon_105.png"
+      "file": "boss/mini/105_gryphon.png"
     },
     {
-      "key": "mini_AncientMummy_110",
+      "key": "mini_110_ancient_mummy",
       "name": "Ancient Mummy",
       "lv": 110,
       "type": "mini",
-      "file": "boss/mini/AncientMummy_110.png"
+      "file": "boss/mini/110_ancient_mummy.png"
     },
     {
-      "key": "mini_KoboldLeader_120",
+      "key": "mini_120_kobold_leader",
       "name": "Kobold Leader",
       "lv": 120,
       "type": "mini",
-      "file": "boss/mini/KoboldLeader_120.png"
+      "file": "boss/mini/120_kobold_leader.png"
     },
     {
-      "key": "mini_HeavyMetaling_140",
+      "key": "mini_140_heavy_metaling",
       "name": "Heavy Metaling",
       "lv": 140,
       "type": "mini",
-      "file": "boss/mini/HeavyMetaling_140.png"
+      "file": "boss/mini/140_heavy_metaling.png"
     }
   ],
-  "elite": []
+  "elite": [
+    {
+      "key": "elite_005_drops_ringleader",
+      "name": "Drops Ringleader",
+      "lv": 5,
+      "type": "elite",
+      "file": "boss/elite/005_drops_ringleader.png"
+    },
+    {
+      "key": "elite_005_poring_ringleader",
+      "name": "Poring Ringleader",
+      "lv": 5,
+      "type": "elite",
+      "file": "boss/elite/005_poring_ringleader.png"
+    },
+    {
+      "key": "elite_010_elusive_hornet",
+      "name": "Elusive Hornet",
+      "lv": 10,
+      "type": "elite",
+      "file": "boss/elite/010_elusive_hornet.png"
+    },
+    {
+      "key": "elite_010_furious_picky",
+      "name": "Furious Picky",
+      "lv": 10,
+      "type": "elite",
+      "file": "boss/elite/010_furious_picky.png"
+    },
+    {
+      "key": "elite_010_solid_fabre",
+      "name": "Solid Fabre",
+      "lv": 10,
+      "type": "elite",
+      "file": "boss/elite/010_solid_fabre.png"
+    },
+    {
+      "key": "elite_010_solid_lunatic",
+      "name": "Solid Lunatic",
+      "lv": 10,
+      "type": "elite",
+      "file": "boss/elite/010_solid_lunatic.png"
+    },
+    {
+      "key": "elite_015_desert_wolf_ringleader",
+      "name": "Desert Wolf Ringleader",
+      "lv": 15,
+      "type": "elite",
+      "file": "boss/elite/015_desert_wolf_ringleader.png"
+    },
+    {
+      "key": "elite_015_roda_frog_ringleader",
+      "name": "Roda Frog Ringleader",
+      "lv": 15,
+      "type": "elite",
+      "file": "boss/elite/015_roda_frog_ringleader.png"
+    },
+    {
+      "key": "elite_015_solid_mandragora",
+      "name": "Solid Mandragora",
+      "lv": 15,
+      "type": "elite",
+      "file": "boss/elite/015_solid_mandragora.png"
+    },
+    {
+      "key": "elite_015_swift_savage_babe",
+      "name": "Swift Savage Babe",
+      "lv": 15,
+      "type": "elite",
+      "file": "boss/elite/015_swift_savage_babe.png"
+    },
+    {
+      "key": "elite_020_elusive_ambernite",
+      "name": "Elusive Ambernite",
+      "lv": 20,
+      "type": "elite",
+      "file": "boss/elite/020_elusive_ambernite.png"
+    },
+    {
+      "key": "elite_020_solid_thief_bug",
+      "name": "Solid Thief Bug",
+      "lv": 20,
+      "type": "elite",
+      "file": "boss/elite/020_solid_thief_bug.png"
+    },
+    {
+      "key": "elite_020_tarou_ringleader",
+      "name": "Tarou Ringleader",
+      "lv": 20,
+      "type": "elite",
+      "file": "boss/elite/020_tarou_ringleader.png"
+    },
+    {
+      "key": "elite_025_elusive_familiar",
+      "name": "Elusive Familiar",
+      "lv": 25,
+      "type": "elite",
+      "file": "boss/elite/025_elusive_familiar.png"
+    },
+    {
+      "key": "elite_025_furious_toucan",
+      "name": "Furious Toucan",
+      "lv": 25,
+      "type": "elite",
+      "file": "boss/elite/025_furious_toucan.png"
+    },
+    {
+      "key": "elite_025_muka_ringleader",
+      "name": "Muka Ringleader",
+      "lv": 25,
+      "type": "elite",
+      "file": "boss/elite/025_muka_ringleader.png"
+    },
+    {
+      "key": "elite_025_solid_poison_spore",
+      "name": "Solid Poison Spore",
+      "lv": 25,
+      "type": "elite",
+      "file": "boss/elite/025_solid_poison_spore.png"
+    },
+    {
+      "key": "elite_025_swift_creamy",
+      "name": "Swift Creamy",
+      "lv": 25,
+      "type": "elite",
+      "file": "boss/elite/025_swift_creamy.png"
+    },
+    {
+      "key": "elite_030_elite_ant_larva",
+      "name": "Elite Ant Larva",
+      "lv": 30,
+      "type": "elite",
+      "file": "boss/elite/030_elite_ant_larva.png"
+    },
+    {
+      "key": "elite_030_elite_baby_desert_wolf",
+      "name": "Elite Baby Desert Wolf",
+      "lv": 30,
+      "type": "elite",
+      "file": "boss/elite/030_elite_baby_desert_wolf.png"
+    },
+    {
+      "key": "elite_030_elusive_deniro",
+      "name": "Elusive Deniro",
+      "lv": 30,
+      "type": "elite",
+      "file": "boss/elite/030_elusive_deniro.png"
+    },
+    {
+      "key": "elite_030_poporing_ringleader",
+      "name": "Poporing Ringleader",
+      "lv": 30,
+      "type": "elite",
+      "file": "boss/elite/030_poporing_ringleader.png"
+    },
+    {
+      "key": "elite_035_solid_andre",
+      "name": "Solid Andre",
+      "lv": 35,
+      "type": "elite",
+      "file": "boss/elite/035_solid_andre.png"
+    },
+    {
+      "key": "elite_035_swift_elder_willow",
+      "name": "Swift Elder Willow",
+      "lv": 35,
+      "type": "elite",
+      "file": "boss/elite/035_swift_elder_willow.png"
+    },
+    {
+      "key": "elite_040_elite_giearth",
+      "name": "Elite Giearth",
+      "lv": 40,
+      "type": "elite",
+      "file": "boss/elite/040_elite_giearth.png"
+    },
+    {
+      "key": "elite_040_swift_coco",
+      "name": "Swift Coco",
+      "lv": 40,
+      "type": "elite",
+      "file": "boss/elite/040_swift_coco.png"
+    },
+    {
+      "key": "elite_040_swift_yoyo",
+      "name": "Swift Yoyo",
+      "lv": 40,
+      "type": "elite",
+      "file": "boss/elite/040_swift_yoyo.png"
+    },
+    {
+      "key": "elite_045_elusive_skel_worker",
+      "name": "Elusive Skel Worker",
+      "lv": 45,
+      "type": "elite",
+      "file": "boss/elite/045_elusive_skel_worker.png"
+    },
+    {
+      "key": "elite_045_solid_orc_lady",
+      "name": "Solid Orc Lady",
+      "lv": 45,
+      "type": "elite",
+      "file": "boss/elite/045_solid_orc_lady.png"
+    },
+    {
+      "key": "elite_045_solid_vadon",
+      "name": "Solid Vadon",
+      "lv": 45,
+      "type": "elite",
+      "file": "boss/elite/045_solid_vadon.png"
+    },
+    {
+      "key": "elite_050_elite_knife_goblin",
+      "name": "Elite Knife Goblin",
+      "lv": 50,
+      "type": "elite",
+      "file": "boss/elite/050_elite_knife_goblin.png"
+    },
+    {
+      "key": "elite_050_elusive_orc_zombie",
+      "name": "Elusive Orc Zombie",
+      "lv": 50,
+      "type": "elite",
+      "file": "boss/elite/050_elusive_orc_zombie.png"
+    },
+    {
+      "key": "elite_055_furious_mimic",
+      "name": "Furious Mimic",
+      "lv": 55,
+      "type": "elite",
+      "file": "boss/elite/055_furious_mimic.png"
+    },
+    {
+      "key": "elite_055_swift_mummy",
+      "name": "Swift Mummy",
+      "lv": 55,
+      "type": "elite",
+      "file": "boss/elite/055_swift_mummy.png"
+    },
+    {
+      "key": "elite_060_angry_minorous",
+      "name": "Angry Minorous",
+      "lv": 60,
+      "type": "elite",
+      "file": "boss/elite/060_angry_minorous.png"
+    },
+    {
+      "key": "elite_075_elusive_marduk",
+      "name": "Elusive Marduk",
+      "lv": 75,
+      "type": "elite",
+      "file": "boss/elite/075_elusive_marduk.png"
+    },
+    {
+      "key": "elite_080_swift_flyingpetite",
+      "name": "Swift Flyingpetite",
+      "lv": 80,
+      "type": "elite",
+      "file": "boss/elite/080_swift_flyingpetite.png"
+    },
+    {
+      "key": "elite_080_swift_pasana",
+      "name": "Swift Pasana",
+      "lv": 80,
+      "type": "elite",
+      "file": "boss/elite/080_swift_pasana.png"
+    },
+    {
+      "key": "elite_085_mighty_groundpetite",
+      "name": "Mighty Groundpetite",
+      "lv": 85,
+      "type": "elite",
+      "file": "boss/elite/085_mighty_groundpetite.png"
+    }
+  ]
 }
