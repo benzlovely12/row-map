@@ -8763,6 +8763,108 @@
         "boss": "elite_100_furious_wanderer"
       }
     ],
+    "glastheim8": [
+      {
+        "id": 1591,
+        "type": "boss",
+        "x": 313,
+        "y": 1445,
+        "boss": "mini_100_abysmal_knight"
+      },
+      {
+        "id": 1592,
+        "type": "boss",
+        "x": 912,
+        "y": 1595,
+        "boss": "mini_100_abysmal_knight"
+      },
+      {
+        "id": 1593,
+        "type": "boss",
+        "x": 1349,
+        "y": 1226,
+        "boss": "mini_100_abysmal_knight"
+      },
+      {
+        "id": 1594,
+        "type": "boss",
+        "x": 1583,
+        "y": 1673,
+        "boss": "mini_100_abysmal_knight"
+      },
+      {
+        "id": 1595,
+        "type": "boss",
+        "x": 511,
+        "y": 1118,
+        "boss": "mini_105_raydric"
+      },
+      {
+        "id": 1596,
+        "type": "boss",
+        "x": 1064,
+        "y": 1085,
+        "boss": "mini_105_raydric"
+      },
+      {
+        "id": 1597,
+        "type": "boss",
+        "x": 664,
+        "y": 1537,
+        "boss": "mini_105_raydric"
+      },
+      {
+        "id": 1598,
+        "type": "boss",
+        "x": 1218,
+        "y": 1568,
+        "boss": "mini_105_raydric"
+      }
+    ],
+    "glastheim9": [
+      {
+        "id": 1599,
+        "type": "boss",
+        "x": 823,
+        "y": 776,
+        "boss": "mini_100_mysteltainn"
+      },
+      {
+        "id": 1600,
+        "type": "boss",
+        "x": 1358,
+        "y": 1630,
+        "boss": "mini_100_mysteltainn"
+      },
+      {
+        "id": 1601,
+        "type": "boss",
+        "x": 1212,
+        "y": 1307,
+        "boss": "mini_100_mysteltainn"
+      },
+      {
+        "id": 1602,
+        "type": "boss",
+        "x": 939,
+        "y": 1111,
+        "boss": "elite_100_swift_raydric"
+      },
+      {
+        "id": 1603,
+        "type": "boss",
+        "x": 449,
+        "y": 1572,
+        "boss": "elite_100_swift_raydric"
+      },
+      {
+        "id": 1604,
+        "type": "boss",
+        "x": 1478,
+        "y": 1795,
+        "boss": "elite_100_swift_raydric"
+      }
+    ],
     "byalan2": [
       {
         "id": 867,
@@ -9925,6 +10027,8 @@
     "glastheim4": 1.35,
     "glastheim5": 1.8,
     "glastheim6": 1.8,
-    "glastheim7": 1.8
+    "glastheim7": 1.8,
+    "glastheim8": 1.8,
+    "glastheim9": 1.8
   }
 }
