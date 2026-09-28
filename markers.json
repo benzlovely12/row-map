@@ -1253,6 +1253,111 @@
         "x": 382,
         "y": 1189,
         "boss": "elite_010_elusive_hornet"
+      },
+      {
+        "id": 1285,
+        "type": "boss",
+        "x": 979,
+        "y": 482,
+        "boss": "mini_Eclipse_30"
+      },
+      {
+        "id": 1286,
+        "type": "boss",
+        "x": 981,
+        "y": 237,
+        "boss": "mini_Eclipse_30"
+      },
+      {
+        "id": 1287,
+        "type": "boss",
+        "x": 1180,
+        "y": 222,
+        "boss": "mini_Eclipse_30"
+      },
+      {
+        "id": 1288,
+        "type": "boss",
+        "x": 1310,
+        "y": 295,
+        "boss": "mini_Eclipse_30"
+      },
+      {
+        "id": 1289,
+        "type": "boss",
+        "x": 1659,
+        "y": 215,
+        "boss": "mini_Choco_50"
+      },
+      {
+        "id": 1290,
+        "type": "boss",
+        "x": 1792,
+        "y": 185,
+        "boss": "mini_Choco_50"
+      },
+      {
+        "id": 1291,
+        "type": "boss",
+        "x": 1822,
+        "y": 348,
+        "boss": "mini_Choco_50"
+      },
+      {
+        "id": 1292,
+        "type": "boss",
+        "x": 1646,
+        "y": 366,
+        "boss": "mini_Choco_50"
+      },
+      {
+        "id": 1293,
+        "type": "boss",
+        "x": 1006,
+        "y": 1540,
+        "boss": "mini_Mastering_40"
+      },
+      {
+        "id": 1294,
+        "type": "boss",
+        "x": 1330,
+        "y": 1815,
+        "boss": "mini_Mastering_40"
+      },
+      {
+        "id": 1295,
+        "type": "boss",
+        "x": 1307,
+        "y": 1896,
+        "boss": "mini_Mastering_40"
+      },
+      {
+        "id": 1296,
+        "type": "boss",
+        "x": 827,
+        "y": 939,
+        "boss": "mini_Vocal_20"
+      },
+      {
+        "id": 1297,
+        "type": "boss",
+        "x": 488,
+        "y": 1134,
+        "boss": "mini_Vocal_20"
+      },
+      {
+        "id": 1298,
+        "type": "boss",
+        "x": 635,
+        "y": 1073,
+        "boss": "mini_Vocal_20"
+      },
+      {
+        "id": 1299,
+        "type": "boss",
+        "x": 821,
+        "y": 1221,
+        "boss": "mini_Vocal_20"
       }
     ],
     "morroc": [
@@ -2190,6 +2295,34 @@
         "x": 892,
         "y": 1916,
         "boss": "elite_010_furious_picky"
+      },
+      {
+        "id": 1300,
+        "type": "boss",
+        "x": 1673,
+        "y": 1677,
+        "boss": "mini_DragonFly_50"
+      },
+      {
+        "id": 1301,
+        "type": "boss",
+        "x": 1562,
+        "y": 1795,
+        "boss": "mini_DragonFly_50"
+      },
+      {
+        "id": 1302,
+        "type": "boss",
+        "x": 1735,
+        "y": 1880,
+        "boss": "mini_DragonFly_50"
+      },
+      {
+        "id": 1303,
+        "type": "boss",
+        "x": 1761,
+        "y": 1761,
+        "boss": "mini_DragonFly_50"
       }
     ],
     "novice": [
@@ -5948,6 +6081,90 @@
         "x": 1105,
         "y": 1655,
         "boss": "elite_080_swift_flyingpetite"
+      },
+      {
+        "id": 1304,
+        "type": "boss",
+        "x": 4261,
+        "y": 3013,
+        "boss": "mini_Toad_30"
+      },
+      {
+        "id": 1305,
+        "type": "boss",
+        "x": 4020,
+        "y": 3158,
+        "boss": "mini_Toad_30"
+      },
+      {
+        "id": 1306,
+        "type": "boss",
+        "x": 4279,
+        "y": 3255,
+        "boss": "mini_Toad_30"
+      },
+      {
+        "id": 1307,
+        "type": "boss",
+        "x": 4604,
+        "y": 3226,
+        "boss": "mini_Toad_30"
+      },
+      {
+        "id": 1308,
+        "type": "boss",
+        "x": 1162,
+        "y": 2589,
+        "boss": "mini_KoboldLeader_120"
+      },
+      {
+        "id": 1309,
+        "type": "boss",
+        "x": 778,
+        "y": 3058,
+        "boss": "mini_KoboldLeader_120"
+      },
+      {
+        "id": 1310,
+        "type": "boss",
+        "x": 1299,
+        "y": 2951,
+        "boss": "mini_KoboldLeader_120"
+      },
+      {
+        "id": 1311,
+        "type": "boss",
+        "x": 1226,
+        "y": 3214,
+        "boss": "mini_KoboldLeader_120"
+      },
+      {
+        "id": 1312,
+        "type": "boss",
+        "x": 675,
+        "y": 1980,
+        "boss": "mini_Gryphon_105"
+      },
+      {
+        "id": 1313,
+        "type": "boss",
+        "x": 856,
+        "y": 1753,
+        "boss": "mini_Gryphon_105"
+      },
+      {
+        "id": 1314,
+        "type": "boss",
+        "x": 1066,
+        "y": 1949,
+        "boss": "mini_Gryphon_105"
+      },
+      {
+        "id": 1315,
+        "type": "boss",
+        "x": 983,
+        "y": 2149,
+        "boss": "mini_Gryphon_105"
       }
     ],
     "geffenriver": [
@@ -7338,6 +7555,118 @@
         "x": 1666,
         "y": 512,
         "boss": "elite_005_poring_ringleader"
+      },
+      {
+        "id": 1316,
+        "type": "boss",
+        "x": 847,
+        "y": 2217,
+        "boss": "mini_Alligator_60"
+      },
+      {
+        "id": 1317,
+        "type": "boss",
+        "x": 886,
+        "y": 1887,
+        "boss": "mini_Alligator_60"
+      },
+      {
+        "id": 1318,
+        "type": "boss",
+        "x": 1256,
+        "y": 1919,
+        "boss": "mini_Alligator_60"
+      },
+      {
+        "id": 1319,
+        "type": "boss",
+        "x": 1252,
+        "y": 2277,
+        "boss": "mini_Alligator_60"
+      },
+      {
+        "id": 1320,
+        "type": "boss",
+        "x": 1788,
+        "y": 206,
+        "boss": "mini_ArcAngeling_80"
+      },
+      {
+        "id": 1321,
+        "type": "boss",
+        "x": 1638,
+        "y": 322,
+        "boss": "mini_ArcAngeling_80"
+      },
+      {
+        "id": 1322,
+        "type": "boss",
+        "x": 1773,
+        "y": 379,
+        "boss": "mini_ArcAngeling_80"
+      },
+      {
+        "id": 1323,
+        "type": "boss",
+        "x": 1854,
+        "y": 534,
+        "boss": "mini_ArcAngeling_80"
+      },
+      {
+        "id": 1324,
+        "type": "boss",
+        "x": 1241,
+        "y": 1071,
+        "boss": "mini_GrandPeco_75"
+      },
+      {
+        "id": 1325,
+        "type": "boss",
+        "x": 1024,
+        "y": 1364,
+        "boss": "mini_GrandPeco_75"
+      },
+      {
+        "id": 1326,
+        "type": "boss",
+        "x": 1333,
+        "y": 1468,
+        "boss": "mini_GrandPeco_75"
+      },
+      {
+        "id": 1327,
+        "type": "boss",
+        "x": 1572,
+        "y": 1275,
+        "boss": "mini_GrandPeco_75"
+      },
+      {
+        "id": 1328,
+        "type": "boss",
+        "x": 1342,
+        "y": 288,
+        "boss": "mini_HeavyMetaling_140"
+      },
+      {
+        "id": 1329,
+        "type": "boss",
+        "x": 1361,
+        "y": 433,
+        "boss": "mini_HeavyMetaling_140"
+      },
+      {
+        "id": 1330,
+        "type": "boss",
+        "x": 1513,
+        "y": 643,
+        "boss": "mini_HeavyMetaling_140"
+      },
+      {
+        "id": 1331,
+        "type": "boss",
+        "x": 1862,
+        "y": 765,
+        "boss": "mini_HeavyMetaling_140"
       }
     ],
     "izlude": [
@@ -7750,6 +8079,7 @@
         "boss": "mini_090_raydric_archer"
       }
     ],
+    "aldebaran": [],
     "sakura": [
       {
         "id": 1112,
@@ -8213,6 +8543,20 @@
         "x": 850,
         "y": 165,
         "boss": "mini_110_wanderer"
+      },
+      {
+        "id": 1588,
+        "type": "boss",
+        "x": 997,
+        "y": 696,
+        "boss": "elite_105_furious_majorous"
+      },
+      {
+        "id": 1589,
+        "type": "boss",
+        "x": 1102,
+        "y": 576,
+        "boss": "elite_105_furious_majorous"
       }
     ],
     "glastheim4": [
@@ -8322,6 +8666,101 @@
         "x": 587,
         "y": 1978,
         "boss": "mini_105_sting"
+      },
+      {
+        "id": 1574,
+        "type": "boss",
+        "x": 198,
+        "y": 417,
+        "boss": "elite_095_furious_anolian"
+      },
+      {
+        "id": 1575,
+        "type": "boss",
+        "x": 1835,
+        "y": 1086,
+        "boss": "elite_095_furious_anolian"
+      },
+      {
+        "id": 1576,
+        "type": "boss",
+        "x": 1211,
+        "y": 1417,
+        "boss": "elite_095_furious_anolian"
+      }
+    ],
+    "glastheim6": [
+      {
+        "id": 1582,
+        "type": "boss",
+        "x": 733,
+        "y": 162,
+        "boss": "mini_100_owl_duke_leader"
+      },
+      {
+        "id": 1583,
+        "type": "boss",
+        "x": 333,
+        "y": 712,
+        "boss": "mini_100_owl_duke_leader"
+      },
+      {
+        "id": 1584,
+        "type": "boss",
+        "x": 1615,
+        "y": 270,
+        "boss": "mini_100_owl_duke_leader"
+      },
+      {
+        "id": 1585,
+        "type": "boss",
+        "x": 482,
+        "y": 481,
+        "boss": "elite_095_elusive_carat"
+      },
+      {
+        "id": 1586,
+        "type": "boss",
+        "x": 921,
+        "y": 476,
+        "boss": "elite_095_elusive_carat"
+      },
+      {
+        "id": 1587,
+        "type": "boss",
+        "x": 855,
+        "y": 805,
+        "boss": "elite_095_elusive_carat"
+      }
+    ],
+    "glastheim7": [
+      {
+        "id": 1578,
+        "type": "boss",
+        "x": 1585,
+        "y": 262,
+        "boss": "elite_100_furious_wanderer"
+      },
+      {
+        "id": 1579,
+        "type": "boss",
+        "x": 1582,
+        "y": 552,
+        "boss": "elite_100_furious_wanderer"
+      },
+      {
+        "id": 1580,
+        "type": "boss",
+        "x": 1588,
+        "y": 855,
+        "boss": "elite_100_furious_wanderer"
+      },
+      {
+        "id": 1581,
+        "type": "boss",
+        "x": 1873,
+        "y": 184,
+        "boss": "elite_100_furious_wanderer"
       }
     ],
     "byalan2": [
@@ -8420,6 +8859,34 @@
         "x": 485,
         "y": 478,
         "boss": "elite_045_solid_vadon"
+      },
+      {
+        "id": 1332,
+        "type": "boss",
+        "x": 139,
+        "y": 141,
+        "boss": "mini_AncientStrouf_60"
+      },
+      {
+        "id": 1333,
+        "type": "boss",
+        "x": 377,
+        "y": 114,
+        "boss": "mini_AncientStrouf_60"
+      },
+      {
+        "id": 1334,
+        "type": "boss",
+        "x": 226,
+        "y": 407,
+        "boss": "mini_AncientStrouf_60"
+      },
+      {
+        "id": 1335,
+        "type": "boss",
+        "x": 465,
+        "y": 481,
+        "boss": "mini_AncientStrouf_60"
       }
     ],
     "mjolnir2": [
@@ -8724,6 +9191,181 @@
         "x": 564,
         "y": 107,
         "boss": "mini_060_vagabond_wolf"
+      },
+      {
+        "id": 1336,
+        "type": "boss",
+        "x": 90,
+        "y": 555,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1337,
+        "type": "boss",
+        "x": 82,
+        "y": 446,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1338,
+        "type": "boss",
+        "x": 88,
+        "y": 308,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1339,
+        "type": "boss",
+        "x": 87,
+        "y": 216,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1340,
+        "type": "boss",
+        "x": 90,
+        "y": 71,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1341,
+        "type": "boss",
+        "x": 202,
+        "y": 69,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1342,
+        "type": "boss",
+        "x": 209,
+        "y": 200,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1343,
+        "type": "boss",
+        "x": 213,
+        "y": 320,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1344,
+        "type": "boss",
+        "x": 332,
+        "y": 318,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1345,
+        "type": "boss",
+        "x": 217,
+        "y": 440,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1346,
+        "type": "boss",
+        "x": 329,
+        "y": 441,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1347,
+        "type": "boss",
+        "x": 446,
+        "y": 443,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1348,
+        "type": "boss",
+        "x": 451,
+        "y": 319,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1349,
+        "type": "boss",
+        "x": 566,
+        "y": 330,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1350,
+        "type": "boss",
+        "x": 571,
+        "y": 199,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1351,
+        "type": "boss",
+        "x": 451,
+        "y": 211,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1352,
+        "type": "boss",
+        "x": 438,
+        "y": 75,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1353,
+        "type": "boss",
+        "x": 566,
+        "y": 83,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1354,
+        "type": "boss",
+        "x": 333,
+        "y": 547,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1355,
+        "type": "boss",
+        "x": 472,
+        "y": 541,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1356,
+        "type": "boss",
+        "x": 564,
+        "y": 550,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1357,
+        "type": "boss",
+        "x": 208,
+        "y": 554,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1358,
+        "type": "boss",
+        "x": 70,
+        "y": 68,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1359,
+        "type": "boss",
+        "x": 230,
+        "y": 421,
+        "boss": "mini_VagabondWolf_60"
+      },
+      {
+        "id": 1360,
+        "type": "boss",
+        "x": 564,
+        "y": 107,
+        "boss": "mini_VagabondWolf_60"
       }
     ],
     "prontera3": [
@@ -8982,6 +9624,34 @@
         "x": 335,
         "y": 567,
         "boss": "elite_055_swift_mummy"
+      },
+      {
+        "id": 1361,
+        "type": "boss",
+        "x": 188,
+        "y": 161,
+        "boss": "mini_AncientMummy_110"
+      },
+      {
+        "id": 1362,
+        "type": "boss",
+        "x": 526,
+        "y": 169,
+        "boss": "mini_AncientMummy_110"
+      },
+      {
+        "id": 1363,
+        "type": "boss",
+        "x": 187,
+        "y": 462,
+        "boss": "mini_AncientMummy_110"
+      },
+      {
+        "id": 1364,
+        "type": "boss",
+        "x": 528,
+        "y": 505,
+        "boss": "mini_AncientMummy_110"
       }
     ],
     "morroc6": [
@@ -9091,6 +9761,48 @@
         "x": 488,
         "y": 252,
         "boss": "elite_080_swift_pasana"
+      },
+      {
+        "id": 1571,
+        "type": "boss",
+        "x": 348,
+        "y": 275,
+        "boss": "mini_105_abubis"
+      },
+      {
+        "id": 1572,
+        "type": "boss",
+        "x": 354,
+        "y": 533,
+        "boss": "mini_105_abubis"
+      },
+      {
+        "id": 1573,
+        "type": "boss",
+        "x": 428,
+        "y": 463,
+        "boss": "mini_105_abubis"
+      },
+      {
+        "id": 1365,
+        "type": "boss",
+        "x": 348,
+        "y": 275,
+        "boss": "mini_Abubis_105"
+      },
+      {
+        "id": 1366,
+        "type": "boss",
+        "x": 354,
+        "y": 533,
+        "boss": "mini_Abubis_105"
+      },
+      {
+        "id": 1367,
+        "type": "boss",
+        "x": 428,
+        "y": 463,
+        "boss": "mini_Abubis_105"
       }
     ],
     "morroc8": [
@@ -9152,6 +9864,34 @@
         "x": 526,
         "y": 266,
         "boss": "mini_060_yao_jun"
+      },
+      {
+        "id": 1368,
+        "type": "boss",
+        "x": 233,
+        "y": 584,
+        "boss": "mini_YaoJun_60"
+      },
+      {
+        "id": 1369,
+        "type": "boss",
+        "x": 252,
+        "y": 429,
+        "boss": "mini_YaoJun_60"
+      },
+      {
+        "id": 1370,
+        "type": "boss",
+        "x": 554,
+        "y": 402,
+        "boss": "mini_YaoJun_60"
+      },
+      {
+        "id": 1371,
+        "type": "boss",
+        "x": 526,
+        "y": 266,
+        "boss": "mini_YaoJun_60"
       }
     ]
   },
@@ -9183,6 +9923,8 @@
     "glastheim2": 1.15,
     "glastheim3": 0.85,
     "glastheim4": 1.35,
-    "glastheim5": 1.8
+    "glastheim5": 1.8,
+    "glastheim6": 1.8,
+    "glastheim7": 1.8
   }
 }
