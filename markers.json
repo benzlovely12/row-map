@@ -7699,6 +7699,55 @@
         "type": "rain",
         "x": 890,
         "y": 602
+      },
+      {
+        "id": 1528,
+        "type": "boss",
+        "x": 319,
+        "y": 212,
+        "boss": "mini_090_raydric_archer"
+      },
+      {
+        "id": 1529,
+        "type": "boss",
+        "x": 319,
+        "y": 339,
+        "boss": "mini_090_raydric_archer"
+      },
+      {
+        "id": 1530,
+        "type": "boss",
+        "x": 388,
+        "y": 702,
+        "boss": "mini_090_raydric_archer"
+      },
+      {
+        "id": 1531,
+        "type": "boss",
+        "x": 476,
+        "y": 823,
+        "boss": "mini_090_raydric_archer"
+      },
+      {
+        "id": 1532,
+        "type": "boss",
+        "x": 887,
+        "y": 795,
+        "boss": "mini_090_raydric_archer"
+      },
+      {
+        "id": 1533,
+        "type": "boss",
+        "x": 903,
+        "y": 332,
+        "boss": "mini_090_raydric_archer"
+      },
+      {
+        "id": 1534,
+        "type": "boss",
+        "x": 943,
+        "y": 170,
+        "boss": "mini_090_raydric_archer"
       }
     ],
     "sakura": [
@@ -7931,6 +7980,90 @@
         "type": "landmark",
         "x": 807,
         "y": 897
+      },
+      {
+        "id": 1535,
+        "type": "boss",
+        "x": 313,
+        "y": 128,
+        "boss": "mini_095_ogretooth"
+      },
+      {
+        "id": 1536,
+        "type": "boss",
+        "x": 483,
+        "y": 449,
+        "boss": "mini_095_ogretooth"
+      },
+      {
+        "id": 1537,
+        "type": "boss",
+        "x": 531,
+        "y": 1036,
+        "boss": "mini_095_ogretooth"
+      },
+      {
+        "id": 1538,
+        "type": "boss",
+        "x": 480,
+        "y": 716,
+        "boss": "elite_090_solid_wind_ghost"
+      },
+      {
+        "id": 1539,
+        "type": "boss",
+        "x": 713,
+        "y": 927,
+        "boss": "elite_090_solid_wind_ghost"
+      },
+      {
+        "id": 1540,
+        "type": "boss",
+        "x": 1173,
+        "y": 312,
+        "boss": "elite_090_solid_wind_ghost"
+      },
+      {
+        "id": 1541,
+        "type": "boss",
+        "x": 282,
+        "y": 844,
+        "boss": "elite_090_furious_injustice"
+      },
+      {
+        "id": 1542,
+        "type": "boss",
+        "x": 975,
+        "y": 914,
+        "boss": "elite_090_furious_injustice"
+      },
+      {
+        "id": 1543,
+        "type": "boss",
+        "x": 1173,
+        "y": 122,
+        "boss": "elite_090_furious_injustice"
+      },
+      {
+        "id": 1544,
+        "type": "boss",
+        "x": 559,
+        "y": 118,
+        "boss": "elite_085_elite_dark_high_priest"
+      },
+      {
+        "id": 1545,
+        "type": "boss",
+        "x": 1153,
+        "y": 686,
+        "boss": "elite_085_elite_dark_high_priest"
+      },
+      {
+        "id": 1546,
+        "type": "boss",
+        "x": 1273,
+        "y": 960,
+        "boss": "elite_085_elite_dark_high_priest"
       }
     ],
     "glastheim3": [
@@ -8017,6 +8150,178 @@
         "type": "box",
         "x": 1154,
         "y": 514
+      },
+      {
+        "id": 1547,
+        "type": "boss",
+        "x": 614,
+        "y": 775,
+        "boss": "elite_105_furious_dark_priest"
+      },
+      {
+        "id": 1548,
+        "type": "boss",
+        "x": 966,
+        "y": 809,
+        "boss": "elite_105_furious_dark_priest"
+      },
+      {
+        "id": 1549,
+        "type": "boss",
+        "x": 786,
+        "y": 114,
+        "boss": "elite_105_furious_dark_priest"
+      },
+      {
+        "id": 1550,
+        "type": "boss",
+        "x": 780,
+        "y": 506,
+        "boss": "mini_110_dark_illusion"
+      },
+      {
+        "id": 1551,
+        "type": "boss",
+        "x": 470,
+        "y": 303,
+        "boss": "mini_110_dark_illusion"
+      },
+      {
+        "id": 1552,
+        "type": "boss",
+        "x": 631,
+        "y": 179,
+        "boss": "mini_110_dark_illusion"
+      },
+      {
+        "id": 1553,
+        "type": "boss",
+        "x": 616,
+        "y": 843,
+        "boss": "mini_110_wanderer"
+      },
+      {
+        "id": 1554,
+        "type": "boss",
+        "x": 469,
+        "y": 638,
+        "boss": "mini_110_wanderer"
+      },
+      {
+        "id": 1555,
+        "type": "boss",
+        "x": 850,
+        "y": 165,
+        "boss": "mini_110_wanderer"
+      }
+    ],
+    "glastheim4": [
+      {
+        "id": 1556,
+        "type": "boss",
+        "x": 871,
+        "y": 208,
+        "boss": "mini_110_corrupted_spider_queen"
+      },
+      {
+        "id": 1557,
+        "type": "boss",
+        "x": 1094,
+        "y": 214,
+        "boss": "mini_110_corrupted_spider_queen"
+      },
+      {
+        "id": 1558,
+        "type": "boss",
+        "x": 544,
+        "y": 1263,
+        "boss": "mini_110_corrupted_spider_queen"
+      },
+      {
+        "id": 1559,
+        "type": "boss",
+        "x": 214,
+        "y": 793,
+        "boss": "elite_105_solid_zombie_prisoner"
+      },
+      {
+        "id": 1560,
+        "type": "boss",
+        "x": 800,
+        "y": 888,
+        "boss": "elite_105_solid_zombie_prisoner"
+      },
+      {
+        "id": 1561,
+        "type": "boss",
+        "x": 1291,
+        "y": 1034,
+        "boss": "elite_105_solid_zombie_prisoner"
+      }
+    ],
+    "glastheim5": [
+      {
+        "id": 1562,
+        "type": "boss",
+        "x": 239,
+        "y": 264,
+        "boss": "elite_095_elusive_sting"
+      },
+      {
+        "id": 1563,
+        "type": "boss",
+        "x": 1180,
+        "y": 1143,
+        "boss": "elite_095_elusive_sting"
+      },
+      {
+        "id": 1564,
+        "type": "boss",
+        "x": 2085,
+        "y": 774,
+        "boss": "elite_095_elusive_sting"
+      },
+      {
+        "id": 1565,
+        "type": "boss",
+        "x": 1454,
+        "y": 1017,
+        "boss": "elite_100_gargoyle_ringleader"
+      },
+      {
+        "id": 1566,
+        "type": "boss",
+        "x": 1161,
+        "y": 1773,
+        "boss": "elite_100_gargoyle_ringleader"
+      },
+      {
+        "id": 1567,
+        "type": "boss",
+        "x": 2068,
+        "y": 602,
+        "boss": "elite_100_gargoyle_ringleader"
+      },
+      {
+        "id": 1568,
+        "type": "boss",
+        "x": 1979,
+        "y": 1399,
+        "boss": "mini_105_sting"
+      },
+      {
+        "id": 1569,
+        "type": "boss",
+        "x": 765,
+        "y": 1784,
+        "boss": "mini_105_sting"
+      },
+      {
+        "id": 1570,
+        "type": "boss",
+        "x": 587,
+        "y": 1978,
+        "boss": "mini_105_sting"
       }
     ],
     "byalan2": [
@@ -8743,21 +9048,21 @@
         "type": "boss",
         "x": 348,
         "y": 275,
-        "boss": "mini_105_abubis"
+        "boss": "mini_105_anubis"
       },
       {
         "id": 1271,
         "type": "boss",
         "x": 354,
         "y": 533,
-        "boss": "mini_105_abubis"
+        "boss": "mini_105_anubis"
       },
       {
         "id": 1272,
         "type": "boss",
         "x": 428,
         "y": 463,
-        "boss": "mini_105_abubis"
+        "boss": "mini_105_anubis"
       },
       {
         "id": 1515,
@@ -8874,6 +9179,10 @@
     "morroc2": 0.65,
     "morroc3": 0.55,
     "morroc6": 0.65,
-    "morroc8": 0.6
+    "morroc8": 0.6,
+    "glastheim2": 1.15,
+    "glastheim3": 0.85,
+    "glastheim4": 1.35,
+    "glastheim5": 1.8
   }
 }

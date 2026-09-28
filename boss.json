@@ -507,6 +507,13 @@
       "file": "boss/elite/095_elusive_sting.png"
     },
     {
+      "key": "elite_095_furious_anolian",
+      "name": "Furious Anolian",
+      "lv": 95,
+      "type": "elite",
+      "file": "boss/elite/095_furious_anolian.png"
+    },
+    {
       "key": "elite_100_furious_wanderer",
       "name": "Furious Wanderer",
       "lv": 100,
@@ -533,6 +540,13 @@
       "lv": 105,
       "type": "elite",
       "file": "boss/elite/105_furious_dark_priest.png"
+    },
+    {
+      "key": "elite_105_furious_majorous",
+      "name": "Furious Majorous",
+      "lv": 105,
+      "type": "elite",
+      "file": "boss/elite/105_furious_majorous.png"
     },
     {
       "key": "elite_105_solid_zombie_prisoner",
