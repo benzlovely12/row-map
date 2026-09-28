@@ -85,11 +85,46 @@
       "file": "boss/mini/080_arc_angeling.png"
     },
     {
-      "key": "mini_105_abubis",
-      "name": "Abubis",
+      "key": "mini_090_raydric_archer",
+      "name": "Raydric Archer",
+      "lv": 90,
+      "type": "mini",
+      "file": "boss/mini/090_raydric_archer.png"
+    },
+    {
+      "key": "mini_095_ogretooth",
+      "name": "Ogretooth",
+      "lv": 95,
+      "type": "mini",
+      "file": "boss/mini/095_ogretooth.png"
+    },
+    {
+      "key": "mini_100_abysmal_knight",
+      "name": "Abysmal Knight",
+      "lv": 100,
+      "type": "mini",
+      "file": "boss/mini/100_abysmal_knight.png"
+    },
+    {
+      "key": "mini_100_mysteltainn",
+      "name": "Mysteltainn",
+      "lv": 100,
+      "type": "mini",
+      "file": "boss/mini/100_mysteltainn.png"
+    },
+    {
+      "key": "mini_100_owl_duke_leader",
+      "name": "Owl Duke Leader",
+      "lv": 100,
+      "type": "mini",
+      "file": "boss/mini/100_owl_duke_leader.png"
+    },
+    {
+      "key": "mini_105_anubis",
+      "name": "Anubis",
       "lv": 105,
       "type": "mini",
-      "file": "boss/mini/105_abubis.png"
+      "file": "boss/mini/105_anubis.png"
     },
     {
       "key": "mini_105_gryphon",
@@ -99,11 +134,53 @@
       "file": "boss/mini/105_gryphon.png"
     },
     {
+      "key": "mini_105_raydric",
+      "name": "Raydric",
+      "lv": 105,
+      "type": "mini",
+      "file": "boss/mini/105_raydric.png"
+    },
+    {
+      "key": "mini_105_sting",
+      "name": "Sting",
+      "lv": 105,
+      "type": "mini",
+      "file": "boss/mini/105_sting.png"
+    },
+    {
       "key": "mini_110_ancient_mummy",
       "name": "Ancient Mummy",
       "lv": 110,
       "type": "mini",
       "file": "boss/mini/110_ancient_mummy.png"
+    },
+    {
+      "key": "mini_110_corrupted_spider_queen",
+      "name": "Corrupted Spider Queen",
+      "lv": 110,
+      "type": "mini",
+      "file": "boss/mini/110_corrupted_spider_queen.png"
+    },
+    {
+      "key": "mini_110_dark_illusion",
+      "name": "Dark Illusion",
+      "lv": 110,
+      "type": "mini",
+      "file": "boss/mini/110_dark_illusion.png"
+    },
+    {
+      "key": "mini_110_wanderer",
+      "name": "Wanderer",
+      "lv": 110,
+      "type": "mini",
+      "file": "boss/mini/110_wanderer.png"
+    },
+    {
+      "key": "mini_115_arc_elder",
+      "name": "Arc Elder",
+      "lv": 115,
+      "type": "mini",
+      "file": "boss/mini/115_arc_elder.png"
     },
     {
       "key": "mini_120_kobold_leader",
@@ -388,11 +465,81 @@
       "file": "boss/elite/080_swift_pasana.png"
     },
     {
+      "key": "elite_085_elite_dark_high_priest",
+      "name": "Elite Dark High Priest",
+      "lv": 85,
+      "type": "elite",
+      "file": "boss/elite/085_elite_dark_high_priest.png"
+    },
+    {
       "key": "elite_085_mighty_groundpetite",
       "name": "Mighty Groundpetite",
       "lv": 85,
       "type": "elite",
       "file": "boss/elite/085_mighty_groundpetite.png"
+    },
+    {
+      "key": "elite_090_furious_injustice",
+      "name": "Furious Injustice",
+      "lv": 90,
+      "type": "elite",
+      "file": "boss/elite/090_furious_injustice.png"
+    },
+    {
+      "key": "elite_090_solid_wind_ghost",
+      "name": "Solid Wind Ghost",
+      "lv": 90,
+      "type": "elite",
+      "file": "boss/elite/090_solid_wind_ghost.png"
+    },
+    {
+      "key": "elite_095_elusive_carat",
+      "name": "Elusive Carat",
+      "lv": 95,
+      "type": "elite",
+      "file": "boss/elite/095_elusive_carat.png"
+    },
+    {
+      "key": "elite_095_elusive_sting",
+      "name": "Elusive Sting",
+      "lv": 95,
+      "type": "elite",
+      "file": "boss/elite/095_elusive_sting.png"
+    },
+    {
+      "key": "elite_100_furious_wanderer",
+      "name": "Furious Wanderer",
+      "lv": 100,
+      "type": "elite",
+      "file": "boss/elite/100_furious_wanderer.png"
+    },
+    {
+      "key": "elite_100_gargoyle_ringleader",
+      "name": "Gargoyle Ringleader",
+      "lv": 100,
+      "type": "elite",
+      "file": "boss/elite/100_gargoyle_ringleader.png"
+    },
+    {
+      "key": "elite_100_swift_raydric",
+      "name": "Swift Raydric",
+      "lv": 100,
+      "type": "elite",
+      "file": "boss/elite/100_swift_raydric.png"
+    },
+    {
+      "key": "elite_105_furious_dark_priest",
+      "name": "Furious Dark Priest",
+      "lv": 105,
+      "type": "elite",
+      "file": "boss/elite/105_furious_dark_priest.png"
+    },
+    {
+      "key": "elite_105_solid_zombie_prisoner",
+      "name": "Solid Zombie Prisoner",
+      "lv": 105,
+      "type": "elite",
+      "file": "boss/elite/105_solid_zombie_prisoner.png"
     }
   ]
 }
